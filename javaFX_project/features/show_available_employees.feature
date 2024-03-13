@@ -14,3 +14,11 @@ Feature: show available employees
     When user searches for available employees for the activity in "Project A"
     Then user should receive a notification that no available employees are found
     And user should be prompted to adjust the workload or hire additional staff
+
+  Scenario: Assigning Activity to Employee with Least Activities
+    Given there is a project "Project B" with an activity to be assigned
+    And there are multiple available employees with varying numbers of assigned activities
+    When I search for available employees for the activity in "Project B"
+    Then I should see a list of suitable employees
+    And the employee with the least number of assigned activities should be prioritized
+    And the activity should be assigned to the employee with the least number of assigned activities
