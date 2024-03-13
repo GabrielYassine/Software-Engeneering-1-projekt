@@ -4,25 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Employee {
-    private int id;
     private String name;
     private Map<Integer, Double> dailyTimeSheets; // Map<date, hours> We can use a different alternative class
 
     // Constructor
-    public Employee(int id, String name) {
-        this.id = id;
+    public Employee(String name) {
         this.name = name;
         this.dailyTimeSheets = new HashMap<>();
     }
 
     // Getters and setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -44,7 +35,6 @@ public class Employee {
     @Override
     public String toString() {
         return "Employee{" +
-                "id=" + id +
                 ", name='" + name + '\'' +
                 ", dailyTimeSheets=" + dailyTimeSheets +
                 '}';
