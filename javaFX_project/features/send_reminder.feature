@@ -13,3 +13,11 @@ Feature: send reminder
     And "Alice" is already working on 10 activities
     When the employee tries to start a new activity
     Then the employee should receive a notification informing her that she has reached the maximum limit of 10 activities
+
+  Scenario: Project leader receives a notification for activity budget exceedance
+    Given there is a project "Project X"
+    Given there is a project leader "Emily" assigned to "Project X"
+    And there is an activity "Task 1" in "Project ABC" with a budgeted number of hours
+    And "Task 1" has exceeded the budgeted number of hours
+    When the system detects the exceedance of budgeted hours for "Task 1"
+    Then "Emily" should receive a notification informing themg about the budget exceedance of "Task 1" in "Project ABC"
