@@ -13,6 +13,5 @@ public class StepDefinitions {
 
 	@Then("everything is okay")
 	public void everythingIsOkay() {
-		employee.assign(dasdsada)
 	}
 }
