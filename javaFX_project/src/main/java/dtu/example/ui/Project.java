@@ -7,7 +7,7 @@ public class Project {
     private int id;
     private String name;
     private List<Activity> activities;
-    private ProjectLeader projectLeader;
+    private Employee projectLeader;
 
     // Constructor
     public Project(int id, String name) {
@@ -32,16 +32,6 @@ public class Project {
     public void setName(String name) {
         this.name = name;
     }
-
-    public ProjectLeader getProjectLeader() {
-        return projectLeader;
-    }
-
-    public void setProjectLeader(ProjectLeader projectLeader) {
-        this.projectLeader = projectLeader;
-    }
-
-    // Methods
     public void addActivity(Activity activity) {
         activities.add(activity);
     }
