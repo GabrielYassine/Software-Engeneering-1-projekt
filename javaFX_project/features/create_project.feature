@@ -4,7 +4,7 @@ Feature: Create Project
 
   Scenario: Create a project
     Given the company is logged in
-    And there is an employee with initials "Huba" who is available
+    And there is an employee with initials "Huba"
     When the company creates a project with the employee "Huba"
     Then the project should be created successfully
     And the project number should be assigned by the system in the format "YYNNN"
