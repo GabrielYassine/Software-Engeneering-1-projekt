@@ -19,6 +19,14 @@ Feature: Assign employee to project
     When the company assigns the employee "Huba" to the project
     Then the employee "Huba" should be successfully assigned to the project
 
+  Scenario: Assign multiple employees to project
+    Given that the company is logged in
+    And there is an existing project
+    And there are employees with initials "Huba", "Aha", and "Ekki"
+    And the employees are accessible
+    When the company assigns the employees "Huba", "Aha", and "Ekki" to the project
+    Then the employees "Huba", "Aha", and "Ekki" should be successfully assigned to the project
+
   Scenario: Assign employee to non-existent project
     Given that the company is logged in
     And there is an employee with initials "Huba"
