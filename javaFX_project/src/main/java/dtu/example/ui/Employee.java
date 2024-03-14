@@ -4,23 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Employee {
-    private String name;
+    private String initials;
     private Map<Integer, Double> dailyTimeSheets; // Map<date, hours> We can use a different alternative class
 
     // Constructor
-    public Employee(String name) {
-        this.name = name;
+    public Employee(String initials) {
+        this.initials = initials;
         this.dailyTimeSheets = new HashMap<>();
     }
 
     // Getters and setters
 
     public String getName() {
-        return name;
+        return initials;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.initials = initials;
     }
 
     // Methods
@@ -35,7 +35,7 @@ public class Employee {
     @Override
     public String toString() {
         return "Employee{" +
-                ", name='" + name + '\'' +
+                ", name='" + initials + '\'' +
                 ", dailyTimeSheets=" + dailyTimeSheets +
                 '}';
     }
