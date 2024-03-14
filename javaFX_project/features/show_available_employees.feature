@@ -19,7 +19,7 @@ Feature: show available employees
 
   Scenario: An employee is sick
     Given that there is an employee "huba"
-    When the employee has called in sick
+    When the employee has a sick day
     Then the employee is not available
 
   Scenario: An employee is on vacation
