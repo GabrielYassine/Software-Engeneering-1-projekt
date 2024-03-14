@@ -4,15 +4,18 @@ Feature: show available employees
 
   Scenario: An employee is available
     Given that there is an employee "huba"
-    When the employee doesn't have an acitivity within the timeframe
-    And the employee is working on less than 20 activities in a week
+    When the employee is working on less than 20 activities in a week
     Then the employee is available
 
   Scenario: Multiple employees are available
     Given that there are employees "huba", "ilas" and "sdas"
-    And each employee doesn't have any activities within the timeframe
     And each employee is working on less than 20 activities in a week
     Then the employees "huba", "ilas" and "sdas" are available
+
+  Scenario: An employee is not available
+    Given that there is an employee "huba"
+    And the employee is working 20 activities in a week
+    Then the employee is not available
 
   Scenario: An employee is sick
     Given that there is an employee "huba"
@@ -23,4 +26,3 @@ Feature: show available employees
     Given that there is an employee "huba"
     When the employee is on vacation
     Then the employee is not available
-
