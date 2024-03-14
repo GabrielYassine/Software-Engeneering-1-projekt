@@ -14,7 +14,7 @@ Feature: show available employees
 
   Scenario: An employee is not available
     Given that there is an employee "huba"
-    And the employee is working on 20 activities in a week
+    When the employee is working on 20 activities in a week
     Then the employee is not available
 
   Scenario: An employee is sick
