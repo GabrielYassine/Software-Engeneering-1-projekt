@@ -4,10 +4,9 @@ Feature: Show completion status on project
   Actor: Employee
 
   Scenario: Display project completion status
-    Given the employee is logged into the project management system
-    And the employee has access to view project details
-    When the employee navigates to the section for viewing project information
-    And selects the specific project they want to check the completion status for
+    Given the employee has accessed the project management system
+    And the employee has navigated to the section for viewing project information
+    When the employee selects the specific project they want to check the completion status for
     Then the system retrieves and displays the completion status of the selected project
 
   Scenario: Project completion status not available
@@ -24,8 +23,7 @@ Feature: Show completion status on project
     When the employee navigates to view project completion status
     Then the system displays a list of all projects assigned to the employee
     And for each project, the system presents the completion status
-    And the employee can review the completion status of each project to gain
-        insights into their progress
+    And the employee can review the completion status of each project to gain insights into their progress
 
   Scenario: No projects available to display completion status
     Given the employee is logged into the project management system
