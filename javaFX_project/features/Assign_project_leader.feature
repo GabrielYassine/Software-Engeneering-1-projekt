@@ -24,14 +24,11 @@ Feature: Assign project leader
     Then the system notifies the employee that the project does not exist
     And prompts the employee to create the project before assigning a leader
 
-  ## Er dette scenarie korrekt? Altså hvis der allerede findes en project leader skal
-  # man så erstatte ham eller skal man bliver cancelled?
   Scenario: Project leader already assigned
     Given a project exists in the project management system
     And a project leader is already assigned to the project
     When the employee attempts to assign a leader to the same project
-    Then the system notifies the employee that a leader is already assigned
-    And provides information about the currently assigned leader
+    Then the system replaces the current project leader with the new one
 
   Scenario: Project leader assignment canceled
     Given the employee is in the process of assigning a project leader
