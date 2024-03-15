@@ -11,8 +11,6 @@ Feature: show available employees
   Scenario: Multiple employees are available
     Given that there are 10 employees
     And each employee is working on less than 20 activities in a week
-    And each employee is not sick
-    And each employee is not on vacation
     When the system checks if the employees are available
     Then the employees are available
 
@@ -21,6 +19,12 @@ Feature: show available employees
     And the employee is working on 20 activities in a week
     When the system checks if the employee is available
     Then the employee is not available
+
+  Scenario: Multiple employees are not available
+    Given that there are 10 employees
+    And each employee is working on 20 activities in a week
+    When the system checks if the employees are available
+    Then the employees are not available
 
   Scenario: An employee is sick
     Given that there is an employee "huba"
