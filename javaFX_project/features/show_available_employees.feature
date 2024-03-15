@@ -2,23 +2,27 @@ Feature: show available employees
   Description: the user can view available employees
   Actor: employee
 
-  Scenario: Assigning an Activity to Available Employees
-    Given there is a project "Project X" with an activity to be assigned
-    When user searches for available employees for the activity in "Project X"
-    Then user should see a list of suitable employees
-    And the number of assigned activities for each employee should not exceed 10
+  Scenario: An employee is available
+    Given that there is an employee "huba"
+    When the employee is working on less than 20 activities in a week
+    Then the employee is available
 
-  Scenario: No Available Employees for the Activity
-    Given there is a project "Project X" with an activity to be assigned
-    And all employees are currently occupied with 10 activities each
-    When user searches for available employees for the activity in "Project X"
-    Then user should receive a notification that no available employees are found
-    And user should be prompted to adjust the workload or hire additional staff
+  Scenario: Multiple employees are available
+    Given that there are employees "huba", "ilas" and "sdas"
+    And each employee is working on less than 20 activities in a week
+    Then the employees "huba", "ilas" and "sdas" are available
 
-  Scenario: Assigning Activity to Employee with Least Activities
-    Given there is a project "Project B" with an activity to be assigned
-    And there are multiple available employees with varying numbers of assigned activities
-    When user searches for available employees for the activity in "Project X"
-    Then user should see a list of suitable employees
-    And the employee with the least number of assigned activities should be prioritized
-    And the activity should be assigned to the employee with the least number of assigned activities
+  Scenario: An employee is not available
+    Given that there is an employee "huba"
+    When the employee is working on 20 activities in a week
+    Then the employee is not available
+
+  Scenario: An employee is sick
+    Given that there is an employee "huba"
+    When the employee has a sick day
+    Then the employee is not available
+
+  Scenario: An employee is on vacation
+    Given that there is an employee "huba"
+    When the employee is on vacation
+    Then the employee is not available

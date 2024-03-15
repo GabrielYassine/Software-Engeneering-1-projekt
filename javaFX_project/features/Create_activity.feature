@@ -1,23 +1,24 @@
 Feature: Create Activity
-  Description: Company or employee creates an activity
-  Actors: Company, employee
+  Description: Employee creates an activity
+  Actors: Employee
 
-Scenario: Create an activity
+Scenario: Employee creates an activity
   Given a project exist in the system
-  And there is an activity with name "Testing", beginning "25-03-2024", end "05-04-2024", expected hours "100"
-  When the company or employee creates the activity
+  And there is an activity with name "Testing", beginning "25-03-2024", end "05-04-2024", expected hours 100
+  And no activity exists with that name
+  When the employee creates the activity
   Then the activity is created
 
 
-Scenario: Create an activity without enough data
-  Given a project exist in the system
-  And there is an activity without every detail specified
-  When the company or employee creates the activity
-  Then the activity is created without the details specified
+Scenario: Employees tries to create an activity without name, beginning, end or expected hours
+  Given a project exists in the system
+  And there is an activity without a name, beginning, end or expected hours
+  When the employee creates the activity
+  Then the error message "Can't create activity: not enough information given" is given
 
 
-Scenario: Cant create an activity with wrong data
-  Given a project exist in the system
-  And there is an activity with wrong data
-  When the company or employee creates the activity
-  Then the error message "Can't create activity: wrong data given"
+Scenario: Employee tries to create an activity with wrong datatype
+  Given a project exists in the system
+  And there is an activity with wrong datatype
+  When the employee creates the activity
+  Then the error message "Can't create activity: Wrong data given" is given
