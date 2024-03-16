@@ -15,11 +15,13 @@ Feature: Create Project
     When the company tries to create a project
     Then an error message "Company not logged in" should be displayed
 
-  Scenario: Create a project with incorrect employee initials
+  Scenario: Create a project without an employee with incorrect initials
     Given the company is logged in
+    And there exists an employee with initials "ABC"
     When the company tries to create a project with incorrect employee initials "XYZ"
     Then an error message "Employee initials 'XYZ' not found" should be displayed
-
+    And the project should be created without including the employee with initials "XYZ"
+    
   Scenario: Create a project without providing a name
     Given the company is logged in
     And there is an employee with initials "Huba"
@@ -29,7 +31,7 @@ Feature: Create Project
 
   Scenario: Create a project with multiple employees
     Given the company is logged in
-    And there are employees with initials "Huba", "Aha", and "Ekki" who are all accessible
+    And there are employees with initials "Huba", "Aha", and "Ekki"
     When the company creates a project with employees "Huba", "Aha", and "Ekki"
     Then the project should be created successfully
     And the project should be assigned a project number
