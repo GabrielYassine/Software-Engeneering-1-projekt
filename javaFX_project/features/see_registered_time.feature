@@ -1,8 +1,6 @@
 Feature: See registered time
-  Description:
-  Company can see the registered time.
-  Actor:
-  Company, Employee
+  Description: Company can see the registered time.
+  Actor: Company, Employee
 
   Scenario: Employee has registered the time spent on the activity
     Given Employee has registered the time spent on the activity
