@@ -8,14 +8,12 @@ Scenario: Employee creates an activity
   And no activity exists with that name
   When the employee creates the activity
   Then the activity is created
-
-
+  
 Scenario: Employees tries to create an activity without filling information
   Given a project exists in the system
   And there is an activity without a name, beginning, end or expected hours
   When the employee creates the activity
   Then the error message "Can't create activity: not enough information given" is given
-
 
 Scenario: Employee tries to create an activity with wrong datatype
   Given a project exists in the system
