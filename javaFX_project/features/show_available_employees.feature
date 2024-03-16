@@ -19,6 +19,7 @@ Feature: show available employees
     And the employee is working on 20 activities in a week
     When the system checks if the employee is available
     Then the employee is not available
+    And the error message "Employee is not available" is shown
 
   Scenario: No employees are available
     Given that there are 10 employees
@@ -32,9 +33,11 @@ Feature: show available employees
     And the employee has a sick day
     When the system checks if the employee is available
     Then the employee is not available
+    And the error message "Employee is sick" is shown
 
   Scenario: An employee is on vacation
     Given that there is an employee "huba"
     And the employee is on vacation
     When the system checks if the employee is available
     Then the employee is not available
+    And the error message "Employee is on vacation" is shown
