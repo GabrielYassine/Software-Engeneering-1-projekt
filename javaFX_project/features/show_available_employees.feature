@@ -14,6 +14,12 @@ Feature: show available employees
     When the system checks if the employees are available
     Then some of the employees are available
 
+  Scenario: All employees are available
+    Given that there are 10 employees
+    And each employee are working on less than 20 activities in a week
+    When the system checks if the employees are available
+    Then all the employees are available
+
   Scenario: An employee is not available
     Given that there is an employee "huba"
     And the employee is working on 20 activities in a week
