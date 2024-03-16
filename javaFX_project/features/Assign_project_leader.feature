@@ -17,7 +17,7 @@ Feature: Assign project leader
     When the employee attempts to assign a leader to the project
     Then the system notifies the employee that there are no project leaders available
 
-  Scenario: Chane of project leader
+  Scenario: Change of project leader
     Given a project exists in the project management system
     And a project leader is already assigned to the project
     When the employee attempts to assign the new leader to the same project
