@@ -18,7 +18,7 @@ Feature: Show completion status on project
 
   Scenario: View completion status for multiple projects
     Given the employee has accessed the project management system
-    And the employee has navigated to the section for viewing imformatio for multiple projects
+    And the employee has navigated to the section for viewing imformation for multiple projects
     And there are multiple projects assigned to the employee
     When the employee navigates to view project completion status
     Then the system displays a list of all projects assigned to the employee
