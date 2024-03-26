@@ -48,13 +48,13 @@ public class App extends Application {
         projectRepository.add(project);
     }
 
-    public Employee findEmployeeByInitials(String initials) {
+    public Employee findEmployeeByInitials(String initials) throws Exception {
         for (Employee employee : employeeRepository) {
             if (employee.getInitials().equals(initials)) {
                 return employee;
             }
         }
-        return null;
+        throw new Exception("Employee with initials '" + initials + "' not found");
     }
 
     public List<Project> getProjects() {
