@@ -11,5 +11,4 @@
 #    Given Employee has not entered the time
 #    When Company checks the employee's registration status
 #    Then Company can see that the employee has not registered
-#
-#
+

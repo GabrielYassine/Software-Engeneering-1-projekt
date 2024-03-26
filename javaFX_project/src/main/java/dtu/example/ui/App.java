@@ -56,7 +56,14 @@ public class App extends Application {
         }
         throw new Exception("Employee with initials '" + initials + "' not found");
     }
-
+    public Project getProjectWithID(int id) throws Exception {
+        for (Project project : projectRepository) {
+            if (project.getID() == id) {
+                return project;
+            }
+        }
+        throw new Exception("Project with ID '" + id + "' not found");
+    }
     public List<Project> getProjects() {
         return projectRepository;
     }

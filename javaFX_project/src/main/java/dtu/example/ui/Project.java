@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Project {
     private final App app;
-    private int id;
+    private int ID;
     private String name;
     private List<Activity> activities;
     private List<Employee> employees;
@@ -13,17 +13,19 @@ public class Project {
 
     public Project(App app, String name, List<Employee> employees) {
         this.app = app;
-        this.generateID();
+        this.ID = generateID();
         if (name.isEmpty()) {
             throw new IllegalArgumentException("No project name given");
         }
+        this.name = name;
         this.activities = new ArrayList<>();
         this.employees = employees;
         this.projectLeader = null;
+        app.appendProject(this);
     }
 
     public int getID() {
-        return id;
+        return ID;
     }
 
     public String getName() {
@@ -32,6 +34,15 @@ public class Project {
 
     public List<Employee> getEmployees() {
         return employees;
+    }
+
+    public void assignToProject(Employee employee) throws Exception{
+        for (Employee e : employees) {
+            if (e.getInitials().equals(employee.getInitials())) {
+                throw new Exception("Employee already assigned to project");
+            }
+        }
+        employees.add(employee);
     }
 
     public int generateID() {

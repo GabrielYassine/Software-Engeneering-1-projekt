@@ -29,9 +29,8 @@ public class ProjectSteps {
 
 	@Given("there is an employee with initials {string}")
 	public void thereIsAnEmployeeWithInitials(String initials) throws Exception {
-		employee = new Employee(initials);
+		employee = new Employee(app, initials);
 		assertThat(employee.getInitials(),is(equalTo(initials)));
-		app.appendEmployee(employee);
 	}
 
 	@When("the company creates a project with the employee {string} and the project name {string}")
@@ -39,10 +38,7 @@ public class ProjectSteps {
 		try {
 			List<Employee> employees = new ArrayList<>();
 			project = new Project(app, projectName, employees);
-			app.appendProject(project);
-
 			Employee employee = app.findEmployeeByInitials(employeeInitials);
-			employees.add(employee);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -75,13 +71,48 @@ public class ProjectSteps {
 		try {
 			List<Employee> employees = new ArrayList<>();
 			Employee employee = app.findEmployeeByInitials(employeeInitials);
-			employees.add(employee);
-
 			project = new Project(app, "", employees);
-			app.appendProject(project);
 		} catch (IllegalArgumentException e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
 
+	@Given("there exists a project with name {string}")
+	public void thereExistsAProjectWithID(String projectName) {
+		List<Employee> employees = new ArrayList<>();
+		project = new Project(app, projectName, employees);
+		assertThat(project.getName(),is(equalTo(projectName)));
+	}
+
+	@When("the company assigns the employee {string} to the project with ID {int}")
+	public void theCompanyAssignsTheEmployeeToTheProjectWithID(String initial, Integer ID) throws Exception {
+		try {
+			Employee employee = app.findEmployeeByInitials(initial);
+			Project project = app.getProjectWithID(ID);
+			project.assignToProject(employee);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+
+	@Then("the employee {string} should be successfully assigned to the project")
+	public void theEmployeeShouldBeSuccessfullyAssignedToTheProject(String initial) {
+		boolean employeeFound = false;
+		for (Employee employee : project.getEmployees()) {
+			if (employee.getInitials().equals(initial)) {
+				employeeFound = true;
+				break;
+			}
+		}
+		assertThat(employeeFound, is(true));
+	}
+
+	@Given("there is an employee with initials {string} assigned to the project with ID {int}")
+	public void thereIsAnEmployeeWithInitialsAssignedToTheProjectWithID(String initial, Integer ID) throws Exception {
+		employee = new Employee(app, initial);
+		assertThat(employee.getInitials(),is(equalTo(initial)));
+		Employee employee = app.findEmployeeByInitials(initial);
+		Project project = app.getProjectWithID(ID);
+		project.assignToProject(employee);
+	}
 }
