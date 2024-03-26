@@ -7,11 +7,15 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
+    private List<Employee> employeeRepository = new ArrayList<>();
+    private List<Project> projectRepository = new ArrayList<>();
 
     private static Scene scene;
 
@@ -33,6 +37,28 @@ public class App extends Application {
 
     public static void main(String[] args) {
         launch();
+    }
+
+
+    public void appendEmployee(Employee employee) {
+        employeeRepository.add(employee);
+    }
+
+    public void appendProject(Project project) {
+        projectRepository.add(project);
+    }
+
+    public Employee findEmployeeByInitials(String initials) {
+        for (Employee employee : employeeRepository) {
+            if (employee.getInitials().equals(initials)) {
+                return employee;
+            }
+        }
+        return null;
+    }
+
+    public List<Project> getProjects() {
+        return projectRepository;
     }
 
 }

@@ -7,50 +7,23 @@ public class Project {
     private int id;
     private String name;
     private List<Activity> activities;
+    private List<Employee> employees;
     private Employee projectLeader;
 
-    // Constructor
-    public Project(int id, String name) {
-        this.id = id;
+    public Project(int projectID, String name, Employee employee) {
+        this.id = projectID;
         this.name = name;
         this.activities = new ArrayList<>();
+        this.employees = new ArrayList<>();
+        this.projectLeader = null;
     }
 
-    // Getters and setters
-    public int getId() {
+    public int getID() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-    public void addActivity(Activity activity) {
-        activities.add(activity);
-    }
-
-    public void removeActivity(Activity activity) {
-        activities.remove(activity);
-    }
-
-    public List<Activity> getActivities() {
-        return activities;
-    }
-
-    @Override
-    public String toString() {
-        return "Project{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", activities=" + activities +
-                ", projectLeader=" + (projectLeader != null ? projectLeader.getName() : "None") +
-                '}';
-    }
 }
