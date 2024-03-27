@@ -1,6 +1,7 @@
-package dtu.example.ui;
+package dtu.example.ui.pages;
 
 import java.io.IOException;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
