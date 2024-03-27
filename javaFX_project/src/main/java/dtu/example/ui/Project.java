@@ -36,6 +36,13 @@ public class Project {
         return employees;
     }
 
+    public Employee getProjectLeader() {
+        return projectLeader;
+    }
+
+    public List<Activity> getActivities() {
+        return activities;
+    }
     public void assignToProject(Employee employee) throws Exception{
         for (Employee e : employees) {
             if (e.getInitials().equals(employee.getInitials())) {
@@ -44,7 +51,6 @@ public class Project {
         }
         employees.add(employee);
     }
-
     public int generateID() {
         int defaultID = 24001;
         if (app.getProjects().isEmpty()) {
@@ -59,7 +65,15 @@ public class Project {
             return maxID + 1;
         }
     }
-
-
-
+    public void assignProjectLeader(Employee employee) throws Exception {
+        for (Employee e : employees) {
+            if (e.getInitials().equals(employee.getInitials())) {
+                this.projectLeader = employee;
+                return;
+            }
+        }
+        throw new Exception("Employee not assigned to project");
+    }
+    public void appendActivity(Activity activity) {activities.add(activity);
+    }
 }

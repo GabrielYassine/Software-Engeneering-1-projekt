@@ -4,6 +4,7 @@ import dtu.example.ui.App;
 import dtu.example.ui.Employee;
 import dtu.example.ui.Project;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Given;
@@ -114,5 +115,31 @@ public class ProjectSteps {
 		Employee employee = app.findEmployeeByInitials(initial);
 		Project project = app.getProjectWithID(ID);
 		project.assignToProject(employee);
+	}
+
+	@Given("these employees are assigned to a project with ID {int}")
+	public void theseEmployeesAreAssignedToAProjectWithID(int ID, List<String> initials) throws Exception {
+		for (String initial : initials) {
+			employee = new Employee(app, initial);
+			Project project = app.getProjectWithID(ID);
+			project.assignToProject(employee);
+		}
+	}
+
+	@When("an employee assigns the employee {string} to be project leader of the project with ID {int}")
+	public void anEmployeeAssignsTheEmployeeToBeProjectLeaderOfTheProjectWithID(String initial, Integer ID) throws Exception {
+		try {
+			Project project = app.getProjectWithID(ID);
+			Employee employee = app.findEmployeeByInitials(initial);
+			project.assignProjectLeader(employee);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+
+	@Then("the employee {string} should be succesfully appointed as the project leader for the project with ID {int}")
+	public void theEmployeeShouldBeSuccesfullyAppointedAsTheProjectLeaderForTheProjectWithID(String initial, int ID) throws Exception {
+		Project project = app.getProjectWithID(ID);
+		assertThat(project.getProjectLeader().getInitials(), is(equalTo(initial)));
 	}
 }

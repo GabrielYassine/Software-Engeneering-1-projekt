@@ -1,29 +1,30 @@
-#Feature: Assign project leader
-#  Description: This use case involves displaying the completion status of a project
-#  to provide insight into its progress and current status.
-#  Actor: Employee
-#
-#  Scenario: Assign project leader to a project
-#    Given a project exists in the project management system
-#    And An employee selects the project to assign a leader to
-#    When The employee chooses an employee to be the project leader
-#    And the employee confirms the selection
-#    Then the project is updated with the assigned project leader
-#    And the system notifies the employee of the successful assignment
-#
+Feature: Assign project leader
+  Description: This use case involves displaying the completion status of a project
+  to provide insight into its progress and current status.
+  Actor: Employee
+
+  Background: The app has a project, and a couple of employees
+    Given there exists a project with name "New Project"
+    And these employees are assigned to a project with ID 24001
+      | Huba |
+      | Abcd |
+      | Efgh |
+      | Hijk |
+
+  Scenario: Assign project leader to a project
+    When an employee assigns the employee "Huba" to be project leader of the project with ID 24001
+    Then the employee "Huba" should be succesfully appointed as the project leader for the project with ID 24001
+
+  Scenario: Change of project leader
+    When an employee assigns the employee "Abcd" to be project leader of the project with ID 24001
+    And an employee assigns the employee "Huba" to be project leader of the project with ID 24001
+    Then the employee "Huba" should be succesfully appointed as the project leader for the project with ID 24001
+
+  Scenario: Attempt to assign leader to non-existent project
+    And an employee assigns the employee "Huba" to be project leader of the project with ID 24002
+    Then an error message "Project with ID '24002' not found" should be given
+
 #  Scenario: No project leaders available to assign
-#    Given a project exists in the project management system
 #    And there are no available project leaders to assign
 #    When the employee attempts to assign a leader to the project
 #    Then the system notifies the employee that there are no project leaders available
-#
-#  Scenario: Change of project leader
-#    Given a project exists in the project management system
-#    And a project leader is already assigned to the project
-#    When the employee attempts to assign the new leader to the same project
-#    Then the system replaces the current project leader with the new one
-#
-#  Scenario: Attempt to assign leader to non-existent project
-#    Given a project does not exist in the project management system
-#    And the employee attempts to assign a project leader
-#    Then the system notifies the employee that the project does not exist
