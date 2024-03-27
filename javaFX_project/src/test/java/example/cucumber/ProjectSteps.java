@@ -2,10 +2,13 @@ package example.cucumber;
 
 import dtu.example.ui.*;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Given;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -17,16 +20,18 @@ import static org.junit.Assert.assertThat;
 
 public class ProjectSteps {
 
-	private final App app;
+	private final Database app;
 	private ErrorMessageHolder errorMessage;
 	private Employee employee;
 	private Project project;
 	private Activity activity;
 
+	DateServer dateServer;
 
-	public ProjectSteps(App app) {
+	public ProjectSteps(Database app) {
 		this.app = app;
 		this.errorMessage = new ErrorMessageHolder();
+		this.dateServer = new DateServer();
 	}
 
 	@Given("there is an employee with initials {string}")
@@ -215,13 +220,47 @@ public class ProjectSteps {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@Given("the following employees are assigned to the project with ID {int}")
-	public void theFollowingEmployeesAreAssignedToTheProjectWithID(Integer ID, List<String> initials) throws Exception {
-		for (String initial : initials) {
-			Employee employee = new Employee(app, initial);
-			Project project = app.getProjectWithID(ID);
-			project.assignToProject(employee);
+	@Given("there exists an activity with the following details")
+	public void thereExistsAnActivityWithTheFollowingDetails(DataTable table) {
+		List<Map<String, String>> rows = table.asMaps(String.class, String.class);
+		for (Map<String, String> columns : rows) {
+			int projectID = Integer.parseInt(columns.get("projectID"));
+			String name = columns.get("name");
+			int budgetHours = Integer.parseInt(columns.get("budgetHours"));
+			int startWeek = Integer.parseInt(columns.get("startWeek"));
+			int endWeek = Integer.parseInt(columns.get("endWeek"));
+			try {
+				Project project = app.getProjectWithID(projectID);
+				Activity activity = new Activity(project, name, budgetHours, startWeek, endWeek);
+				project.appendActivity(activity);
+			} catch (Exception e) {
+				errorMessage.setErrorMessage(e.getMessage());
+			}
 		}
 	}
 
+	@When("the employee {string} registers {int} hours on the activity {string} on {string}")
+	public void theEmployeeRegistersHoursOnTheActivityOnDate(String initials, Integer hours, String activityName, String dateStr) throws Exception {
+		try {
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar date = Calendar.getInstance();
+			date.setTime(format.parse(dateStr));
+			employee = app.findEmployeeByInitials(initials);
+			activity = project.findActivityByName(activityName);
+			employee.getActivityLog().registerHours(date, activity, hours);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+
+	@Then("the employee {string}'s time spent on {string} on activity {string} should be {int} hours")
+	public void theEmployeeSTimeSpentOnDateOnActivityShouldBeHours(String initials, String dateStr, String activityName, int expectedHours) throws Exception {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar date = Calendar.getInstance();
+		date.setTime(format.parse(dateStr));
+		employee = app.findEmployeeByInitials(initials);
+		activity = project.findActivityByName(activityName);
+		assertThat(employee.getActivityLog().getActivityHours(date).get(activity), is(expectedHours));
+	}
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

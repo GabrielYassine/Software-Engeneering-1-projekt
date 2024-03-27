@@ -1,7 +1,7 @@
-#Feature: show available employees
-#  Description: the user can view available employees
-#  Actor: employee
-#
+Feature: show available employees
+  Description: the user can view available employees
+  Actor: employee
+
 #  Scenario: An employee is available
 #    Given that there is an employee "huba"
 #    And the employee is working on less than 20 activities in a week

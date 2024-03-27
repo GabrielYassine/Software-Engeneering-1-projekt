@@ -1,8 +1,8 @@
-#Feature: Show completion status on project
-#  Description: This use case involves displaying the completion status of a project
-#  to provide insight into its progress and current status.
-#  Actor: Employee
-#
+Feature: Show completion status on project
+  Description: This use case involves displaying the completion status of a project
+  to provide insight into its progress and current status.
+  Actor: Employee
+
 #  Scenario: Display project completion status
 #    Given the employee has accessed the project management system
 #    And the employee has navigated to the section for viewing project information

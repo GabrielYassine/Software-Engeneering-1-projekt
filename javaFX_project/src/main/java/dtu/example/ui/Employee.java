@@ -2,11 +2,11 @@ package dtu.example.ui;
 
 public class Employee {
 
-    private final App app;
+    private final Database app;
     private final String initials;
     private final ActivityLog activityLog;
 
-    public Employee(App app, String initials) {
+    public Employee(Database app, String initials) {
         if (app == null) {
             throw new IllegalArgumentException("App cannot be null");
         }
@@ -25,5 +25,9 @@ public class Employee {
 
     public ActivityLog getActivityLog() {
         return activityLog;
+    }
+
+    public void registerHours(Activity activity, Integer hours) {
+
     }
 }

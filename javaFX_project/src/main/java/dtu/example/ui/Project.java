@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Project {
-    private final App app;
+    private final Database app;
     private final int ID;
     private final String name;
     private final List<Activity> activities;
     private final List<Employee> employees;
     private Employee projectLeader;
 
-    public Project(App app, String name, List<Employee> employees) {
+    public Project(Database app, String name, List<Employee> employees) {
         this.app = app;
         this.ID = generateID();
         if (name == null || name.isEmpty()) {

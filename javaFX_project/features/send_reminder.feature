@@ -1,7 +1,7 @@
-#Feature: send reminder
-#  Description: the system sends an employee an important reminder
-#  Actor: system
-#
+Feature: send reminder
+  Description: the system sends an employee an important reminder
+  Actor: system
+
 #  Scenario: Employee receives a reminder for unregistered daily work
 #    Given that there is an employee "huba"
 #    And the employee has not registered his daily work for the current day
