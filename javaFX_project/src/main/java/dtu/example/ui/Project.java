@@ -5,21 +5,21 @@ import java.util.List;
 
 public class Project {
     private final App app;
-    private int ID;
-    private String name;
-    private List<Activity> activities;
-    private List<Employee> employees;
+    private final int ID;
+    private final String name;
+    private final List<Activity> activities;
+    private final List<Employee> employees;
     private Employee projectLeader;
 
     public Project(App app, String name, List<Employee> employees) {
         this.app = app;
         this.ID = generateID();
-        if (name.isEmpty()) {
+        if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("No project name given");
         }
         this.name = name;
         this.activities = new ArrayList<>();
-        this.employees = employees;
+        this.employees = new ArrayList<>(employees);
         this.projectLeader = null;
         app.appendProject(this);
     }
@@ -33,7 +33,7 @@ public class Project {
     }
 
     public List<Employee> getEmployees() {
-        return employees;
+        return new ArrayList<>(employees);
     }
 
     public Employee getProjectLeader() {
@@ -41,9 +41,13 @@ public class Project {
     }
 
     public List<Activity> getActivities() {
-        return activities;
+        return new ArrayList<>(activities);
     }
-    public void assignToProject(Employee employee) throws Exception{
+
+    public void assignToProject(Employee employee) throws Exception {
+        if (employee == null) {
+            throw new IllegalArgumentException("No employee given");
+        }
         for (Employee e : employees) {
             if (e.getInitials().equals(employee.getInitials())) {
                 throw new Exception("Employee already assigned to project");
@@ -51,6 +55,7 @@ public class Project {
         }
         employees.add(employee);
     }
+
     public int generateID() {
         int defaultID = 24001;
         if (app.getProjects().isEmpty()) {
@@ -65,7 +70,11 @@ public class Project {
             return maxID + 1;
         }
     }
+
     public void assignProjectLeader(Employee employee) throws Exception {
+        if (employee == null) {
+            throw new IllegalArgumentException("No employee given");
+        }
         for (Employee e : employees) {
             if (e.getInitials().equals(employee.getInitials())) {
                 this.projectLeader = employee;
@@ -74,6 +83,20 @@ public class Project {
         }
         throw new Exception("Employee not assigned to project");
     }
-    public void appendActivity(Activity activity) {activities.add(activity);
+
+    public void appendActivity(Activity activity) {
+        if (activity == null) {
+            throw new IllegalArgumentException("No activity given");
+        }
+        activities.add(activity);
+    }
+
+    public Activity findActivityByName(String name) {
+        for (Activity a : activities) {
+            if (a.getName().equals(name)) {
+                return a;
+            }
+        }
+        return null;
     }
 }

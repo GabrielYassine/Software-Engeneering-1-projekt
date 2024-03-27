@@ -16,7 +16,6 @@ import java.util.List;
 public class App extends Application {
     private List<Employee> employeeRepository = new ArrayList<>();
     private List<Project> projectRepository = new ArrayList<>();
-
     private static Scene scene;
 
     @Override
@@ -56,6 +55,7 @@ public class App extends Application {
         }
         throw new Exception("Employee with initials '" + initials + "' not found");
     }
+
     public Project getProjectWithID(int id) throws Exception {
         for (Project project : projectRepository) {
             if (project.getID() == id) {
