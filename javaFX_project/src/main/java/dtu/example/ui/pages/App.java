@@ -1,5 +1,6 @@
 package dtu.example.ui.pages;
 
+import dtu.example.ui.Database;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,12 +12,15 @@ import java.io.IOException;
 /**
  * JavaFX App
  */
+
 public class App extends Application {
 
     private static Scene scene;
+    public static Database database;
 
     @Override
     public void start(Stage stage) throws IOException {
+        database = new Database();
         scene = new Scene(loadFXML("primary"), 640, 480);
         stage.setScene(scene);
         stage.show();
@@ -34,5 +38,4 @@ public class App extends Application {
     public static void main(String[] args) {
         launch();
     }
-
 }

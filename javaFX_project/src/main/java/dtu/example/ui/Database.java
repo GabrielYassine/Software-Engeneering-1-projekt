@@ -13,6 +13,7 @@ import java.util.List;
 /**
  * JavaFX App
  */
+
 public class Database {
     private List<Employee> employeeRepository = new ArrayList<>();
     private List<Project> projectRepository = new ArrayList<>();
@@ -44,6 +45,17 @@ public class Database {
     }
     public List<Project> getProjects() {
         return projectRepository;
+    }
+
+    public void initializeTestRun() {
+        // Create some test employees
+        Employee employee1 = new Employee();
+        Employee employee2 = new Employee();
+
+        // Add the employees to the repository
+        appendEmployee(employee1);
+        appendEmployee(employee2);
+
     }
 
 }
