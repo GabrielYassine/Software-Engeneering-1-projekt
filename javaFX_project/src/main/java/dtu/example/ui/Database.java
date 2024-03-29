@@ -17,6 +17,8 @@ import java.util.List;
 public class Database {
     private List<Employee> employeeRepository = new ArrayList<>();
     private List<Project> projectRepository = new ArrayList<>();
+    public Project selectedProject;
+    private Activity selectedActivity;
 
     public void appendEmployee(Employee employee) {
         employeeRepository.add(employee);
@@ -47,15 +49,30 @@ public class Database {
         return projectRepository;
     }
 
+    public List<Employee> getEmployees() {
+        return employeeRepository;
+    }
+    
+
+    public void setSelectedProject(Project project) {
+        this.selectedProject = project;
+        System.out.println("Selected project: " + selectedProject);
+    }
+
+    public void setSelectedActivity(Activity activity) {
+        this.selectedActivity = activity;
+        System.out.println("Selected activity: " + selectedActivity);
+    }
+
     public void initializeTestRun() {
-        // Create some test employees
-        Employee employee1 = new Employee();
-        Employee employee2 = new Employee();
-
-        // Add the employees to the repository
-        appendEmployee(employee1);
-        appendEmployee(employee2);
-
+        Employee employee1 = new Employee(this, "Huba");
+        Employee employee2 = new Employee(this, "Abcd");
+        Employee employee3 = new Employee(this, "Efgh");
+        Employee employee4 = new Employee(this, "Hijk");
+        Employee employee5 = new Employee(this, "Lmno");
+        Employee employee6 = new Employee(this, "Pqrs");
+        Employee employee7 = new Employee(this, "Tuvw");
+        Employee employee8 = new Employee(this, "Xyzz");
     }
 
 }

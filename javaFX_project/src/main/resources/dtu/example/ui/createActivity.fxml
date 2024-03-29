@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.example.ui.pages.CreateActivityController">
+    <children>
+        <Label text="Activity Name:" />
+        <TextField fx:id="activityNameField" maxWidth="100.0" />
+        <Label text="Budget Hours:" />
+        <TextField fx:id="budgetHoursField" maxWidth="100.0" />
+        <Label text="Start Week:" />
+        <TextField fx:id="startWeekField" maxWidth="100.0" />
+        <Label text="End Week:" />
+        <TextField fx:id="endWeekField" maxWidth="100.0" />
+        <Button text="Create Activity" onAction="#createActivity" />
+    </children>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</VBox>

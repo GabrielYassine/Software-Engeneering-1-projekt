@@ -56,4 +56,8 @@ public class Activity {
         this.startWeek = newStartWeek;
         this.endWeek = newEndWeek;
     }
+
+    public String toString() {
+        return "Activity: " + name;
+    }
 }

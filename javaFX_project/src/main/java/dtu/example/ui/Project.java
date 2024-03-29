@@ -99,4 +99,11 @@ public class Project {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "Project ID: " + ID + "\n" +
+                "Project Name: " + name + "\n";
+    }
+
 }

@@ -3,10 +3,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
 
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.example.ui.pages.ProjectsController">
     <children>
         <Button fx:id="createProjectsButton" onAction="#switchToCreateProject" text="Create Project"/>
+        <ListView fx:id="projectsListView" />
     </children>
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

@@ -8,9 +8,7 @@
 
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.example.ui.pages.PrimaryController">
    <children>
-      <Label text="Enter your initials" />
-      <TextField fx:id="employeeNameField" maxWidth="100.0" />
-      <Button fx:id="primaryButton" text="Login" onAction="#switchToSecondary"/>
+      <Button fx:id="primaryButton" text="Start Test" onAction="#switchToSecondary"/>
    </children>
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
