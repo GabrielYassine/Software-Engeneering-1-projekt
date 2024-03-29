@@ -18,7 +18,7 @@ public class Database {
     private List<Employee> employeeRepository = new ArrayList<>();
     private List<Project> projectRepository = new ArrayList<>();
     public Project selectedProject;
-    private Activity selectedActivity;
+    public Activity selectedActivity;
 
     public void appendEmployee(Employee employee) {
         employeeRepository.add(employee);
@@ -56,12 +56,10 @@ public class Database {
 
     public void setSelectedProject(Project project) {
         this.selectedProject = project;
-        System.out.println("Selected project: " + selectedProject);
     }
 
     public void setSelectedActivity(Activity activity) {
         this.selectedActivity = activity;
-        System.out.println("Selected activity: " + selectedActivity);
     }
 
     public void initializeTestRun() {
