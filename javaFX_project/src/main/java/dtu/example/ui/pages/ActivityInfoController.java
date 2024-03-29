@@ -25,7 +25,6 @@ public class ActivityInfoController {
 
     private void updateActivityInfo() {
         activity = App.database.selectedActivity;
-        System.out.println(activity);
         if (activity != null) {
             activityNameLabel.setText("name: " + activity.getName());
             budgetHoursLabel.setText("BudgetHours: " + String.valueOf(activity.getBudgetHours()));

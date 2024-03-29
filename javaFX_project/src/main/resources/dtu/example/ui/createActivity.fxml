@@ -8,6 +8,7 @@
 
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.example.ui.pages.CreateActivityController">
     <children>
+        <fx:include source="backButton.fxml"/>
         <Label text="Activity Name:" />
         <TextField fx:id="activityNameField" maxWidth="100.0" />
         <Label text="Budget Hours:" />

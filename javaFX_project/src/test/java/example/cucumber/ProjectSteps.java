@@ -21,7 +21,7 @@ import static org.junit.Assert.assertThat;
 public class ProjectSteps {
 
 	private final Database app;
-	private ErrorMessageHolder errorMessage;
+	private final ErrorMessageHolder errorMessage;
 	private Employee employee;
 	private Project project;
 	private Activity activity;
@@ -143,18 +143,9 @@ public class ProjectSteps {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@When("the company creates an activity with name {string}, and expected hours {int}, scheduled from week {int} to week {int} with ID {int}")
-	public void theCompanyCreatesAnActivityWithNameAndExpectedHoursScheduledFromWeekToWeek(String name, int budgetHours, int weekStart, int weekEnd, int ID) throws Exception {
+	@When("the company creates an activity with name {string}, and expected hours {string}, scheduled from week {string} to week {string} with ID {int}")
+	public void theCompanyCreatesAnActivityWithNameAndExpectedHoursScheduledFromWeekToWeek(String name, String budgetHours, String weekStart, String weekEnd, int ID) throws Exception {
 		activity = new Activity(project, name, budgetHours, weekStart, weekEnd);
-	}
-
-	@When("the employee creates an activity with insufficient or incorrect information")
-	public void theEmployeeCreatesAnActivityWithInsufficientOrIncorrectInformation() {
-		try {
-			activity = new Activity(project, null, 0, 0, 0);
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
 	}
 
 	@Then("the activity should be created successfully")
@@ -162,10 +153,21 @@ public class ProjectSteps {
 		assertThat(project.getActivities(), hasItem(activity));
 	}
 
+	@When("the company tries to create an activity with name {string}, expected hours {string}, scheduled from week {string} to week {string} with ID {int}")
+	public void theCompanyTriesToCreateAnActivityWithNameExpectedHoursScheduledFromWeekToWeekWithID(String name, String budgetHours, String startWeek, String endWeek, Integer ID) {
+		try {
+			Project project = app.getProjectWithID(ID);
+			Activity activity = new Activity(project, name, budgetHours, startWeek, endWeek);
+			project.appendActivity(activity);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@Given("there exists an activity with name {string}, expected hours {int}, scheduled from week {int} to week " + "{int} in the project with ID {int}")
-	public void thereExistsAnActivityWithNameExpectedHoursScheduledFromWeekToWeekInTheProject(String name, Integer budgetHours, Integer startWeek, Integer endWeek, int ID) throws Exception{
+	@Given("there exists an activity with name {string}, expected hours {string}, scheduled from week {string} to week " + "{string} in the project with ID {int}")
+	public void thereExistsAnActivityWithNameExpectedHoursScheduledFromWeekToWeekInTheProject(String name, String budgetHours, String startWeek, String endWeek, int ID) throws Exception{
 		project = app.getProjectWithID(ID);
 		activity = new Activity(project, name, budgetHours, startWeek, endWeek);
 		project.appendActivity(activity);
@@ -226,9 +228,9 @@ public class ProjectSteps {
 		for (Map<String, String> columns : rows) {
 			int projectID = Integer.parseInt(columns.get("projectID"));
 			String name = columns.get("name");
-			int budgetHours = Integer.parseInt(columns.get("budgetHours"));
-			int startWeek = Integer.parseInt(columns.get("startWeek"));
-			int endWeek = Integer.parseInt(columns.get("endWeek"));
+			String budgetHours = columns.get("budgetHours");
+			String startWeek = columns.get("startWeek");
+			String endWeek = columns.get("endWeek");
 			try {
 				Project project = app.getProjectWithID(projectID);
 				Activity activity = new Activity(project, name, budgetHours, startWeek, endWeek);

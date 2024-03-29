@@ -12,10 +12,10 @@ public class SecondaryController {
 
     @FXML
     private void switchToProjects() throws IOException {
-        App.setRoot("Projects");
+        App.setRoot("projects");
     }
     @FXML
     private void switchToEmployees() throws IOException {
-        App.setRoot("Employees");
+        App.setRoot("employees");
     }
 }
