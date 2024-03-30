@@ -10,12 +10,12 @@ Feature: Register time on activity
       | 24001     | New Activity | 100         | 1         | 4       |
 
   Scenario: The user registers the time spent on the activity on a specific date
-    When the employee "Huba" registers 5 hours on the activity "New Activity" on "2023-03-01"
+    When the employee "Huba" registers "5" hours on the activity "New Activity" on "2023-03-01"
     Then the employee "Huba"'s time spent on "2023-03-01" on activity "New Activity" should be 5 hours
 
   Scenario: The user tries to register a negative number of hours on the activity
-    When the employee "Huba" registers -5 hours on the activity "New Activity" on "2023-03-01"
-    Then an error message "Insufficient or incorrect information given" should be given
+    When the employee "Huba" registers "-5" hours on the activity "New Activity" on "2023-03-01"
+    Then an error message "Registered hours cannot be negative" should be given
 
 #  Scenario: The user tries to register time spent on the activity on a non-existent date
 #    When the employee "Huba" registers 5 hours on the activity "New Activity" on "2023-13-1"

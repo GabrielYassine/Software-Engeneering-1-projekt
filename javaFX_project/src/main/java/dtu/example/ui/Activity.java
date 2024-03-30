@@ -9,6 +9,8 @@ public class Activity {
     private int startWeek;
     private int endWeek;
 
+    public int hoursSpent = 0;
+
     public Activity(Project project, String name, String budgetHours, String startWeek, String endWeek) {
         validateProject(project);
         validateName(name, project);

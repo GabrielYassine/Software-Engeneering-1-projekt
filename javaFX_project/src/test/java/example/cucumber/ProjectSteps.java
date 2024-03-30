@@ -241,8 +241,8 @@ public class ProjectSteps {
 		}
 	}
 
-	@When("the employee {string} registers {int} hours on the activity {string} on {string}")
-	public void theEmployeeRegistersHoursOnTheActivityOnDate(String initials, Integer hours, String activityName, String dateStr) throws Exception {
+	@When("the employee {string} registers {string} hours on the activity {string} on {string}")
+	public void theEmployeeRegistersHoursOnTheActivityOnDate(String initials, String hours, String activityName, String dateStr) throws Exception {
 		try {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar date = Calendar.getInstance();

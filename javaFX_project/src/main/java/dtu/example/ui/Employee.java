@@ -27,10 +27,6 @@ public class Employee {
         return activityLog;
     }
 
-    public void registerHours(Activity activity, Integer hours) {
-
-    }
-
     @Override
     public String toString() {
         return initials;

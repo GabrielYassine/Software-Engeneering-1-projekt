@@ -32,10 +32,23 @@ public class ActivityLog {
     }
 
 
-    public void registerHours(Calendar date, Activity activity, int hours) throws Exception{
-        if (date == null || activity == null || hours < 0) {
+    public void registerHours(Calendar date, Activity activity, String hours) throws Exception{
+        int hoursInt = parseAndValidateHours(hours);
+        if (date == null || activity == null || hoursInt < 0) {
             throw new Exception("Insufficient or incorrect information given");
         }
-        addActivity(date, activity, hours);
+        addActivity(date, activity, hoursInt);
+    }
+
+    private int parseAndValidateHours(String registeredHours) {
+        try {
+            int hours = Integer.parseInt(registeredHours);
+            if (hours < 0) {
+                throw new IllegalArgumentException("Registered hours cannot be negative");
+            }
+            return hours;
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Registered hours value error");
+        }
     }
 }

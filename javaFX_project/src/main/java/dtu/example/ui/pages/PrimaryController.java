@@ -8,9 +8,6 @@ import javafx.scene.control.TextField;
 public class PrimaryController {
 
     public Button primaryButton;
-    public Button initializeTestRunButton;
-    @FXML
-    private TextField employeeNameField;
 
     @FXML
     private void switchToSecondary() throws IOException {

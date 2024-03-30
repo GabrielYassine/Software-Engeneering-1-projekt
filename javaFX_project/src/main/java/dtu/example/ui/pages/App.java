@@ -24,6 +24,7 @@ public class App extends Application {
         database = new Database();
         scene = new Scene(loadFXML("primary"), 640, 480);
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -57,7 +58,7 @@ public class App extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/dtu/example/ui/" + fxml + ".fxml"));
         return fxmlLoader.load();
     }
-    
+
     public static void main(String[] args) {
         launch();
     }

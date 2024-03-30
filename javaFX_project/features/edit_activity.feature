@@ -9,6 +9,7 @@ Feature: Edit Activity
   Scenario: Employee Edits an Activity Successfully
     When the employee edits the activity with name "New Activity", changing its name to "Updated Activity", expected hours to 120, and rescheduling from week 11 to week 14
     Then the activity "Updated Activity" should have expected hours as 120 and scheduled from week 11 to week 14
+
 #
 #  Scenario: Employee Tries to Edit an Activity with Insufficient or Incorrect Information
 #    When the employee tries to edit the activity with name "New Activity", providing no name, expected hours as -10, and scheduling from week -1 to week 0
