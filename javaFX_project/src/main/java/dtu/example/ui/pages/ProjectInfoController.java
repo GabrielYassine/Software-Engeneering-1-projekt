@@ -18,6 +18,9 @@ public class ProjectInfoController extends CommonElementsController {
     public Button createActivityButton;
     public TableView<Activity> activityTableView;
     public TableColumn<Activity, String> nameColumn;
+    public Label projectNameValue;
+    public Label projectLeaderValue;
+    public Button editButton;
 
     @FXML
     private TextField activityNameField;
@@ -37,9 +40,18 @@ public class ProjectInfoController extends CommonElementsController {
     private void initialize() {
         super.setupNumericTextFieldListeners(budgetHoursField, startWeekField, endWeekField);
 
+
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         Project selectedProject = App.database.selectedProject;
+        projectNameValue.setText(selectedProject.getName());
+
+        if (selectedProject.getProjectLeader() != null) {
+            projectLeaderValue.setText(selectedProject.getProjectLeader().getInitials());
+        } else {
+            projectLeaderValue.setText("No leader assigned");
+        }
+
         activityTableView.getItems().addAll(selectedProject.getActivities());
         employeesListView.getItems().addAll(selectedProject.getEmployees());
 
@@ -81,6 +93,11 @@ public class ProjectInfoController extends CommonElementsController {
     }
 
     private void resetActivityCreationFields() {
-        super.resetActivityCreationFields(activityNameField, budgetHoursField, startWeekField, endWeekField, employeesListView, selectedEmployeesListView);
+        super.resetActivityCreationFields(activityNameField, budgetHoursField, startWeekField, endWeekField, employeesListView, selectedEmployeesListView, null, null, null);
+    }
+
+    @FXML
+    private void editProject() throws IOException {
+        App.setRoot("editProject");
     }
 }

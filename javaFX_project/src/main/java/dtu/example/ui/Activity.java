@@ -119,4 +119,16 @@ public class Activity {
         }
         employees.add(e);
     }
+
+    public void clearEmployees() {
+        employees = new ArrayList<>();
+    }
+
+    public void updateEmployees() {
+        if (employees == null) {
+            return;
+        }
+        List<Employee> projectEmployees = project.getEmployees();
+        employees.removeIf(e -> !projectEmployees.contains(e));
+    }
 }

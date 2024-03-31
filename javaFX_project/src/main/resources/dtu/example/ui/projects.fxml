@@ -12,6 +12,7 @@
 <?import javafx.scene.control.ListView?>
 
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.ComboBox?>
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.example.ui.pages.ProjectsController">
     <children>
         <fx:include source="backButton.fxml"/>
@@ -25,10 +26,13 @@
                 </TableColumn>
             </columns>
         </TableView>
+        <Label text= "Create Project" style="-fx-font-size: 15;" />
         <HBox spacing="20">
             <GridPane alignment="CENTER" hgap="10" vgap="10">
                 <Label text="Activity Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                 <TextField fx:id="activityNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label text="Project leader:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <ComboBox fx:id="projectLeaderComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             </GridPane>
             <ListView fx:id="employeesListView" minHeight ="100" maxWidth="100" maxHeight="100"/>
             <VBox spacing="10">

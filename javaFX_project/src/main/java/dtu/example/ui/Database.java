@@ -80,6 +80,8 @@ public class Database {
         Activity activity4 = new Activity(project2, "Activity 4", "40", "1", "10");
         Activity activity5 = new Activity(project3, "Activity 5", "50", "1", "10");
         Activity activity6 = new Activity(project3, "Activity 6", "60", "1", "10");
+        activity1.addEmployee(employee1);
+        activity1.addEmployee(employee2);
     }
 
 }

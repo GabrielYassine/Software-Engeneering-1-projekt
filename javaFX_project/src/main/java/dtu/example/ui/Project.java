@@ -6,7 +6,7 @@ import java.util.List;
 public class Project {
     private final Database app;
     private final int ID;
-    private final String name;
+    private String name;
     private final List<Activity> activities;
     private final List<Employee> employees;
     private Employee projectLeader;
@@ -33,7 +33,7 @@ public class Project {
     }
 
     public List<Employee> getEmployees() {
-        return new ArrayList<>(employees);
+        return employees;
     }
 
     public Employee getProjectLeader() {
@@ -98,6 +98,26 @@ public class Project {
             }
         }
         return null;
+    }
+
+    public void clearEmployees() {
+        employees.clear();
+    }
+
+    public void addEmployee(Employee employee) {
+        employees.add(employee);
+    }
+
+    public void editProject(String newName, Employee newProjectLeader) {
+        this.name = newName;
+        this.projectLeader = newProjectLeader;
+        updateActivityEmployees();
+    }
+
+    private void updateActivityEmployees() {
+        for (Activity a : activities) {
+            a.updateEmployees();
+        }
     }
 
     @Override

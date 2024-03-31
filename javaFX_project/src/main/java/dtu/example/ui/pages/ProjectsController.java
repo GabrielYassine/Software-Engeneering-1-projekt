@@ -22,6 +22,7 @@ public class ProjectsController extends CommonElementsController {
     public TableColumn<Project, String> nameColumn;
     public TextField activityNameField;
     public ListView<Employee> employeesListView;
+    public ComboBox<Employee> projectLeaderComboBox;
     @FXML
     private ListView<Employee> selectedEmployeesListView;
     @FXML
@@ -34,6 +35,8 @@ public class ProjectsController extends CommonElementsController {
 
         projectsTableView.getItems().addAll(App.database.getProjects());
         employeesListView.getItems().addAll(App.database.getEmployees());
+        projectLeaderComboBox.setItems(selectedEmployeesListView.getItems());
+
 
         setRowClickAction(projectsTableView, clickedRow -> {
             App.database.setSelectedProject(clickedRow);
@@ -48,9 +51,13 @@ public class ProjectsController extends CommonElementsController {
     @FXML
     private void createProject() throws IOException {
         String projectName = activityNameField.getText();
+        Employee projectLeader = projectLeaderComboBox.getSelectionModel().getSelectedItem();
+
         try {
             List<Employee> employees = new ArrayList<>(selectedEmployeesListView.getItems());
             Project newProject = new Project(App.database, projectName, employees);
+            newProject.assignProjectLeader(projectLeader);
+
             System.out.println("Created project: " + newProject.getName() + " with employees: " + newProject.getEmployees());
             projectsTableView.getItems().add(newProject);
             resetActivityCreationFields();
@@ -68,6 +75,6 @@ public class ProjectsController extends CommonElementsController {
     }
 
     private void resetActivityCreationFields() {
-        super.resetActivityCreationFields(activityNameField, null, null, null, employeesListView, selectedEmployeesListView);
+        super.resetActivityCreationFields(activityNameField, null, null, null, employeesListView, selectedEmployeesListView, null, null, null);
     }
 }

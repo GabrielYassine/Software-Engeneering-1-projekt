@@ -17,6 +17,10 @@ Feature: Register time on activity
     When the employee "Huba" registers "-5" hours on the activity "New Activity" on "2023-03-01"
     Then an error message "Registered hours cannot be negative" should be given
 
-#  Scenario: The user tries to register as an employee that is not assigned to the project
-#    When the employee "Abcd" registers "5" hours on the activity "New Activity" on "2023-03-01"
-#    Then an error message "Employee is not assigned to the project" should be given
+  Scenario: The user tries to register as an employee that is not assigned to the project
+    When the employee "Abcd" registers "5" hours on the activity "New Activity" on "2023-03-01"
+    Then an error message "Employee with initials 'Abcd' not found" should be given
+
+  Scenario: The user tries to register time with no date
+    When the employee "Huba" registers "5" hours on the activity "New Activity" on ""
+    Then an error message "Date not selected" should be given

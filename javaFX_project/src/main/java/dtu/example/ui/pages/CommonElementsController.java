@@ -1,10 +1,8 @@
 package dtu.example.ui.pages;
 
+import dtu.example.ui.Database;
 import dtu.example.ui.Employee;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 
 import java.io.IOException;
@@ -38,14 +36,37 @@ public class CommonElementsController {
         }
     }
 
-    public void resetActivityCreationFields(TextField activityNameField, TextField budgetHoursField, TextField startWeekField, TextField endWeekField, ListView<Employee> employeesListView, ListView<Employee> selectedEmployeesListView) {
-        activityNameField.clear();
-        budgetHoursField.clear();
-        startWeekField.clear();
-        endWeekField.clear();
-        employeesListView.getItems().clear();
-        selectedEmployeesListView.getItems().clear();
-        employeesListView.getItems().addAll(App.database.getEmployees());
+    public void resetActivityCreationFields(TextField activityNameField, TextField budgetHoursField, TextField startWeekField, TextField endWeekField, ListView<Employee> employeesListView, ListView<Employee> selectedEmployeesListView, TextField initialsField, TextField hoursField, DatePicker datePicker) {
+        if (activityNameField != null) {
+            activityNameField.clear();
+        }
+        if (budgetHoursField != null) {
+            budgetHoursField.clear();
+        }
+        if (startWeekField != null) {
+            startWeekField.clear();
+        }
+        if (endWeekField != null) {
+            endWeekField.clear();
+        }
+        if (employeesListView != null) {
+            employeesListView.getItems().clear();
+            if (App.database != null) {
+                employeesListView.getItems().addAll(App.database.getEmployees());
+            }
+        }
+        if (selectedEmployeesListView != null) {
+            selectedEmployeesListView.getItems().clear();
+        }
+        if (initialsField != null) {
+            initialsField.clear();
+        }
+        if (hoursField != null) {
+            hoursField.clear();
+        }
+        if (datePicker != null) {
+            datePicker.setValue(null);
+        }
     }
 
     public void setupNumericTextFieldListeners(TextField... textFields) {
@@ -67,7 +88,6 @@ public class CommonElementsController {
             });
         }
     }
-
     public <T> void setRowClickAction(TableView<T> tableView, Consumer<T> action) {
         tableView.setRowFactory(tv -> {
             TableRow<T> row = new TableRow<>();
