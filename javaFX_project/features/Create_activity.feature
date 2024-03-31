@@ -24,7 +24,7 @@ Feature: Create Activity
 
   Scenario: Employee Tries to Create an Activity with Empty Budget Hours
     When the company tries to create an activity with name "New Activity", expected hours "", scheduled from week "10" to week "13" with ID 24001
-    Then an error message "Budget hours value error" should be given
+    Then an error message "Budget hours cannot be empty" should be given
 
   Scenario: Employee Tries to Create an Activity with Empty Start Week
     When the company tries to create an activity with name "New Activity", expected hours "100", scheduled from week "" to week "13" with ID 24001

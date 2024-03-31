@@ -9,9 +9,9 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ListView?>
 
+<?import javafx.scene.layout.GridPane?>
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.example.ui.pages.ProjectsController">
     <children>
         <fx:include source="backButton.fxml"/>
@@ -25,25 +25,18 @@
                 </TableColumn>
             </columns>
         </TableView>
-
-        <HBox spacing="10">
+        <HBox spacing="20">
+            <GridPane alignment="CENTER" hgap="10" vgap="10">
+                <Label text="Activity Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <TextField fx:id="activityNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            </GridPane>
+            <ListView fx:id="employeesListView" minHeight ="100" maxWidth="100" maxHeight="100"/>
             <VBox spacing="10">
-                <HBox spacing="10">
-                    <Label text="Project Name:" />
-                    <TextField fx:id="projectNameField" maxWidth="100.0" />
-                </HBox>
-                <HBox spacing="10" >
-                    <Label text="Assign employees: " />
-                    <ComboBox fx:id="employeesComboBox" maxWidth="100" />
-                </HBox>
-                <Button fx:id="addEmployeeButton" text="Add Employee" layoutX="200" />
+                <Button text="Add" onAction="#addEmployee" />
+                <Button text="Remove" onAction="#removeEmployee" />
             </VBox>
             <ListView fx:id="selectedEmployeesListView" minHeight ="100" maxWidth="100" maxHeight="100"/>
-            <VBox spacing="10">
-                <Button fx:id="removeEmployeeButton" text="Remove Employee" minWidth="120"/>
-            </VBox>
         </HBox>
-
         <Button text="Create Project" onAction="#createProject" />
     </children>
     <padding>

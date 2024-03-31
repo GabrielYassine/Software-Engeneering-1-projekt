@@ -173,52 +173,24 @@ public class ProjectSteps {
 		project.appendActivity(activity);
 	}
 
-	@When("the employee edits the activity with name {string}, changing its name to {string}, expected hours to {int}, and rescheduling from week {int} to week {int}")
-	public void theEmployeeEditsTheActivityWithNameChangingItsNameToExpectedHoursToAndReschedulingFromWeekToWeek(String oldName, String newName, Integer newBudgetHours, Integer newStartWeek, Integer newEndWeek) {
+	@When("the employee edits the activity with name {string}, changing its name to {string}, expected hours to {string}, and rescheduling from week {string} to week {string}")
+	public void theEmployeeEditsTheActivityWithNameChangingItsNameToExpectedHoursToAndReschedulingFromWeekToWeek(String oldName, String newName, String newBudgetHours, String newStartWeek, String newEndWeek) {
 		activity = project.findActivityByName(oldName);
-		activity.editActivity(newName, newBudgetHours, newStartWeek, newEndWeek);
+		try {
+			activity.editActivity(newName, newBudgetHours, newStartWeek, newEndWeek);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
 	}
 
 	@Then("the activity {string} should have expected hours as {int} and scheduled from week {int} to week {int}")
-	public void theActivityShouldHaveExpectedHoursAsAndScheduledFromWeekToWeek(String name, Integer expectedHours, Integer startWeek, Integer endWeek) {
+	public void theActivityShouldHaveExpectedHoursAsAndScheduledFromWeekToWeek(String name, int expectedHours, int startWeek, int endWeek) {
 		activity = project.findActivityByName(name);
 		assertThat(activity.getBudgetHours(), is(expectedHours));
 		assertThat(activity.getStartWeek(), is(startWeek));
 		assertThat(activity.getEndWeek(), is(endWeek));
 	}
 
-	@When("the employee tries to edit the activity with name {string}, providing no name, expected hours as {int}, and scheduling from week {int} to week {int}")
-	public void theEmployeeTriesToEditTheActivityWithNameProvidingNoNameExpectedHoursAsAndSchedulingFromWeekToWeek(String oldName, Integer newBudgetHours, Integer newStartWeek, Integer newEndWeek) {
-		try {
-			activity = project.findActivityByName(oldName);
-			activity.editActivity("", newBudgetHours, newStartWeek, newEndWeek);
-		} catch (IllegalArgumentException e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
-
-	@When("the employee tries to edit the activity with name {string}, changing its name to {string}")
-	public void theEmployeeTriesToEditTheActivityWithNameChangingItsNameTo(String oldName, String newName) {
-		try {
-			activity = project.findActivityByName(oldName);
-			activity.editActivity(newName, activity.getBudgetHours(), activity.getStartWeek(), activity.getEndWeek());
-		} catch (IllegalArgumentException e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
-
-	@When("the employee tries to edit the activity with name {string}, changing expected hours to {int}, and rescheduling from week {int} to week {int}")
-	public void theEmployeeTriesToEditTheActivityWithNameChangingExpectedHoursToAndReschedulingFromWeekToWeek(String oldName, Integer newBudgetHours, Integer newStartWeek, Integer newEndWeek) {
-		try {
-			activity = project.findActivityByName(oldName);
-			if (activity == null) {
-				throw new IllegalArgumentException("Activity with this name does not exist in the project");
-			}
-			activity.editActivity(oldName, newBudgetHours, newStartWeek, newEndWeek);
-		} catch (IllegalArgumentException e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 

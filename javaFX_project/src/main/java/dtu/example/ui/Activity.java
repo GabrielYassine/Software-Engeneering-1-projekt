@@ -1,14 +1,15 @@
 package dtu.example.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Activity {
+    private List<Employee> employees;
     private final Project project;
     private String name;
     private int budgetHours;
     private int startWeek;
     private int endWeek;
-
     public int hoursSpent = 0;
 
     public Activity(Project project, String name, String budgetHours, String startWeek, String endWeek) {
@@ -26,14 +27,28 @@ public class Activity {
         if (project == null) {
             throw new IllegalArgumentException("Project cannot be null");
         }
+
     }
 
-    private void validateName(String name, Project project) {
-        if (name == null || name.isEmpty()) {
+    private void validateName(String newName, Project project) {
+        List<Activity> activities = project.getActivities();
+        if (newName == null || newName.isEmpty()) {
             throw new IllegalArgumentException("Activity name cannot be empty");
         }
-        for (Activity a : project.getActivities()) {
-            if (a.getName().equals(name)) {
+        for (Activity a : activities) {
+            if (a.getName().equals(newName)) {
+                throw new IllegalArgumentException("Activity with this name already exists in the project");
+            }
+        }
+    }
+
+    private void validateName(String newName, Project project, Activity activityBeingEdited) {
+        List<Activity> activities = project.getActivities();
+        if (newName == null || newName.isEmpty()) {
+            throw new IllegalArgumentException("Activity name cannot be empty");
+        }
+        for (Activity a : activities) {
+            if (a != activityBeingEdited && a.getName().equals(newName)) {
                 throw new IllegalArgumentException("Activity with this name already exists in the project");
             }
         }
@@ -47,7 +62,7 @@ public class Activity {
             }
             return hours;
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Budget hours value error");
+            throw new IllegalArgumentException("Budget hours cannot be empty");
         }
     }
 
@@ -79,22 +94,29 @@ public class Activity {
         return budgetHours;
     }
 
-    public void editActivity(String newName, int newBudgetHours, int newStartWeek, int newEndWeek) {
-        if (newName == null || newName.isEmpty() || newBudgetHours < 0 || newStartWeek < 0 || newEndWeek < 0) {
-            throw new IllegalArgumentException("Can't edit activity: Insufficient or incorrect information given");
-        }
-        for (Activity a : project.getActivities()) {
-            if (a.getName().equals(newName) && !this.name.equals(newName)) {
-                throw new IllegalArgumentException("Activity with this name already exists in the project");
-            }
-        }
+    public void editActivity(String newName, String newBudgetHours, String newStartWeek, String newEndWeek) {
+        validateName(newName, project, this);
         this.name = newName;
-        this.budgetHours = newBudgetHours;
-        this.startWeek = newStartWeek;
-        this.endWeek = newEndWeek;
+        this.budgetHours = parseAndValidateHours(newBudgetHours);
+        this.startWeek = parseAndValidateWeek(newStartWeek, "Start week value error");
+        this.endWeek = parseAndValidateWeek(newEndWeek, "End week value error");
     }
 
     public String toString() {
         return "Activity: " + name;
+    }
+
+    public List<Employee> getEmployees() {
+        if (employees == null) {
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(employees);
+    }
+
+    public void addEmployee(Employee e) {
+        if (employees == null) {
+            employees = new ArrayList<>();
+        }
+        employees.add(e);
     }
 }

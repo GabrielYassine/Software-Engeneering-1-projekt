@@ -3,55 +3,71 @@ package dtu.example.ui.pages;
 import dtu.example.ui.Activity;
 import dtu.example.ui.Employee;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
-
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ActivityInfoController {
+public class ActivityInfoController extends CommonElementsController {
+
+
+    public Label activityNameValue;
+
+    public Label startWeekValue;
+
+    public Label endWeekValue;
+
+    public Label budgetHoursValue;
+    public Button editButton;
+    public TableView<Employee> selectedEmployeesTableView;
+    public TableColumn<Employee, String> employeeColumn;
+
     @FXML
     private TextField initialsField;
+
     @FXML
     private TextField hoursField;
+
     @FXML
     private DatePicker datePicker;
-    @FXML
-    private Label activityNameLabel;
-    @FXML
-    private Label startWeekLabel;
-    @FXML
-    private Label endWeekLabel;
-    @FXML
-    private Label budgetHoursLabel;
 
 
     public void initialize() {
+        super.setupNumericTextFieldListeners(hoursField);
+        super.setupLetterTextFieldListeners(initialsField);
         Activity activity = App.database.selectedActivity;
-        activityNameLabel.setText(activity.getName());
-        startWeekLabel.setText("Start week: " + activity.getStartWeek());
-        endWeekLabel.setText("End week: " + activity.getEndWeek());
-        budgetHoursLabel.setText("Budget hours: " + activity.getBudgetHours());
+        activityNameValue.setText(activity.getName());
+        startWeekValue.setText(String.valueOf(activity.getStartWeek()));
+        endWeekValue.setText(String.valueOf(activity.getEndWeek()));
+        budgetHoursValue.setText(activity.hoursSpent + " / " + activity.getBudgetHours());
+        employeeColumn.setCellValueFactory(new PropertyValueFactory<>("initials"));
+        selectedEmployeesTableView.getItems().addAll(App.database.selectedActivity.getEmployees());
     }
 
     @FXML
     private void registerHours() throws Exception {
         String initials = initialsField.getText();
-        String hours = hoursField.getText();
-        LocalDate selectedDate = datePicker.getValue();
+        Activity activity = App.database.selectedActivity;
+        Employee employee = App.database.findEmployeeByInitials(initials);
 
+        LocalDate selectedDate = datePicker.getValue();
         Instant instant = selectedDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(Date.from(instant));
 
-        Activity activity = App.database.selectedActivity;
-        Employee employee = App.database.findEmployeeByInitials(initials);
+        String hours = hoursField.getText();
+
         employee.getActivityLog().registerHours(calendar, activity, hours);
         activity.hoursSpent += Integer.parseInt(hours);
-        System.out.println(activity.hoursSpent);
     }
+
+    @FXML
+    private void editActivity() throws IOException {
+        App.setRoot("editActivity");
+    }
+
 }

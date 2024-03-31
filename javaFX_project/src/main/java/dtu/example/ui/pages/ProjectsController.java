@@ -1,7 +1,9 @@
 package dtu.example.ui.pages;
 
+import dtu.example.ui.Activity;
 import dtu.example.ui.Employee;
 import dtu.example.ui.Project;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -11,22 +13,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectsController {
-
+public class ProjectsController extends CommonElementsController {
     @FXML
     public TableView<Project> projectsTableView;
     @FXML
     public TableColumn<Project, Integer> idColumn;
     @FXML
     public TableColumn<Project, String> nameColumn;
-    @FXML
-    private TextField projectNameField;
-    @FXML
-    private ComboBox<Employee> employeesComboBox;
+    public TextField activityNameField;
+    public ListView<Employee> employeesListView;
     @FXML
     private ListView<Employee> selectedEmployeesListView;
-    @FXML
-    private Button addEmployeeButton;
     @FXML
     public Button removeEmployeeButton;
 
@@ -36,65 +33,41 @@ public class ProjectsController {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         projectsTableView.getItems().addAll(App.database.getProjects());
+        employeesListView.getItems().addAll(App.database.getEmployees());
 
-        projectsTableView.setRowFactory(tv -> {
-            TableRow<Project> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-                    Project clickedRow = row.getItem();
-                    App.database.setSelectedProject(clickedRow);
-                    try {
-                        App.setRoot("projectInfo");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            return row;
-        });
-
-        List<Employee> employeesCopy = new ArrayList<>(App.database.getEmployees());
-        employeesComboBox.getItems().addAll(employeesCopy);
-
-        addEmployeeButton.setOnAction(event -> {
-            Employee selectedEmployee = employeesComboBox.getSelectionModel().getSelectedItem();
-            if (selectedEmployee != null) {
-                selectedEmployeesListView.getItems().add(selectedEmployee);
-                employeesComboBox.getItems().remove(selectedEmployee);
-            }
-        });
-
-        removeEmployeeButton.setOnAction(event -> {
-            Employee selectedEmployee = selectedEmployeesListView.getSelectionModel().getSelectedItem();
-            if (selectedEmployee != null) {
-                selectedEmployeesListView.getItems().remove(selectedEmployee);
-                employeesComboBox.getItems().add(selectedEmployee);
+        setRowClickAction(projectsTableView, clickedRow -> {
+            App.database.setSelectedProject(clickedRow);
+            try {
+                App.setRoot("projectInfo");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
     }
 
     @FXML
     private void createProject() throws IOException {
-        String projectName = projectNameField.getText();
+        String projectName = activityNameField.getText();
         try {
             List<Employee> employees = new ArrayList<>(selectedEmployeesListView.getItems());
             Project newProject = new Project(App.database, projectName, employees);
             System.out.println("Created project: " + newProject.getName() + " with employees: " + newProject.getEmployees());
             projectsTableView.getItems().add(newProject);
-            resetEmployeeSelection();
+            resetActivityCreationFields();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    @FXML
-    private void resetEmployeeSelection() {
-        projectNameField.clear();
-        selectedEmployeesListView.getItems().clear();
-        employeesComboBox.getItems().clear();
-        List<Employee> allEmployees = new ArrayList<>(App.database.getEmployees());
-        employeesComboBox.getItems().addAll(allEmployees);
+    public void addEmployee(ActionEvent actionEvent) {
+        super.addEmployee(employeesListView, selectedEmployeesListView);
     }
 
+    public void removeEmployee(ActionEvent actionEvent) {
+        super.removeEmployee(employeesListView, selectedEmployeesListView);
+    }
 
+    private void resetActivityCreationFields() {
+        super.resetActivityCreationFields(activityNameField, null, null, null, employeesListView, selectedEmployeesListView);
+    }
 }

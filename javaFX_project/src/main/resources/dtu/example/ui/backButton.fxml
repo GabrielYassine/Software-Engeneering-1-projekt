@@ -5,6 +5,6 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="dtu.example.ui.pages.BackButtonController">
-    <Button text="Back" onAction="#goBack" fx:id="backButton" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20"/>
+            fx:controller="dtu.example.ui.pages.CommonElementsController">
+    <Button text="Back" onAction="#goBack" fx:id="backButton" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0"/>
 </AnchorPane>
