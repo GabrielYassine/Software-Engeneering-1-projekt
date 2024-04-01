@@ -1,7 +1,7 @@
-package dtu.example.ui.pages;
+package dtu.app.ui.pages;
 
-import dtu.example.ui.Employee;
-import dtu.example.ui.Project;
+import dtu.app.ui.classes.Employee;
+import dtu.app.ui.classes.Project;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -14,15 +14,16 @@ import java.util.List;
 
 public class EditProjectController extends CommonElementsController{
 
+    @FXML
     public ListView<Employee> employeesListView;
+    @FXML
     public ListView<Employee> selectedEmployeesListView;
+    @FXML
     public ComboBox<String> projectLeaderComboBox;
     @FXML
     private TextField projectNameField;
 
     @FXML
-    private TextField projectLeaderField;
-
     public void initialize() {
         Project project = App.database.selectedProject;
         projectNameField.setText(project.getName());
@@ -72,10 +73,11 @@ public class EditProjectController extends CommonElementsController{
         new CommonElementsController().goBack();
     }
 
+    @FXML
     public void addEmployee(ActionEvent actionEvent) {
         super.addEmployee(employeesListView, selectedEmployeesListView);
     }
-
+    @FXML
     public void removeEmployee(ActionEvent actionEvent) {
         super.removeEmployee(employeesListView, selectedEmployeesListView);
     }

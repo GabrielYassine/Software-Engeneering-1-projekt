@@ -1,6 +1,6 @@
-package dtu.example.ui.pages;
+package dtu.app.ui.pages;
 
-import dtu.example.ui.Database;
+import dtu.app.ui.classes.Database;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -33,7 +33,7 @@ public class App extends Application {
     }
 
     static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/dtu/example/ui/" + fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/dtu/app/ui/" + fxml + ".fxml"));
         return fxmlLoader.load();
     }
 

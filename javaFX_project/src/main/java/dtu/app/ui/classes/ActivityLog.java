@@ -1,11 +1,11 @@
-package dtu.example.ui;
+package dtu.app.ui.classes;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ActivityLog {
-    private Map<Calendar, Map<Activity, Integer>> dateLog;
+    private final Map<Calendar, Map<Activity, Integer>> dateLog;
 
     public ActivityLog() {
         this.dateLog = new HashMap<>();
@@ -17,20 +17,11 @@ public class ActivityLog {
         dateLog.put(date, hoursLog);
     }
 
-    public Map<Activity, Integer> getActivityHours(Calendar date) {
-        return dateLog.get(date);
-    }
-
     public void editActivity(Calendar date, Activity activity, int hours) {
         Map<Activity, Integer> hoursLog = dateLog.get(date);
         hoursLog.put(activity, hours);
         dateLog.put(date, hoursLog);
     }
-
-    public Map<Calendar, Map<Activity, Integer>> getDateLog() {
-        return dateLog;
-    }
-
 
     public void registerHours(Calendar date, Activity activity, String hours) throws Exception{
         int hoursInt = parseAndValidateHours(hours);
@@ -50,5 +41,12 @@ public class ActivityLog {
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Registered hours value error");
         }
+    }
+    public Map<Activity, Integer> getActivityHours(Calendar date) {
+        return dateLog.get(date);
+    }
+
+    public Map<Calendar, Map<Activity, Integer>> getDateLog() {
+        return dateLog;
     }
 }

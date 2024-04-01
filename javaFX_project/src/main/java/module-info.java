@@ -2,8 +2,9 @@ module hellofx {
     requires javafx.controls;
     requires javafx.fxml;
 
-    opens dtu.example.ui to javafx.fxml; // Gives access to fxml files
-    exports dtu.example.ui;
-    exports dtu.example.ui.pages;
-    opens dtu.example.ui.pages to javafx.fxml; // Exports the class inheriting from javafx.application.Application
+    opens dtu.app.ui to javafx.fxml; // Gives access to fxml files
+    exports dtu.app.ui.pages;
+    opens dtu.app.ui.pages to javafx.fxml;
+    exports dtu.app.ui.classes;
+    opens dtu.app.ui.classes to javafx.fxml; // Exports the class inheriting from javafx.application.Application
 }

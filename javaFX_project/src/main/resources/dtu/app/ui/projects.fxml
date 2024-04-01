@@ -13,7 +13,7 @@
 
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.ComboBox?>
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.example.ui.pages.ProjectsController">
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.app.ui.pages.ProjectsController">
     <children>
         <fx:include source="backButton.fxml"/>
         <TableView fx:id="projectsTableView" minHeight="150">
@@ -23,6 +23,12 @@
                 </TableColumn>
                 <TableColumn fx:id="nameColumn" text="Name">
                     <cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="activitySizeColumn" text="Activities">
+                    <cellValueFactory><PropertyValueFactory property="activitiesSize"/></cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="employeeSizeColumn" text="Employees">
+                    <cellValueFactory><PropertyValueFactory property="employeesSize"/></cellValueFactory>
                 </TableColumn>
             </columns>
         </TableView>

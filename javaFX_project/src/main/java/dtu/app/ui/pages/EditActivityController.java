@@ -1,8 +1,8 @@
-package dtu.example.ui.pages;
+package dtu.app.ui.pages;
 
-import dtu.example.ui.Activity;
-import dtu.example.ui.Employee;
-import dtu.example.ui.Project;
+import dtu.app.ui.classes.Activity;
+import dtu.app.ui.classes.Employee;
+import dtu.app.ui.classes.Project;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -51,20 +51,29 @@ public class EditActivityController extends CommonElementsController{
     private void saveChanges() throws IOException {
         Activity activity = App.database.selectedActivity;
         try {
-            activity.editActivity(activityNameField.getText(), budgetHoursField.getText(), startWeekField.getText(), endWeekField.getText());
-            activity.clearEmployees();
-            for (Employee employee : selectedEmployeesListView.getItems()) {
-                activity.addEmployee(employee);
-            }
-            new CommonElementsController().goBack();
+            String activityName = activityNameField.getText();
+            String budgetHours = budgetHoursField.getText();
+            String startWeek = startWeekField.getText();
+            String endWeek = endWeekField.getText();
+
+            validateAndSaveChanges(activity, activityName, budgetHours, startWeek, endWeek);
+            goBack();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
+    private void validateAndSaveChanges(Activity activity, String activityName, String budgetHours, String startWeek, String endWeek) throws Exception {
+        activity.editActivity(activityName, budgetHours, startWeek, endWeek);
+        activity.clearEmployees();
+        for (Employee employee : selectedEmployeesListView.getItems()) {
+            activity.addEmployee(employee);
+        }
+    }
+
     @FXML
     private void cancelEdit() throws IOException {
-        new CommonElementsController().goBack();
+        goBack();
     }
 
     public void addEmployee(ActionEvent actionEvent) {

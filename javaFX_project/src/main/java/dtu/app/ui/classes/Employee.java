@@ -1,26 +1,26 @@
-package dtu.example.ui;
+package dtu.app.ui.classes;
 
 public class Employee {
 
-    private final Database app;
     private final String initials;
+    private int activityCount;
     private final ActivityLog activityLog;
 
     public Employee(Database app, String initials) {
-        if (app == null) {
-            throw new IllegalArgumentException("App cannot be null");
-        }
         if (initials == null || initials.isEmpty()) {
             throw new IllegalArgumentException("Initials cannot be null or empty");
         }
-        this.app = app;
         this.initials = initials;
         this.activityLog = new ActivityLog();
+        this.activityCount = 0;
         app.appendEmployee(this);
     }
-
     public String getInitials() {
         return initials;
+    }
+
+    public int getActivityCount() {
+        return activityCount;
     }
 
     public ActivityLog getActivityLog() {

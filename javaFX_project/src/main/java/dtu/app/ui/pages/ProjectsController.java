@@ -1,13 +1,11 @@
-package dtu.example.ui.pages;
+package dtu.app.ui.pages;
 
-import dtu.example.ui.Activity;
-import dtu.example.ui.Employee;
-import dtu.example.ui.Project;
+import dtu.app.ui.classes.Employee;
+import dtu.app.ui.classes.Project;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,26 +15,32 @@ public class ProjectsController extends CommonElementsController {
     @FXML
     public TableView<Project> projectsTableView;
     @FXML
-    public TableColumn<Project, Integer> idColumn;
+    private TableColumn<Project, Integer> idColumn;
     @FXML
-    public TableColumn<Project, String> nameColumn;
+    private TableColumn<Project, String> nameColumn;
+    @FXML
+    private TableColumn<Project, Integer> employeeSizeColumn;
+    @FXML
+    private TableColumn<Project, Integer> activitySizeColumn;
+    @FXML
     public TextField activityNameField;
+    @FXML
     public ListView<Employee> employeesListView;
+    @FXML
     public ComboBox<Employee> projectLeaderComboBox;
     @FXML
     private ListView<Employee> selectedEmployeesListView;
-    @FXML
-    public Button removeEmployeeButton;
 
     @FXML
     private void initialize() throws Exception {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        employeeSizeColumn.setCellValueFactory(new PropertyValueFactory<>("employeesSize"));
+        activitySizeColumn.setCellValueFactory(new PropertyValueFactory<>("activitiesSize"));
 
         projectsTableView.getItems().addAll(App.database.getProjects());
         employeesListView.getItems().addAll(App.database.getEmployees());
         projectLeaderComboBox.setItems(selectedEmployeesListView.getItems());
-
 
         setRowClickAction(projectsTableView, clickedRow -> {
             App.database.setSelectedProject(clickedRow);
@@ -58,7 +62,6 @@ public class ProjectsController extends CommonElementsController {
             Project newProject = new Project(App.database, projectName, employees);
             newProject.assignProjectLeader(projectLeader);
 
-            System.out.println("Created project: " + newProject.getName() + " with employees: " + newProject.getEmployees());
             projectsTableView.getItems().add(newProject);
             resetActivityCreationFields();
         } catch (Exception e) {
@@ -66,10 +69,12 @@ public class ProjectsController extends CommonElementsController {
         }
     }
 
+    @FXML
     public void addEmployee(ActionEvent actionEvent) {
         super.addEmployee(employeesListView, selectedEmployeesListView);
     }
 
+    @FXML
     public void removeEmployee(ActionEvent actionEvent) {
         super.removeEmployee(employeesListView, selectedEmployeesListView);
     }

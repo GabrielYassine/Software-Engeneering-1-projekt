@@ -1,5 +1,6 @@
-package dtu.example.ui;
+package dtu.app.ui.classes;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,68 @@ public class Project {
         app.appendProject(this);
     }
 
+    public int generateID() {
+        int currentYear = Year.now().getValue() % 100;
+        int serialNumber = 1;
+
+        for (Project p : app.getProjects()) {
+            if (p.getID() / 1000 == currentYear) {
+                serialNumber = Math.max(serialNumber, p.getID() % 1000 + 1);
+            }
+        }
+        return currentYear * 1000 + serialNumber;
+    }
+
+    public void assignToProject(Employee employee) throws Exception {
+        if (employee == null) {
+            throw new IllegalArgumentException("No employee given");
+        }
+        for (Employee e : employees) {
+            if (e.getInitials().equals(employee.getInitials())) {
+                throw new Exception("Employee already assigned to project");
+            }
+        }
+        employees.add(employee);
+    }
+
+    public void assignProjectLeader(Employee employee) throws Exception {
+        if (employee != null) {
+            for (Employee e : employees) {
+                if (e.getInitials().equals(employee.getInitials())) {
+                    this.projectLeader = employee;
+                    return;
+                }
+            }
+        }
+    }
+
+    public void addActivity(Activity activity) {
+        if (activity == null) {
+            throw new IllegalArgumentException("No activity given");
+        }
+        activities.add(activity);
+    }
+
+    public void editProject(String newName, Employee newProjectLeader) {
+        this.name = newName;
+        this.projectLeader = newProjectLeader;
+        updateActivityEmployees();
+    }
+
+    public void addEmployee(Employee employee) {
+        employees.add(employee);
+    }
+
+    public void clearEmployees() {
+        employees.clear();
+    }
+
+    private void updateActivityEmployees() {
+        for (Activity a : activities) {
+            a.updateEmployees();
+        }
+    }
+
     public int getID() {
         return ID;
     }
@@ -44,54 +107,7 @@ public class Project {
         return new ArrayList<>(activities);
     }
 
-    public void assignToProject(Employee employee) throws Exception {
-        if (employee == null) {
-            throw new IllegalArgumentException("No employee given");
-        }
-        for (Employee e : employees) {
-            if (e.getInitials().equals(employee.getInitials())) {
-                throw new Exception("Employee already assigned to project");
-            }
-        }
-        employees.add(employee);
-    }
-
-    public int generateID() {
-        int defaultID = 24001;
-        if (app.getProjects().isEmpty()) {
-            return defaultID;
-        } else {
-            int maxID = 0;
-            for (Project p : app.getProjects()) {
-                if (p.getID() > maxID) {
-                    maxID = p.getID();
-                }
-            }
-            return maxID + 1;
-        }
-    }
-
-    public void assignProjectLeader(Employee employee) throws Exception {
-        if (employee == null) {
-            throw new IllegalArgumentException("No employee given");
-        }
-        for (Employee e : employees) {
-            if (e.getInitials().equals(employee.getInitials())) {
-                this.projectLeader = employee;
-                return;
-            }
-        }
-        throw new Exception("Employee not assigned to project");
-    }
-
-    public void appendActivity(Activity activity) {
-        if (activity == null) {
-            throw new IllegalArgumentException("No activity given");
-        }
-        activities.add(activity);
-    }
-
-    public Activity findActivityByName(String name) {
+    public Activity getActivity(String name) {
         for (Activity a : activities) {
             if (a.getName().equals(name)) {
                 return a;
@@ -100,24 +116,12 @@ public class Project {
         return null;
     }
 
-    public void clearEmployees() {
-        employees.clear();
+    public int getActivitiesSize() {
+        return activities.size();
     }
 
-    public void addEmployee(Employee employee) {
-        employees.add(employee);
-    }
-
-    public void editProject(String newName, Employee newProjectLeader) {
-        this.name = newName;
-        this.projectLeader = newProjectLeader;
-        updateActivityEmployees();
-    }
-
-    private void updateActivityEmployees() {
-        for (Activity a : activities) {
-            a.updateEmployees();
-        }
+    public int getEmployeesSize() {
+        return employees.size();
     }
 
     @Override

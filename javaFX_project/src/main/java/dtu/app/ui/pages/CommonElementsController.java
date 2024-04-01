@@ -1,11 +1,11 @@
-package dtu.example.ui.pages;
+package dtu.app.ui.pages;
 
-import dtu.example.ui.Database;
-import dtu.example.ui.Employee;
+import dtu.app.ui.classes.Employee;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
-
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class CommonElementsController {
@@ -37,33 +37,25 @@ public class CommonElementsController {
     }
 
     public void resetActivityCreationFields(TextField activityNameField, TextField budgetHoursField, TextField startWeekField, TextField endWeekField, ListView<Employee> employeesListView, ListView<Employee> selectedEmployeesListView, TextField initialsField, TextField hoursField, DatePicker datePicker) {
-        if (activityNameField != null) {
-            activityNameField.clear();
-        }
-        if (budgetHoursField != null) {
-            budgetHoursField.clear();
-        }
-        if (startWeekField != null) {
-            startWeekField.clear();
-        }
-        if (endWeekField != null) {
-            endWeekField.clear();
-        }
-        if (employeesListView != null) {
-            employeesListView.getItems().clear();
-            if (App.database != null) {
-                employeesListView.getItems().addAll(App.database.getEmployees());
+        List<TextField> textFields = Arrays.asList(activityNameField, budgetHoursField, startWeekField, endWeekField, initialsField, hoursField);
+        List<ListView<Employee>> listViews = Arrays.asList(employeesListView, selectedEmployeesListView);
+
+        textFields.forEach(textField -> {
+            if (textField != null) {
+                textField.clear();
             }
+        });
+
+        listViews.forEach(listView -> {
+            if (listView != null) {
+                listView.getItems().clear();
+            }
+        });
+
+        if (employeesListView != null && App.database != null) {
+            employeesListView.getItems().addAll(App.database.getEmployees());
         }
-        if (selectedEmployeesListView != null) {
-            selectedEmployeesListView.getItems().clear();
-        }
-        if (initialsField != null) {
-            initialsField.clear();
-        }
-        if (hoursField != null) {
-            hoursField.clear();
-        }
+
         if (datePicker != null) {
             datePicker.setValue(null);
         }

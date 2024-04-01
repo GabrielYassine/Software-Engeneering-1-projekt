@@ -1,11 +1,10 @@
-package dtu.example.ui.pages;
+package dtu.app.ui.pages;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 
-public class PrimaryController {
+public class FrontPageController {
 
     public Button primaryButton;
 

@@ -1,11 +1,11 @@
-package dtu.example.ui.pages;
+package dtu.app.ui.pages;
 
 import java.io.IOException;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-public class SecondaryController {
+public class MenuController {
 
     public Button viewProjectsButton;
     public Button viewEmployeesButton;

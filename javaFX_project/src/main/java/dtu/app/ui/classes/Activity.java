@@ -1,4 +1,4 @@
-package dtu.example.ui;
+package dtu.app.ui.classes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,24 +10,25 @@ public class Activity {
     private int budgetHours;
     private int startWeek;
     private int endWeek;
-    public int hoursSpent = 0;
+    private int hoursSpent = 0;
 
-    public Activity(Project project, String name, String budgetHours, String startWeek, String endWeek) {
+    public Activity(Project project, String name, String budgetHours, String startWeek, String endWeek, List<Employee> employees) {
         validateProject(project);
+        this.project = project;
         validateName(name, project);
+        this.name = name;
+
         this.budgetHours = parseAndValidateHours(budgetHours);
         this.startWeek = parseAndValidateWeek(startWeek, "Start week value error");
         this.endWeek = parseAndValidateWeek(endWeek, "End week value error");
-        this.project = project;
-        this.name = name;
-        project.appendActivity(this);
+        this.employees = new ArrayList<>(employees);
+        project.addActivity(this);
     }
 
     private void validateProject(Project project) {
         if (project == null) {
             throw new IllegalArgumentException("Project cannot be null");
         }
-
     }
 
     private void validateName(String newName, Project project) {
@@ -42,6 +43,7 @@ public class Activity {
         }
     }
 
+    // Method overload because there are two different cases where the name validation is needed.
     private void validateName(String newName, Project project, Activity activityBeingEdited) {
         List<Activity> activities = project.getActivities();
         if (newName == null || newName.isEmpty()) {
@@ -78,39 +80,12 @@ public class Activity {
         }
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public int getStartWeek() {
-        return startWeek;
-    }
-
-    public int getEndWeek() {
-        return endWeek;
-    }
-
-    public int getBudgetHours() {
-        return budgetHours;
-    }
-
     public void editActivity(String newName, String newBudgetHours, String newStartWeek, String newEndWeek) {
         validateName(newName, project, this);
         this.name = newName;
         this.budgetHours = parseAndValidateHours(newBudgetHours);
         this.startWeek = parseAndValidateWeek(newStartWeek, "Start week value error");
         this.endWeek = parseAndValidateWeek(newEndWeek, "End week value error");
-    }
-
-    public String toString() {
-        return "Activity: " + name;
-    }
-
-    public List<Employee> getEmployees() {
-        if (employees == null) {
-            return new ArrayList<>();
-        }
-        return new ArrayList<>(employees);
     }
 
     public void addEmployee(Employee e) {
@@ -131,4 +106,56 @@ public class Activity {
         List<Employee> projectEmployees = project.getEmployees();
         employees.removeIf(e -> !projectEmployees.contains(e));
     }
+
+    public void registerHours(int hours) {
+        hoursSpent += hours;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getStartWeek() {
+        return startWeek;
+    }
+
+    public int getEndWeek() {
+        return endWeek;
+    }
+
+    public int getBudgetHours() {
+        return budgetHours;
+    }
+
+    public int getHoursSpent() {
+        return hoursSpent;
+    }
+
+
+    public List<Employee> getEmployees() {
+        if (employees == null) {
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(employees);
+    }
+
+    public int getEmployeesSize() {
+        return employees.size();
+    }
+
+    public String getStatus() {
+        double halfBudgetHours = budgetHours / 2.0;
+        if (hoursSpent < halfBudgetHours) {
+            return "Good";
+        } else if (hoursSpent <= budgetHours) {
+            return "Nearing budget";
+        } else {
+            return "Over budget";
+        }
+    }
+
+    public String toString() {
+        return "Activity: " + name;
+    }
+
 }

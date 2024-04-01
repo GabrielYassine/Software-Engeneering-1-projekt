@@ -1,15 +1,12 @@
-package dtu.example.ui.pages;
+package dtu.app.ui.pages;
 
-import dtu.example.ui.Activity;
-import dtu.example.ui.Employee;
-import dtu.example.ui.Project;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import dtu.app.ui.classes.Activity;
+import dtu.app.ui.classes.Employee;
+import dtu.app.ui.classes.Project;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
 
 import java.io.IOException;
 
@@ -18,10 +15,14 @@ public class ProjectInfoController extends CommonElementsController {
     public Button createActivityButton;
     public TableView<Activity> activityTableView;
     public TableColumn<Activity, String> nameColumn;
+    @FXML
+    private TableColumn<Activity, String> statusColumn;
+
+    public TableColumn<Activity, Integer> employeeSizeColumn;
+
     public Label projectNameValue;
     public Label projectLeaderValue;
     public Button editButton;
-
     @FXML
     private TextField activityNameField;
     @FXML
@@ -35,13 +36,13 @@ public class ProjectInfoController extends CommonElementsController {
     private ListView<Employee> selectedEmployeesListView;
     @FXML
     private ListView<Employee> employeesListView;
-
     @FXML
     private void initialize() {
         super.setupNumericTextFieldListeners(budgetHoursField, startWeekField, endWeekField);
 
-
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        employeeSizeColumn.setCellValueFactory(new PropertyValueFactory<>("employeesSize"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         Project selectedProject = App.database.selectedProject;
         projectNameValue.setText(selectedProject.getName());
@@ -73,10 +74,7 @@ public class ProjectInfoController extends CommonElementsController {
         String startWeek = startWeekField.getText();
         String endWeek = endWeekField.getText();
         try {
-            Activity newActivity = new Activity(selectedProject, activityName, budgetHours, startWeek, endWeek);
-            for (Employee e : selectedEmployeesListView.getItems()) {
-                newActivity.addEmployee(e);
-            }
+            Activity newActivity = new Activity(selectedProject, activityName, budgetHours, startWeek, endWeek, selectedEmployeesListView.getItems());
             activityTableView.getItems().add(newActivity);
             resetActivityCreationFields();
         } catch (Exception e) {

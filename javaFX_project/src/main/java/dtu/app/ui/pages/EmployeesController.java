@@ -1,6 +1,6 @@
-package dtu.example.ui.pages;
+package dtu.app.ui.pages;
 
-import dtu.example.ui.Employee;
+import dtu.app.ui.classes.Employee;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 
