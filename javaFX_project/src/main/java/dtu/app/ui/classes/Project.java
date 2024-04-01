@@ -12,16 +12,16 @@ public class Project {
     private final List<Employee> employees;
     private Employee projectLeader;
 
-    public Project(Database app, String name, List<Employee> employees) {
+    public Project(Database app, String name, List<Employee> employees, Employee projectLeader) {
         this.app = app;
         this.ID = generateID();
         if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("No project name given");
+            throw new IllegalArgumentException("Name missing");
         }
         this.name = name;
         this.activities = new ArrayList<>();
         this.employees = new ArrayList<>(employees);
-        this.projectLeader = null;
+        this.projectLeader = projectLeader;
         app.appendProject(this);
     }
 
@@ -67,10 +67,17 @@ public class Project {
         activities.add(activity);
     }
 
-    public void editProject(String newName, Employee newProjectLeader) {
+    public void editProject(String newName, Employee newProjectLeader, List<Employee> newEmployees) {
+        if (newName == null || newName.isEmpty()) {
+            throw new IllegalArgumentException("Name missing");
+        }
         this.name = newName;
-        this.projectLeader = newProjectLeader;
-        updateActivityEmployees();
+        if (newProjectLeader != null) {
+            this.projectLeader = newProjectLeader;
+        }
+        employees.clear();
+        employees.addAll(newEmployees);
+        updateData();
     }
 
     public void addEmployee(Employee employee) {
@@ -81,10 +88,31 @@ public class Project {
         employees.clear();
     }
 
-    private void updateActivityEmployees() {
+    private void updateData() {
         for (Activity a : activities) {
             a.updateEmployees();
         }
+        if (projectLeader != null) {
+            boolean found = false;
+            for (Employee e : employees) {
+                if (e.getInitials().equals(projectLeader.getInitials())) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                projectLeader = null;
+            }
+        }
+    }
+
+    public Employee getEmployee(String initials) throws Exception {
+        for (Employee e : employees) {
+            if (e.getInitials().equals(initials)) {
+                return e;
+            }
+        }
+        throw new Exception("Employee not found");
     }
 
     public int getID() {
@@ -127,7 +155,10 @@ public class Project {
     @Override
     public String toString() {
         return "Project ID: " + ID + "\n" +
-                "Project Name: " + name + "\n";
+                "Project Name: " + name + "\n" +
+                "Project Leader: " + projectLeader + "\n" +
+                "Employees: " + employees + "\n" +
+                "Activities: " + activities;
     }
 
 }

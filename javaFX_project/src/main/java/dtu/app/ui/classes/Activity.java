@@ -31,47 +31,42 @@ public class Activity {
         }
     }
 
-    private void validateName(String newName, Project project) {
+    private void validateName(String name, Project project) {
         List<Activity> activities = project.getActivities();
-        if (newName == null || newName.isEmpty()) {
-            throw new IllegalArgumentException("Activity name cannot be empty");
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name missing");
         }
         for (Activity a : activities) {
-            if (a.getName().equals(newName)) {
+            if (a.getName().equals(name)) {
                 throw new IllegalArgumentException("Activity with this name already exists in the project");
             }
         }
     }
 
     // Method overload because there are two different cases where the name validation is needed.
-    private void validateName(String newName, Project project, Activity activityBeingEdited) {
-        List<Activity> activities = project.getActivities();
-        if (newName == null || newName.isEmpty()) {
-            throw new IllegalArgumentException("Activity name cannot be empty");
+    private void validateName(String name, Project project, Activity activity) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name missing");
         }
-        for (Activity a : activities) {
-            if (a != activityBeingEdited && a.getName().equals(newName)) {
-                throw new IllegalArgumentException("Activity with this name already exists in the project");
+        for (Activity a : project.getActivities()) {
+            if (a.getName().equals(name) && a != activity) {
+                throw new IllegalArgumentException("Name already exists");
             }
         }
     }
-
     private int parseAndValidateHours(String budgetHours) {
         try {
             int hours = Integer.parseInt(budgetHours);
-            if (hours < 0) {
-                throw new IllegalArgumentException("Budget hours cannot be negative");
-            }
             return hours;
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Budget hours cannot be empty");
+            throw new IllegalArgumentException("Budget hours missing");
         }
     }
 
     private int parseAndValidateWeek(String week, String errorMessage) {
         try {
             int weekNumber = Integer.parseInt(week);
-            if (weekNumber < 0 || weekNumber > 52) {
+            if (weekNumber == 0 || weekNumber > 52) {
                 throw new IllegalArgumentException(errorMessage);
             }
             return weekNumber;
@@ -129,6 +124,10 @@ public class Activity {
 
     public int getHoursSpent() {
         return hoursSpent;
+    }
+
+    public Project getProject() {
+        return project;
     }
 
 

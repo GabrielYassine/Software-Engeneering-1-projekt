@@ -10,6 +10,8 @@ import java.util.function.Consumer;
 
 public class CommonElementsController {
 
+    public Button backButton;
+
     public void goBack() throws IOException {
         if (!App.navigationHistory.isEmpty()) {
             App.navigationHistory.pop();

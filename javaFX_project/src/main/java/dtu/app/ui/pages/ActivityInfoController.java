@@ -60,10 +60,9 @@ public class ActivityInfoController extends CommonElementsController {
             if (selectedDate == null) {
                 throw new Exception("Date not selected");
             }
-
             String initials = initialsField.getText();
             Activity activity = App.database.selectedActivity;
-            Employee employee = App.database.getEmployee(initials);
+            Employee employee = activity.getProject().getEmployee(initials);
             Calendar calendar = getCalendarFromSelectedDate(selectedDate);
             String hours = hoursField.getText();
 

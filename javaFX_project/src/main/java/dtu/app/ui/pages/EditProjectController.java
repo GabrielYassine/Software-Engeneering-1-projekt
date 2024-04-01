@@ -31,8 +31,9 @@ public class EditProjectController extends CommonElementsController{
         List<Employee> allEmployees = new ArrayList<>(App.database.getEmployees());
         List<Employee> assignedEmployees = project.getEmployees();
         allEmployees.removeAll(assignedEmployees);
+        projectLeaderComboBox.getItems().add("None");
 
-        for (Employee employee : allEmployees) {
+        for (Employee employee : assignedEmployees) {
             projectLeaderComboBox.getItems().add(employee.getInitials());
         }
 
@@ -58,12 +59,9 @@ public class EditProjectController extends CommonElementsController{
             }
         }
 
-        project.clearEmployees();
-        for (Employee employee : selectedEmployeesListView.getItems()) {
-            project.addEmployee(employee);
-        }
+        List<Employee> newEmployees = new ArrayList<>(selectedEmployeesListView.getItems());
 
-        project.editProject(newProjectName, newProjectLeader);
+        project.editProject(newProjectName, newProjectLeader, newEmployees);
 
         new CommonElementsController().goBack();
     }

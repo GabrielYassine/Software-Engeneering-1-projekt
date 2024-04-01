@@ -43,7 +43,7 @@ public class Database {
                 return employee;
             }
         }
-        throw new Exception("Employee with initials '" + initials + "' not found");
+        return null;
     }
 
     public Project getProject(int id) throws Exception {
@@ -57,18 +57,14 @@ public class Database {
 
     public void initializeTestRun() {
         Employee employee1 = new Employee(this, "Huba");
-        Employee employee2 = new Employee(this, "Abcd");
-        Employee employee3 = new Employee(this, "Efgh");
-        Employee employee4 = new Employee(this, "Hijk");
-        Employee employee5 = new Employee(this, "Lmno");
-        Employee employee6 = new Employee(this, "Pqrs");
-        Employee employee7 = new Employee(this, "Tuvw");
-        Employee employee8 = new Employee(this, "Xyzz");
+        Employee employee2 = new Employee(this, "Abed");
+        Employee employee3 = new Employee(this, "Dora");
+        Employee employee4 = new Employee(this, "Jama");
 
-        Project project1 = new Project(this, "Project 1", List.of(employee1, employee2, employee3));
+        Project project1 = new Project(this, "Project 1", List.of(employee1, employee2, employee3, employee4), employee1);
 
         Activity activity1 = new Activity(project1, "Activity 1", "10", "1", "10", List.of(employee1, employee2));
-        Activity activity2 = new Activity(project1, "Activity 2", "20", "11", "20", List.of(employee2, employee3));
+        Activity activity2 = new Activity(project1, "Activity 2", "20", "11", "20", List.of(employee2, employee3, employee4));
     }
 
 }

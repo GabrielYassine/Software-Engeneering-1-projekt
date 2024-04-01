@@ -25,7 +25,7 @@ public class ActivityLog {
 
     public void registerHours(Calendar date, Activity activity, String hours) throws Exception{
         int hoursInt = parseAndValidateHours(hours);
-        if (date == null || activity == null || hoursInt < 0) {
+        if (date == null || activity == null) {
             throw new Exception("Insufficient or incorrect information given");
         }
         addActivity(date, activity, hoursInt);
@@ -34,15 +34,15 @@ public class ActivityLog {
     private int parseAndValidateHours(String registeredHours) {
         try {
             int hours = Integer.parseInt(registeredHours);
-            if (hours < 0) {
-                throw new IllegalArgumentException("Registered hours cannot be negative");
+            if (hours == 0) {
+                throw new IllegalArgumentException("Hours missing");
             }
             return hours;
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Registered hours value error");
         }
     }
-    public Map<Activity, Integer> getActivityHours(Calendar date) {
+    public Map<Activity, Integer> getDateActivities(Calendar date) {
         return dateLog.get(date);
     }
 

@@ -59,9 +59,7 @@ public class ProjectsController extends CommonElementsController {
 
         try {
             List<Employee> employees = new ArrayList<>(selectedEmployeesListView.getItems());
-            Project newProject = new Project(App.database, projectName, employees);
-            newProject.assignProjectLeader(projectLeader);
-
+            Project newProject = new Project(App.database, projectName, employees, projectLeader);
             projectsTableView.getItems().add(newProject);
             resetActivityCreationFields();
         } catch (Exception e) {
