@@ -67,13 +67,17 @@ public class Project {
         activities.add(activity);
     }
 
-    public void editProject(String newName, Employee newProjectLeader, List<Employee> newEmployees) {
+    public void editProject(String newName, String projectLeaderInitials, List<Employee> newEmployees) throws Exception {
         if (newName == null || newName.isEmpty()) {
             throw new IllegalArgumentException("Name missing");
         }
         this.name = newName;
-        if (newProjectLeader != null) {
-            this.projectLeader = newProjectLeader;
+        if (projectLeaderInitials != null) {
+            if (projectLeaderInitials.equals("None")) {
+                projectLeader = null;
+            } else {
+                this.projectLeader = app.getEmployee(projectLeaderInitials);
+            }
         }
         employees.clear();
         employees.addAll(newEmployees);

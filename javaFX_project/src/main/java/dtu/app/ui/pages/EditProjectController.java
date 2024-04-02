@@ -46,22 +46,13 @@ public class EditProjectController extends CommonElementsController{
     }
 
     @FXML
-    private void saveChanges() throws IOException {
+    private void saveChanges() throws Exception {
         Project project = App.database.selectedProject;
         String newProjectName = projectNameField.getText();
         String projectLeaderInitials = projectLeaderComboBox.getValue();
-        Employee newProjectLeader = null;
-
-        for (Employee employee : App.database.getEmployees()) {
-            if (employee.getInitials().equals(projectLeaderInitials)) {
-                newProjectLeader = employee;
-                break;
-            }
-        }
-
         List<Employee> newEmployees = new ArrayList<>(selectedEmployeesListView.getItems());
 
-        project.editProject(newProjectName, newProjectLeader, newEmployees);
+        project.editProject(newProjectName, projectLeaderInitials, newEmployees);
 
         new CommonElementsController().goBack();
     }

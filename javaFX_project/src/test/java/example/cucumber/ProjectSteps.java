@@ -123,7 +123,6 @@ public class ProjectSteps {
 
 	@When("the employee edits the project name to {string}, the project leader to {string}, and the project members to {string}")
 	public void theEmployeeEditsTheProjectNameToTheProjectLeaderToAndTheProjectMembersTo(String newName, String newProjectLeaderInitials, String newEmployeeInitials) throws Exception {
-		Employee newProjectLeader = database.getEmployee(newProjectLeaderInitials);
 		List<Employee> employees = new ArrayList<>();
 		if (newEmployeeInitials != null && !newEmployeeInitials.isEmpty()) {
 			for (String initial : newEmployeeInitials.split(", ")) {
@@ -131,7 +130,7 @@ public class ProjectSteps {
 			}
 		}
 		try {
-			project.editProject(newName, newProjectLeader, employees);
+			project.editProject(newName, newProjectLeaderInitials, employees);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -176,7 +175,6 @@ public class ProjectSteps {
 	@When("the employee edits the project with ID {string}'s name to {string}, the project leader to {string}, and the project members to {string}")
 	public void theEmployeeEditsTheProjectWithIDSNameToTheProjectLeaderToAndTheProjectMembersTo(String id, String newName, String newProjectLeaderInitials, String newEmployeeInitials) throws Exception {
 		Project projectToEdit = database.getProject(Integer.parseInt(id));
-		Employee newProjectLeader = database.getEmployee(newProjectLeaderInitials);
 		List<Employee> employees = new ArrayList<>();
 		if (newEmployeeInitials != null && !newEmployeeInitials.isEmpty()) {
 			for (String initial : newEmployeeInitials.split(", ")) {
@@ -184,7 +182,7 @@ public class ProjectSteps {
 			}
 		}
 		try {
-			projectToEdit.editProject(newName, newProjectLeader, employees);
+			projectToEdit.editProject(newName, newProjectLeaderInitials, employees);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
