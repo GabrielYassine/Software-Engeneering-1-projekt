@@ -15,6 +15,7 @@ public class Employee {
         this.activityCount = 0;
         database.appendEmployee(this);
     }
+
     public String getInitials() {
         return initials;
     }
