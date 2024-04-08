@@ -54,6 +54,7 @@ public class Activity {
             }
         }
     }
+
     private int parseAndValidateHours(String budgetHours) {
         try {
             int hours = Integer.parseInt(budgetHours);

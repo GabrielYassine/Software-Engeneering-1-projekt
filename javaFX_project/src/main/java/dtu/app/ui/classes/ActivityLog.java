@@ -23,7 +23,7 @@ public class ActivityLog {
         dateLog.put(date, hoursLog);
     }
 
-    public void registerHours(Calendar date, Activity activity, String hours) throws Exception{
+    public void registerHours(Calendar date, Activity activity, String hours) throws Exception {
         int hoursInt = parseAndValidateHours(hours);
         if (date == null || activity == null) {
             throw new Exception("Insufficient or incorrect information given");
@@ -42,6 +42,7 @@ public class ActivityLog {
             throw new IllegalArgumentException("Registered hours value error");
         }
     }
+
     public Map<Activity, Integer> getDateActivities(Calendar date) {
         return dateLog.get(date);
     }
