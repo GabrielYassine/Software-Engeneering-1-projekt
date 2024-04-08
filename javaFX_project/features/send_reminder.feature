@@ -13,3 +13,4 @@ Feature: send reminder
 #    And the employee is working on 20 activities in a week
 #    When the employee tries to start a new activity
 #    Then the employee should receive a notification "Can't work on more activities"
+  d
