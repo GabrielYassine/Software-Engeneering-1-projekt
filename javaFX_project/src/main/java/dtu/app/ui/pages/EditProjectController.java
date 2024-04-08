@@ -15,11 +15,11 @@ import java.util.List;
 public class EditProjectController extends CommonElementsController{
 
     @FXML
-    public ListView<Employee> employeesListView;
-    @FXML
     public ListView<Employee> selectedEmployeesListView;
     @FXML
     public ComboBox<String> projectLeaderComboBox;
+    @FXML
+    public ListView<Employee> employeesListView;
     @FXML
     private TextField projectNameField;
 
