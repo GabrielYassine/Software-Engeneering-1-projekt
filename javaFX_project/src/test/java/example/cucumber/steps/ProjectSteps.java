@@ -1,4 +1,4 @@
-package example.cucumber;
+package example.cucumber.steps;
 
 import dtu.app.ui.classes.*;
 import dtu.app.ui.pages.App;
