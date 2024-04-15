@@ -16,6 +16,6 @@ public class MenuController {
     }
     @FXML
     private void switchToEmployees() throws IOException {
-        App.setRoot("activityLog");
+        App.setRoot("employeeLog");
     }
 }
