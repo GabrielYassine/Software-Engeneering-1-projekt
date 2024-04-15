@@ -13,8 +13,9 @@ public class ActivityLog {
 
     public void addActivity(Calendar date, Activity activity, int hours) {
         Map<Activity, Integer> hoursLog = dateLog.getOrDefault(date, new HashMap<>());
-        hoursLog.put(activity, hours);
+        hoursLog.put(activity, hoursLog.getOrDefault(activity, 0) + hours);
         dateLog.put(date, hoursLog);
+        System.out.print("Activity added: " + activity.getName() + " on " + date.getTime() + " with " + hours + " hours\n");
     }
 
     public void editActivity(Calendar date, Activity activity, int hours) {
