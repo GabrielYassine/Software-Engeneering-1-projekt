@@ -15,6 +15,7 @@ public class ProjectInfoController extends CommonElementsController {
     public Button createActivityButton;
     public TableView<Activity> activityTableView;
     public TableColumn<Activity, String> nameColumn;
+    public TableColumn<Activity, Boolean> completedColumn;
     @FXML
     private TableColumn<Activity, String> statusColumn;
 
@@ -43,6 +44,7 @@ public class ProjectInfoController extends CommonElementsController {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         employeeSizeColumn.setCellValueFactory(new PropertyValueFactory<>("employeesSize"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        completedColumn.setCellValueFactory(new PropertyValueFactory<>("completedStatus"));
 
         Project selectedProject = App.database.selectedProject;
         projectNameValue.setText(selectedProject.getName());

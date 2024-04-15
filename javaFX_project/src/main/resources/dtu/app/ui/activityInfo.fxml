@@ -29,7 +29,10 @@
             </TableView>
         </HBox>
         <VBox alignment="CENTER" >
-            <Button fx:id="editButton" text="Edit Activity" onAction="#editActivity" />
+            <HBox alignment="CENTER" spacing="20">
+                <Button fx:id="completeAButton" text="Complete Activity" onAction="#completeActivity" />
+                <Button fx:id="editButton" text="Edit Activity" onAction="#editActivity" />
+            </HBox>
             <Label text= "Register hours for this activity" style="-fx-font-size: 20;" />
         </VBox>
         <HBox spacing="10" alignment="CENTER">

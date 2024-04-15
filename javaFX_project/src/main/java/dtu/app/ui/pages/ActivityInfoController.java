@@ -16,6 +16,8 @@ import java.util.Date;
 
 public class ActivityInfoController extends CommonElementsController {
     @FXML
+    private Button completeAButton;
+    @FXML
     private Label activityNameValue;
     @FXML
     private Label startWeekValue;
@@ -93,5 +95,11 @@ public class ActivityInfoController extends CommonElementsController {
     @FXML
     private void editActivity() throws IOException {
         App.setRoot("editActivity");
+    }
+
+    @FXML
+    private void completeActivity() {
+        Activity activity = App.database.selectedActivity;
+        activity.completeActivity();
     }
 }

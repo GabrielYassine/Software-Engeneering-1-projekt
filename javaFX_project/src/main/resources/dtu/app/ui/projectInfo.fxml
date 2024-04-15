@@ -37,6 +37,9 @@
                 <TableColumn fx:id="employeeSizeColumn" text="Employee Size">
                     <cellValueFactory><PropertyValueFactory property="employeesSize"/></cellValueFactory>
                 </TableColumn>
+                <TableColumn fx:id="completedColumn" text="Activity completed">
+                    <cellValueFactory><PropertyValueFactory property="completedStatus"/></cellValueFactory>
+                </TableColumn>
             </columns>
         </TableView>
         <Label text= "Create Activity" style="-fx-font-size: 15;" />

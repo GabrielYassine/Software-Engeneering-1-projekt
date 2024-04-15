@@ -12,6 +12,8 @@ public class Activity {
     private int endWeek;
     private int hoursSpent = 0;
 
+    private boolean completed;
+
     public Activity(Project project, String name, String budgetHours, String startWeek, String endWeek, List<Employee> employees) {
         validateProject(project);
         this.project = project;
@@ -22,6 +24,7 @@ public class Activity {
         this.startWeek = parseAndValidateWeek(startWeek, "Start week value error");
         this.endWeek = parseAndValidateWeek(endWeek, "End week value error");
         this.employees = new ArrayList<>(employees);
+        this.completed = false;
         project.addActivity(this);
     }
 
@@ -152,6 +155,18 @@ public class Activity {
         } else {
             return "Over budget";
         }
+    }
+
+    public void completeActivity() {
+        if(completed == false) {
+            completed = true;
+        } else {
+            completed = false;
+        }
+    }
+
+    public boolean getCompletedStatus() {
+        return completed;
     }
 
     public String toString() {
