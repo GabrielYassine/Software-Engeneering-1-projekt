@@ -155,6 +155,15 @@ public class Project {
     public int getEmployeesSize() {
         return employees.size();
     }
+    public String getActivitiesCompleted() {
+        int number = 0;
+        for (Activity a: activities) {
+            if(a.getCompletedStatus()) {
+                number++;
+            }
+        }
+        return number + "/" + activities.size();
+    }
 
     @Override
     public String toString() {
