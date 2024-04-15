@@ -111,6 +111,9 @@ public class Activity {
         hoursSpent += hours;
     }
 
+    public void completeActivity() {
+        completed = !completed;
+    }
     public String getName() {
         return name;
     }
@@ -157,11 +160,6 @@ public class Activity {
             return "Over budget";
         }
     }
-
-    public void completeActivity() {
-        completed = !completed;
-    }
-
     public boolean getCompletedStatus() {
         return completed;
     }
