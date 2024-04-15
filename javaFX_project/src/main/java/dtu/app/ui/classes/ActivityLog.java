@@ -8,9 +8,11 @@ import java.util.*;
 
 public class ActivityLog {
     private final Map<Calendar, Map<Activity, Integer>> dateLog;
+    private final List<Calendar> registeredDates;
 
     public ActivityLog() {
         this.dateLog = new HashMap<>();
+        this.registeredDates = new ArrayList<>();
     }
 
     public void addActivity(Calendar date, Activity activity, int hours) {
@@ -36,6 +38,11 @@ public class ActivityLog {
             throw new Exception("Insufficient or incorrect information given");
         }
         addActivity(date, activity, hoursInt);
+        hasRegistered(date);
+    }
+
+    public void hasRegistered(Calendar date) {
+        registeredDates.add(date);
     }
 
     private int parseAndValidateHours(String registeredHours) {
@@ -117,6 +124,10 @@ public class ActivityLog {
 
     public Map<Calendar, Map<Activity, Integer>> getDateLog() {
         return dateLog;
+    }
+
+    public List<Calendar> getRegisteredDates() {
+        return registeredDates;
     }
 
 

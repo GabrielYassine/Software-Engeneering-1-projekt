@@ -11,6 +11,8 @@ import java.util.List;
 public class Database {
     private final List<Employee> employeeRepository = new ArrayList<>();
     private final List<Project> projectRepository = new ArrayList<>();
+    private EmailServer emailServer;
+    private DateServer dateServer = new DateServer();
     public Project selectedProject;
     public Activity selectedActivity;
 
@@ -28,6 +30,14 @@ public class Database {
 
     public void setSelectedActivity(Activity activity) {
         this.selectedActivity = activity;
+    }
+
+    public void setEmailServer(EmailServer emailServer) {
+        this.emailServer = emailServer;
+    }
+
+    public void setDateServer(DateServer dateServer) {
+        this.dateServer = dateServer;
     }
 
     public List<Project> getProjects() {
@@ -54,6 +64,23 @@ public class Database {
             }
         }
         throw new Exception("Project with ID '" + id + "' not found");
+    }
+
+    public boolean hasEmployeeRegistered(Employee employee) throws Exception {
+        if (!employeeRepository.contains(employee)) {
+            throw new Exception("Employee does not exist");
+        }
+
+        Calendar date = dateServer.getDate();
+        return employee.hasRegistered(date);
+    }
+
+    public void sendNotification() throws Exception {
+        for (Employee employee : employeeRepository) {
+            if (!hasEmployeeRegistered(employee)) {
+                employee.sendEmailNotification(emailServer);
+            }
+        }
     }
 
     public void initializeTestRun() throws Exception {

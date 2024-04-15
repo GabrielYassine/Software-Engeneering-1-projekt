@@ -1,5 +1,7 @@
 package dtu.app.ui.classes;
 
+import java.util.Calendar;
+
 public class Employee {
 
     private final String initials;
@@ -14,6 +16,14 @@ public class Employee {
         this.activityLog = new ActivityLog();
         this.activityCount = 0;
         database.appendEmployee(this);
+    }
+
+    public void sendEmailNotification(EmailServer emailServer) {
+        emailServer.sendEmail(initials, "Work", "Register your daily work");
+    }
+
+    public boolean hasRegistered(Calendar date) {
+        return activityLog.getRegisteredDates().contains(date);
     }
 
     public String getInitials() {
