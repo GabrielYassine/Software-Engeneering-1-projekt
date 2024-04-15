@@ -48,6 +48,34 @@ public class ActivityLog {
         return dateLog.get(date);
     }
 
+    public String getMondayActivities() {
+        return "Monday activities";
+    }
+
+    public String getTuesdayActivities() {
+        return "Tuesday activities";
+    }
+
+    public String getWednesdayActivities() {
+        return "Wednesday activities";
+    }
+
+    public String getThursdayActivities() {
+        return "Thursday activities";
+    }
+
+    public String getFridayActivities() {
+        return "Friday activities";
+    }
+
+    public String getSaturdayActivities() {
+        return "Saturday activities";
+    }
+
+    public String getSundayActivities() {
+        return "Sunday activities";
+    }
+
     public Map<Calendar, Map<Activity, Integer>> getDateLog() {
         return dateLog;
     }

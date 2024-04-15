@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.geometry.Insets?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.app.ui.pages.ActivityLogController">
+    <children>
+        <fx:include source="backButton.fxml"/>
+        <TableView fx:id="activityTable">
+            <columns>
+                <TableColumn fx:id="mondayColumn" text="Monday" />
+                <TableColumn fx:id="tuesdayColumn" text="Tuesday" />
+                <TableColumn fx:id="wednesdayColumn" text="Wednesday" />
+                <TableColumn fx:id="thursdayColumn" text="Thursday" />
+                <TableColumn fx:id="fridayColumn" text="Friday" />
+                <TableColumn fx:id="saturdayColumn" text="Saturday" />
+                <TableColumn fx:id="sundayColumn" text="Sunday" />
+            </columns>
+        </TableView>
+    </children>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</VBox>
