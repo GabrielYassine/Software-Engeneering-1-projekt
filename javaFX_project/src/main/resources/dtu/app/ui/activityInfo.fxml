@@ -44,6 +44,7 @@
         </HBox>
         <VBox alignment="CENTER" >
             <Button text="Register Hours" onAction="#registerHours" />
+
         </VBox>
     </children>
     <padding>

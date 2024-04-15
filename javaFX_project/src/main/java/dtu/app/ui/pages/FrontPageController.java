@@ -9,7 +9,7 @@ public class FrontPageController {
     public Button primaryButton;
 
     @FXML
-    private void switchToSecondary() throws IOException {
+    private void switchToSecondary() throws Exception {
         App.database.initializeTestRun();
         App.setRoot("secondary");
     }

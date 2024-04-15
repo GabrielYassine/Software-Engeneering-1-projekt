@@ -1,24 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.app.ui.pages.ActivityLogController">
     <children>
         <fx:include source="backButton.fxml"/>
-        <TableView fx:id="activityTable">
-            <columns>
-                <TableColumn fx:id="mondayColumn" text="Monday" />
-                <TableColumn fx:id="tuesdayColumn" text="Tuesday" />
-                <TableColumn fx:id="wednesdayColumn" text="Wednesday" />
-                <TableColumn fx:id="thursdayColumn" text="Thursday" />
-                <TableColumn fx:id="fridayColumn" text="Friday" />
-                <TableColumn fx:id="saturdayColumn" text="Saturday" />
-                <TableColumn fx:id="sundayColumn" text="Sunday" />
-            </columns>
-        </TableView>
+        <HBox spacing="10">
+            <VBox>
+                <Label text="Monday"/>
+                <ListView fx:id="mondayListView" prefHeight="600" />
+            </VBox>
+            <VBox>
+                <Label text="Tuesday"/>
+                <ListView fx:id="tuesdayListView" prefHeight="600" />
+            </VBox>
+            <VBox>
+                <Label text="Wednesday"/>
+                <ListView fx:id="wednesdayListView" prefHeight="600" />
+            </VBox>
+            <VBox>
+                <Label text="Thursday"/>
+                <ListView fx:id="thursdayListView" prefHeight="600" />
+            </VBox>
+            <VBox>
+                <Label text="Friday"/>
+                <ListView fx:id="fridayListView" prefHeight="600" />
+            </VBox>
+            <VBox>
+                <Label text="Saturday"/>
+                <ListView fx:id="saturdayListView" prefHeight="600" />
+            </VBox>
+            <VBox>
+                <Label text="Sunday"/>
+                <ListView fx:id="sundayListView" prefHeight="600" />
+            </VBox>
+        </HBox>
+        <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Label fx:id="yearNumber" style="-fx-font-size: 20;" />
+            <Label fx:id="weekNumber" style="-fx-font-size: 15;" />
+            <Label fx:id="initialsValue" style="-fx-font-size: 15;" />
+        </VBox>
+        <HBox spacing="10" alignment="CENTER">
+            <TextField fx:id="initialsField" promptText="Initials" />
+            <TextField fx:id="yearField" promptText="year XXXX" />
+            <TextField fx:id="weekField" promptText="week XX" />
+        </HBox>
+        <Button text="Select Week" onAction="#selectWeek" />
     </children>
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
