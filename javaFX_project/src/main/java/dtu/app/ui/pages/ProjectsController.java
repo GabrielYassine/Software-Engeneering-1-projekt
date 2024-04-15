@@ -15,6 +15,8 @@ public class ProjectsController extends CommonElementsController {
     @FXML
     public TableView<Project> projectsTableView;
     @FXML
+    private TableColumn<Project, Integer> projectCompletedColumn;
+    @FXML
     private TableColumn<Project, Integer> idColumn;
     @FXML
     private TableColumn<Project, String> nameColumn;
@@ -37,6 +39,7 @@ public class ProjectsController extends CommonElementsController {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         employeeSizeColumn.setCellValueFactory(new PropertyValueFactory<>("employeesSize"));
         activitySizeColumn.setCellValueFactory(new PropertyValueFactory<>("activitiesSize"));
+        projectCompletedColumn.setCellValueFactory(new PropertyValueFactory<>("activitiesCompleted"));
 
         projectsTableView.getItems().addAll(App.database.getProjects());
         employeesListView.getItems().addAll(App.database.getEmployees());

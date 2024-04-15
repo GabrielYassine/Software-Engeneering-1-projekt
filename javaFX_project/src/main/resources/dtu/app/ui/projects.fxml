@@ -30,6 +30,9 @@
                 <TableColumn fx:id="employeeSizeColumn" text="Employees">
                     <cellValueFactory><PropertyValueFactory property="employeesSize"/></cellValueFactory>
                 </TableColumn>
+                <TableColumn fx:id="projectCompletedColumn" text="Completion Status">
+                    <cellValueFactory><PropertyValueFactory property="projectCompletedStatus"/></cellValueFactory>
+                </TableColumn>
             </columns>
         </TableView>
         <Label text= "Create Project" style="-fx-font-size: 15;" />
