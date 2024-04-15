@@ -2,6 +2,7 @@ package dtu.app.ui.pages;
 
 import dtu.app.ui.classes.Activity;
 import dtu.app.ui.classes.Employee;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -15,6 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class ActivityInfoController extends CommonElementsController {
+    public Label completionStatus;
     @FXML
     private Button completeAButton;
     @FXML
@@ -41,6 +43,8 @@ public class ActivityInfoController extends CommonElementsController {
 
     public void initialize() {
         Activity activity = App.database.selectedActivity;
+
+        updateCompletionStatus(activity);
         updateActivityInfo(activity);
 
         datePicker.addEventFilter(KeyEvent.KEY_TYPED, KeyEvent::consume);
@@ -53,6 +57,21 @@ public class ActivityInfoController extends CommonElementsController {
 
     private void updateActivityInfo(Activity activity) {
         budgetHoursValue.setText(activity.getHoursSpent() + " / " + activity.getBudgetHours());
+    }
+
+    private void updateCompletionStatus(Activity activity) {
+        if (activity.getCompletedStatus()) {
+            completionStatus.setText("Completed");
+        } else {
+            completionStatus.setText("Not completed");
+        }
+    }
+
+    @FXML
+    private void completeActivity() {
+        Activity activity = App.database.selectedActivity;
+        activity.completeActivity();
+        updateCompletionStatus(activity);
     }
 
     @FXML
@@ -97,9 +116,5 @@ public class ActivityInfoController extends CommonElementsController {
         App.setRoot("editActivity");
     }
 
-    @FXML
-    private void completeActivity() {
-        Activity activity = App.database.selectedActivity;
-        activity.completeActivity();
-    }
+
 }

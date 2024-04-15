@@ -37,7 +37,7 @@
                 <TableColumn fx:id="employeeSizeColumn" text="Employee Size">
                     <cellValueFactory><PropertyValueFactory property="employeesSize"/></cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="completedColumn" text="Activity completed">
+                <TableColumn fx:id="completedColumn" text="Completion Status">
                     <cellValueFactory><PropertyValueFactory property="completedStatus"/></cellValueFactory>
                 </TableColumn>
             </columns>

@@ -2,6 +2,7 @@ package dtu.app.ui.classes;
 
 import java.util.ArrayList;
 import java.util.List;
+import dtu.app.ui.classes.Project;
 
 public class Activity {
     private List<Employee> employees;
@@ -12,7 +13,7 @@ public class Activity {
     private int endWeek;
     private int hoursSpent = 0;
 
-    private boolean completed;
+    private boolean completed = false;
 
     public Activity(Project project, String name, String budgetHours, String startWeek, String endWeek, List<Employee> employees) {
         validateProject(project);
@@ -158,11 +159,7 @@ public class Activity {
     }
 
     public void completeActivity() {
-        if(completed == false) {
-            completed = true;
-        } else {
-            completed = false;
-        }
+        completed = !completed;
     }
 
     public boolean getCompletedStatus() {
