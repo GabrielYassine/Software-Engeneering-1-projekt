@@ -30,6 +30,10 @@ public class Employee {
         return initials;
     }
 
+    public void updateActivityCount(int n) {
+        activityCount += n;
+    }
+
     public int getActivityCount() {
         return activityCount;
     }

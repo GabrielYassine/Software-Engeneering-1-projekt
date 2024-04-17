@@ -25,6 +25,10 @@ public class Activity {
         this.startWeek = parseAndValidateWeek(startWeek, "Start week value error");
         this.endWeek = parseAndValidateWeek(endWeek, "End week value error");
         this.employees = new ArrayList<>(employees);
+        // temporary
+        for (Employee e : employees) {
+            e.updateActivityCount(1);
+        }
         this.completed = false;
         project.addActivity(this);
     }

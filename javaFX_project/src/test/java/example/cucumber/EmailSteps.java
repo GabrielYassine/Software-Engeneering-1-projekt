@@ -1,12 +1,14 @@
 package example.cucumber;
 
-import dtu.app.ui.classes.Database;
-import dtu.app.ui.classes.Employee;
-import dtu.app.ui.classes.ErrorMessageHolder;
+import dtu.app.ui.classes.*;
 import dtu.app.ui.pages.App;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.en_old.Ac;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -47,5 +49,44 @@ public class EmailSteps {
             errorMessageHolder.setErrorMessage(e.getMessage());
         }
         verify(emailServer.getMockEmailServer()).sendEmail(employee.getInitials(), "Work", notification);
+    }
+
+    @Given("the employee is working on {int} activities in a week")
+    public void theEmployeeIsWorkingOnActivitiesInAWeek(Integer activityCount) {
+        exampleActivities(activityCount);
+        assertThat(employee.getActivityCount(), is(equalTo(activityCount)));
+    }
+
+//    @When("the employee tries to start a new activity")
+//    public void theEmployeeTriesToStartANewActivity() {
+//        // Write code here that turns the phrase above into concrete actions
+//        throw new io.cucumber.java.PendingException();
+//    }
+
+//    @Then("the employee will get rejected")
+//    public void theEmployeeWillGetRejected() {
+//       // Write code here that turns the phrase above into concrete actions
+//        throw new io.cucumber.java.PendingException();
+//    }
+
+    @Then("the employee should receive a notification {string}")
+    public void theEmployeeShouldReceiveANotification(String string) {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+
+    public Project exampleProject() {
+        List<Employee> employees = new ArrayList<>();
+        employees.add(employee);
+
+        return new Project(database, "ExampleProject", employees, employee);
+    }
+
+    public void exampleActivities(int n) {
+        Project exampleProject = exampleProject();
+
+        for (int i = 0; i < n; i++) {
+            new Activity(exampleProject, "Activity" + i, "5", "1", "10", List.of(employee));
+        }
     }
 }
