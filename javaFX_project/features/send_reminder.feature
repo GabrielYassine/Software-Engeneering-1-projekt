@@ -2,12 +2,6 @@ Feature: send reminder
   Description: the system sends an employee an important reminder
   Actor: system
 
-  Background:
-    Given there is a project with name "New Project"
-    And there is an activity with name "New Activity" in the project, with the following details
-      | Name        | Budget Hours | Start Week | End Week | Initials   |
-      | New Activity| 100          | 5          | 8        | Huba, Abed |
-
   Scenario: Employee receives a reminder for unregistered daily work
     Given that there is an employee "Huba"
     When the employee has not registered his daily work for the current day
