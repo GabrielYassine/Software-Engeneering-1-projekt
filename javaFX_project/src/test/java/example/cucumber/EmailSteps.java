@@ -44,7 +44,7 @@ public class EmailSteps {
     @Then("the employee should receive the notification {string}")
     public void theEmployeeShouldReceiveTheNotification(String notification) {
         try {
-            database.sendNotification();
+            database.sendNotification(notification);
         } catch (Exception e) {
             errorMessageHolder.setErrorMessage(e.getMessage());
         }
@@ -55,24 +55,6 @@ public class EmailSteps {
     public void theEmployeeIsWorkingOnActivitiesInAWeek(Integer activityCount) {
         exampleActivities(activityCount);
         assertThat(employee.getActivityCount(), is(equalTo(activityCount)));
-    }
-
-//    @When("the employee tries to start a new activity")
-//    public void theEmployeeTriesToStartANewActivity() {
-//        // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-
-//    @Then("the employee will get rejected")
-//    public void theEmployeeWillGetRejected() {
-//       // Write code here that turns the phrase above into concrete actions
-//        throw new io.cucumber.java.PendingException();
-//    }
-
-    @Then("the employee should receive a notification {string}")
-    public void theEmployeeShouldReceiveANotification(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
     }
 
     public Project exampleProject() {

@@ -25,11 +25,8 @@ public class Activity {
         this.startWeek = parseAndValidateWeek(startWeek, "Start week value error");
         this.endWeek = parseAndValidateWeek(endWeek, "End week value error");
         this.employees = new ArrayList<>(employees);
-        // temporary
-        for (Employee e : employees) {
-            e.updateActivityCount(1);
-        }
         this.completed = false;
+        addEmployees(employees);
         project.addActivity(this);
     }
 
@@ -96,7 +93,22 @@ public class Activity {
         if (employees == null) {
             employees = new ArrayList<>();
         }
-        employees.add(e);
+        if (e.getActivityCount() < 20) {
+            e.updateActivityCount(1);
+            employees.add(e);
+        }
+    }
+
+    public void addEmployees(List<Employee> PotentialEmployees) {
+        if (employees == null) {
+            employees = new ArrayList<>();
+        }
+        for (Employee e : PotentialEmployees) {
+            if (e.getActivityCount() < 20) {
+                e.updateActivityCount(1);
+                employees.add(e);
+            }
+        }
     }
 
     public void clearEmployees() {

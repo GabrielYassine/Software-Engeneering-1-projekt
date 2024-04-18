@@ -78,10 +78,10 @@ public class Database {
         return employee.hasRegistered(date);
     }
 
-    public void sendNotification() throws Exception {
+    public void sendNotification(String text) throws Exception {
         for (Employee employee : employeeRepository) {
             if (!hasEmployeeRegistered(employee)) {
-                employee.sendEmailNotification(emailServer);
+                employee.sendEmailNotification(emailServer, text);
             }
         }
     }
