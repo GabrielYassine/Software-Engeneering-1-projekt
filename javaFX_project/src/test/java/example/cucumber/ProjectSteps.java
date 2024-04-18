@@ -411,4 +411,18 @@ public class ProjectSteps {
 		assertFalse(activity.getCompletedStatus());
 	}
 
+	////////////////////////////////////////////////////////////////////////////////
+
+	// Feature: Show completion status on project
+
+	@When("the user checks the completion status")
+	public void theUserChecksTheCompletionStatus() {
+
+	}
+
+	@Then("the user gets the number of activities completed and the total number of activities")
+	public void theUserGetsTheNumberOfActivitiesCompletedAndTheTotalNumberOfActivities() {
+		assertEquals("0/0",project.getActivitiesCompleted());
+	}
+
 }
