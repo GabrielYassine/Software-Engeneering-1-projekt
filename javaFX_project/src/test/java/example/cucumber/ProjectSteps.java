@@ -375,4 +375,40 @@ public class ProjectSteps {
 		assertEquals(totalHours, registeredHours);
 	}
 
+	////////////////////////////////////////////////////////////////////////////////
+
+	// Feature: Complete activity
+
+	@Given("an activity is open")
+	public void anActivityIsOpen() {
+		if(activity.getCompletedStatus()) {
+			activity.completeActivity();
+		}
+		assertFalse(activity.getCompletedStatus());
+	}
+	@When("the user closes the activity")
+	public void theUserClosesTheActivity() {
+		activity.completeActivity();
+	}
+	@Then("the activity is completed")
+	public void theActivityIsCompleted() {
+		assertTrue(activity.getCompletedStatus());
+	}
+
+	@Given("an activity is closed")
+	public void anActivityIsClosed() {
+		if(!activity.getCompletedStatus()) {
+			activity.completeActivity();
+		}
+		assertTrue(activity.getCompletedStatus());
+	}
+	@When("the user opens the activity")
+	public void theUserOpensTheActivity() {
+		activity.completeActivity();
+	}
+	@Then("the activity is not completed")
+	public void theActivityIsNotCompleted() {
+		assertFalse(activity.getCompletedStatus());
+	}
+
 }
