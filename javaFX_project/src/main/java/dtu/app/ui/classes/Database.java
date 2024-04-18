@@ -49,12 +49,15 @@ public class Database {
     }
 
     public Employee getEmployee(String initials) throws Exception {
+        if (initials == null || initials.isEmpty()) {
+            throw new IllegalArgumentException("Initials cannot be null or empty");
+        }
         for (Employee employee : employeeRepository) {
             if (employee.getInitials().equals(initials)) {
                 return employee;
             }
         }
-        return null;
+        throw new Exception("Employee with those initials not found");
     }
 
     public Project getProject(int id) throws Exception {

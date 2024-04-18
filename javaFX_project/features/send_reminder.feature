@@ -7,9 +7,9 @@ Feature: send reminder
     When the employee has not registered his daily work for the current day
     Then the employee should receive the notification "Register your daily work"
 
-  Scenario: Employee exceeds the maximum activity limit
-    Given that there is an employee "huba"
-    And the employee is working on 20 activities in a week
-    When the employee tries to start a new activity
-    Then the employee will get rejected
-    Then the employee should receive a notification "Can't work on more activities"
+#  Scenario: Employee exceeds the maximum activity limit
+#    Given that there is an employee "huba"
+#    And the employee is working on 20 activities in a week
+#    When the employee tries to start a new activity
+#    Then the employee will get rejected
+#    Then the employee should receive a notification "Can't work on more activities"

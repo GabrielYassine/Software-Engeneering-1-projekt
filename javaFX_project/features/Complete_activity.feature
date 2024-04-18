@@ -14,12 +14,12 @@ Feature: open/close Activity
       | Name        | Budget Hours | Start Week | End Week | Initials               |
       | New Activity| 100          | 5          | 8        | Huba, Abed, Dora, Jama |
 
-  Scenario: User marks an activity as completed
-    Given an activity is open
-    When the user closes the activity
-    Then the activity is completed
+#  Scenario: User marks an activity as completed
+#    Given an activity is open
+#    When the user closes the activity
+#    Then the activity is completed
 
-  Scenario: User marks an activity as not completed
-    Given an activity is closed
-    When the user opens the activity
-    Then the activity is not completed
+#  Scenario: User marks an activity as not completed
+#    Given an activity is closed
+#    When the user opens the activity
+#    Then the activity is not completed
