@@ -24,7 +24,7 @@ public class ProjectSteps {
 	private Project project;
 	private Activity activity;
 	private ActivityLog weekActivities;
-
+	
 	public ProjectSteps(App app) {
 		this.app = app;
 		this.errorMessage = new ErrorMessageHolder();
@@ -468,6 +468,11 @@ public class ProjectSteps {
 			String expectedActivityName = columns.get("Activity Name");
 			String expectedHours = columns.get("Hours");
 
+			// If expectedDate is null or empty, skip this iteration
+			if (expectedDate == null || expectedDate.isEmpty()) {
+				continue;
+			}
+
 			// Convert the expectedDate to a Calendar instance
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			Date parsedDate = format.parse(expectedDate);
@@ -489,4 +494,34 @@ public class ProjectSteps {
 			assertTrue("Activity with name '" + expectedActivityName + "' and hours '" + expectedHours + "' not found for date '" + expectedDate + "'", activityFound);
 		}
 	}
+
+
+	@Then("the weekday {int} for the employee with initials {string} should contain the following details")
+	public void theDayForEmployeeWithInitialsShouldContainTheFollowingDetails(Integer dayOfWeek, String initials, DataTable table) throws Exception {
+		// Convert the expected details into a list of maps for easier comparison
+		List<Map<String, String>> rows = table.asMaps(String.class, String.class);
+		for (Map<String, String> columns : rows) {
+			String expectedActivityName = columns.get("Activity Name");
+			String expectedHours = columns.get("Hours");
+
+			// Retrieve the employee
+			Employee employee = database.getEmployee(initials);
+
+			// Get the activities for the expected day of the week
+			List <String> dateActivities = employee.getActivityLog().getDayActivities(dayOfWeek);
+			System.out.println(dateActivities);
+			// Check that the activity with the expected name exists and has the expected hours
+			boolean activityFound = false;
+			for (String activityInfo : dateActivities) {
+				String[] activityInfoParts = activityInfo.split("-");
+				if (activityInfoParts[0].equals(expectedActivityName) && activityInfoParts[1].equals(expectedHours)) {
+					activityFound = true;
+					break;
+				}
+			}
+
+			assertTrue("Activity with name '" + expectedActivityName + "' and hours '" + expectedHours + "' not found for day '" + dayOfWeek + "'", activityFound);
+		}
+	}
 }
+

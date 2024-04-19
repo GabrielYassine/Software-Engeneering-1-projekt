@@ -105,13 +105,13 @@ public class ActivityLog {
         return getDayActivities(Calendar.SUNDAY);
     }
 
-    private List<String> getDayActivities(int dayOfWeek) {
+    public List<String> getDayActivities(int dayOfWeek) {
         List<String> activities = new ArrayList<>();
         for (Map.Entry<Calendar, Map<Activity, Integer>> entry : dateLog.entrySet()) {
             if (entry.getKey().get(Calendar.DAY_OF_WEEK) == dayOfWeek) {
                 for (Map.Entry<Activity, Integer> activityEntry : entry.getValue().entrySet()) {
-                    String activityInfo = activityEntry.getKey().getName() + "\n" +
-                            activityEntry.getValue() + " hours";
+                    String activityInfo = activityEntry.getKey().getName() + "-" +
+                            activityEntry.getValue();
                     activities.add(activityInfo);
                 }
             }
