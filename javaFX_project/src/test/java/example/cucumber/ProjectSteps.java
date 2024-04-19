@@ -425,4 +425,44 @@ public class ProjectSteps {
 		assertEquals("0/0",project.getActivitiesCompleted());
 	}
 
+	@And("the employee with initials {string} has registered {string} hours for the activity {string} on the date {string}")
+	public void theEmployeeWithInitialsHasRegisteredHoursForTheActivityOnTheDate(String initials, String hours, String activityName, String date) {
+			try {
+				// Retrieve the employee from the database using the initials
+				Employee employee = database.getEmployee(initials);
+
+				// Retrieve the activity from the project using the activity name
+				Activity activity = project.getActivity(activityName);
+
+				// Parse the date into a Calendar object
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				Date parsedDate = format.parse(date);
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(parsedDate);
+
+				// Register the hours for the activity on the specified date
+				employee.getActivityLog().registerHours(calendar, activity, hours);
+				activity.registerHours(Integer.parseInt(hours));
+			} catch (ParseException e) {
+				if (date.isEmpty()) {
+					errorMessage.setErrorMessage("Date missing");
+				} else {
+					errorMessage.setErrorMessage(e.getMessage());
+				}
+			} catch (Exception e) {
+				errorMessage.setErrorMessage(e.getMessage());
+			}
+		}
+
+	@Then("the selected week should contain the following details")
+	public void theSelectedWeekShouldContainTheFollowingDetails(DataTable expectedDetailsTable) {
+		// Convert the expected details into a list of maps for easier comparison
+		List<Map<String, String>> expectedDetails = expectedDetailsTable.asMaps(String.class, String.class);
+
+		// Retrieve the actual details of the selected week
+		List<Map<String, String>> actualDetails = getWeekActivities();
+
+		// Compare the actual details with the expected details
+		assertEquals(expectedDetails, actualDetails);
+	}
 }
