@@ -9,6 +9,7 @@ public class MenuController {
 
     public Button viewProjectsButton;
     public Button viewEmployeesButton;
+    public Button viewEmailButton;
 
     @FXML
     private void switchToProjects() throws IOException {
@@ -17,5 +18,9 @@ public class MenuController {
     @FXML
     private void switchToEmployees() throws IOException {
         App.setRoot("employeeLog");
+    }
+    @FXML
+    private void switchToEmail() throws IOException {
+        App.setRoot("email");
     }
 }
