@@ -60,6 +60,7 @@ public class ActivityLog {
     public ActivityLog getWeekActivities(String year, String week) {
         int yearInt = Integer.parseInt(year);
         int weekInt = Integer.parseInt(week);
+
         ActivityLog weekActivities = new ActivityLog();
         WeekFields weekFields = WeekFields.of(Locale.getDefault());
 
@@ -145,6 +146,7 @@ public class ActivityLog {
             }
             sb.append("\n");
         }
+        System.out.print("Hello");
         return sb.toString();
     }
 
