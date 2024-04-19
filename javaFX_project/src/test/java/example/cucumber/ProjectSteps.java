@@ -24,7 +24,8 @@ public class ProjectSteps {
 	private Project project;
 	private Activity activity;
 	private ActivityLog weekActivities;
-	
+	private String selectedWeek;
+
 	public ProjectSteps(App app) {
 		this.app = app;
 		this.errorMessage = new ErrorMessageHolder();
@@ -354,7 +355,6 @@ public class ProjectSteps {
 		try {
 			Activity activity = project.getActivity(activityName);
 			Employee employee = project.getEmployee(initials);
-			System.out.print(employee);
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			Date parsedDate = format.parse(date);
 			Calendar calendar = Calendar.getInstance();
@@ -372,7 +372,6 @@ public class ProjectSteps {
 	public void theActivityShouldHaveHoursRegisteredInTotal(String activityName, int totalHours) {
 		Activity activity = project.getActivity(activityName);
 		int registeredHours = activity.getHoursSpent();
-		System.out.println("Registered hours: " + registeredHours);
 		assertEquals(totalHours, registeredHours);
 	}
 
@@ -456,72 +455,89 @@ public class ProjectSteps {
 
 	@When("the employee searches for the schedule of the employee(s) with initials {string} for the year {int} and week {int}")
 	public void theEmployeeSearchesForTheScheduleOfTheEmployeeSWithInitialsForTheYearAndWeek(String initials, int year, int week) throws Exception {
-		Employee employee = database.getEmployee(initials);
-		this.weekActivities = employee.getActivityLog().getWeekActivities(String.valueOf(year), String.valueOf(week));
+		try {
+			Employee employee = database.getEmployee(initials);
+			this.weekActivities = employee.getActivityLog().getWeekActivities(String.valueOf(year), String.valueOf(week));
+			this.selectedWeek = String.valueOf(week);
+		}
+		catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
 	}
 
 	@Then("the selected week for employee with initials {string} should contain the following details")
 	public void theSelectedWeekForEmployeeWithInitialsShouldContainTheFollowingDetails(String initials, DataTable table) throws ParseException {
-		List<Map<String, String>> rows = table.asMaps(String.class, String.class);
-		for (Map<String, String> columns : rows) {
-			String expectedDate = columns.get("Date");
-			String expectedActivityName = columns.get("Activity Name");
-			String expectedHours = columns.get("Hours");
+		try {
+			List<Map<String, String>> rows = table.asMaps(String.class, String.class);
+			for (Map<String, String> columns : rows) {
+				String expectedDate = columns.get("Date");
+				String expectedActivityName = columns.get("Activity Name");
+				String expectedHours = columns.get("Hours");
 
-			// If expectedDate is null or empty, skip this iteration
-			if (expectedDate == null || expectedDate.isEmpty()) {
-				continue;
-			}
-
-			// Convert the expectedDate to a Calendar instance
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			Date parsedDate = format.parse(expectedDate);
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(parsedDate);
-
-			// Get the activities for the expected date
-			Map<Activity, Integer> dateActivities = weekActivities.getDateActivities(calendar);
-
-			// Check that the activity with the expected name exists and has the expected hours
-			boolean activityFound = false;
-			for (Map.Entry<Activity, Integer> entry : dateActivities.entrySet()) {
-				if (entry.getKey().getName().equals(expectedActivityName) && entry.getValue().equals(Integer.parseInt(expectedHours))) {
-					activityFound = true;
-					break;
+				// If expectedDate is null or empty, skip this iteration
+				if (expectedDate == null || expectedDate.isEmpty()) {
+					continue;
 				}
-			}
 
-			assertTrue("Activity with name '" + expectedActivityName + "' and hours '" + expectedHours + "' not found for date '" + expectedDate + "'", activityFound);
+				// Convert the expectedDate to a Calendar instance
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				Date parsedDate = format.parse(expectedDate);
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(parsedDate);
+
+				// Get the activities for the expected date
+				Map<Activity, Integer> dateActivities = weekActivities.getDateActivities(calendar);
+
+				// Check that the activity with the expected name exists and has the expected hours
+				boolean activityFound = false;
+				for (Map.Entry<Activity, Integer> entry : dateActivities.entrySet()) {
+					if (entry.getKey().getName().equals(expectedActivityName) && entry.getValue().equals(Integer.parseInt(expectedHours))) {
+						activityFound = true;
+						break;
+					}
+				}
+
+				assertTrue("Activity with name '" + expectedActivityName + "' and hours '" + expectedHours + "' not found for date '" + expectedDate + "'", activityFound);
+			}
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
-
 
 	@Then("the weekday {int} for the employee with initials {string} should contain the following details")
 	public void theDayForEmployeeWithInitialsShouldContainTheFollowingDetails(Integer dayOfWeek, String initials, DataTable table) throws Exception {
-		// Convert the expected details into a list of maps for easier comparison
-		List<Map<String, String>> rows = table.asMaps(String.class, String.class);
-		for (Map<String, String> columns : rows) {
-			String expectedActivityName = columns.get("Activity Name");
-			String expectedHours = columns.get("Hours");
+		try {
+			// Convert the expected details into a list of maps for easier comparison
+			List<Map<String, String>> rows = table.asMaps(String.class, String.class);
+			for (Map<String, String> columns : rows) {
+				String expectedActivityName = columns.get("Activity Name");
+				String expectedHours = columns.get("Hours");
 
-			// Retrieve the employee
-			Employee employee = database.getEmployee(initials);
+				// Retrieve the employee
+				Employee employee = database.getEmployee(initials);
 
-			// Get the activities for the expected day of the week
-			List <String> dateActivities = employee.getActivityLog().getDayActivities(dayOfWeek);
-			System.out.println(dateActivities);
-			// Check that the activity with the expected name exists and has the expected hours
-			boolean activityFound = false;
-			for (String activityInfo : dateActivities) {
-				String[] activityInfoParts = activityInfo.split("-");
-				if (activityInfoParts[0].equals(expectedActivityName) && activityInfoParts[1].equals(expectedHours)) {
-					activityFound = true;
-					break;
+				int weekOfYear = Integer.parseInt(selectedWeek);
+
+				// Get the activities for the expected day of the week
+				List<String> dateActivities = employee.getActivityLog().getDayActivities(weekOfYear, dayOfWeek);
+
+				// Check that the activity with the expected name exists and has the expected hours
+				boolean activityFound = false;
+				for (String activityInfo : dateActivities) {
+					String[] activityInfoParts = activityInfo.split("-");
+					if (activityInfoParts[0].equals(expectedActivityName) && activityInfoParts[1].equals(expectedHours)) {
+						activityFound = true;
+						break;
+					}
+				}
+
+				// If no activities were found, assert that dateActivities is empty
+				if (!activityFound) {
+					assertTrue(dateActivities.isEmpty());
 				}
 			}
-
-			assertTrue("Activity with name '" + expectedActivityName + "' and hours '" + expectedHours + "' not found for day '" + dayOfWeek + "'", activityFound);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
 }
-

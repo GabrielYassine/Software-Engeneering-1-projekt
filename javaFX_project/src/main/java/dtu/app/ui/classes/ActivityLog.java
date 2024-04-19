@@ -56,10 +56,20 @@ public class ActivityLog {
             throw new IllegalArgumentException("Registered hours value error");
         }
     }
-
+    private int parseAndValidateWeek(String week) {
+        try {
+            int weekNumber = Integer.parseInt(week);
+            if (weekNumber == 0 || weekNumber > 52) {
+                throw new IllegalArgumentException("Week value error");
+            }
+            return weekNumber;
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Week value error");
+        }
+    }
     public ActivityLog getWeekActivities(String year, String week) {
         int yearInt = Integer.parseInt(year);
-        int weekInt = Integer.parseInt(week);
+        int weekInt = parseAndValidateWeek(week);
 
         ActivityLog weekActivities = new ActivityLog();
         WeekFields weekFields = WeekFields.of(Locale.getDefault());
@@ -77,38 +87,38 @@ public class ActivityLog {
         return weekActivities;
     }
 
-    public List<String> getMondayActivities() {
-        return getDayActivities(Calendar.MONDAY);
+    public List<String> getMondayActivities(int weekOfYear) {
+        return getDayActivities(weekOfYear, Calendar.MONDAY);
     }
 
-    public List<String> getTuesdayActivities() {
-        return getDayActivities(Calendar.TUESDAY);
+    public List<String> getTuesdayActivities(int weekOfYear) {
+        return getDayActivities(weekOfYear, Calendar.TUESDAY);
     }
 
-    public List<String> getWednesdayActivities() {
-        return getDayActivities(Calendar.WEDNESDAY);
+    public List<String> getWednesdayActivities(int weekOfYear) {
+        return getDayActivities(weekOfYear, Calendar.WEDNESDAY);
     }
 
-    public List<String> getThursdayActivities() {
-        return getDayActivities(Calendar.THURSDAY);
+    public List<String> getThursdayActivities(int weekOfYear) {
+        return getDayActivities(weekOfYear, Calendar.THURSDAY);
     }
 
-    public List<String> getFridayActivities() {
-        return getDayActivities(Calendar.FRIDAY);
+    public List<String> getFridayActivities(int weekOfYear) {
+        return getDayActivities(weekOfYear, Calendar.FRIDAY);
     }
 
-    public List<String> getSaturdayActivities() {
-        return getDayActivities(Calendar.SATURDAY);
+    public List<String> getSaturdayActivities(int weekOfYear) {
+        return getDayActivities(weekOfYear, Calendar.SATURDAY);
     }
 
-    public List<String> getSundayActivities() {
-        return getDayActivities(Calendar.SUNDAY);
+    public List<String> getSundayActivities(int weekOfYear) {
+        return getDayActivities(weekOfYear, Calendar.SUNDAY);
     }
-
-    public List<String> getDayActivities(int dayOfWeek) {
+    public List<String> getDayActivities(int weekOfYear, int dayOfWeek) {
+        parseAndValidateWeek(String.valueOf(weekOfYear));
         List<String> activities = new ArrayList<>();
         for (Map.Entry<Calendar, Map<Activity, Integer>> entry : dateLog.entrySet()) {
-            if (entry.getKey().get(Calendar.DAY_OF_WEEK) == dayOfWeek) {
+            if (entry.getKey().get(Calendar.DAY_OF_WEEK) == dayOfWeek && entry.getKey().get(Calendar.WEEK_OF_YEAR) == weekOfYear) {
                 for (Map.Entry<Activity, Integer> activityEntry : entry.getValue().entrySet()) {
                     String activityInfo = activityEntry.getKey().getName() + "-" +
                             activityEntry.getValue();
@@ -116,6 +126,7 @@ public class ActivityLog {
                 }
             }
         }
+
         return activities;
     }
 

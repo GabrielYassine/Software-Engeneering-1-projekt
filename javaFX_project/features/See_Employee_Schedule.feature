@@ -32,11 +32,26 @@ Feature: See Employee Schedule
         | Activity Name | Hours |
         | | |
 
-    ##   Scenario: User searches for schedule of an employee with no initials
+    Scenario: User searches for schedule of an employee with no initials
+        When the employee searches for the schedule of the employee with initials "" for the year 2024 and week 7
+        Then an error message "Initials cannot be empty" should be given
 
-    ##  Scenario: User searches for schedule of an employee with wrong initials
+    Scenario: User searches for schedule of an employee with wrong initials
+        When the employee searches for the schedule of the employee with initials "ABCD" for the year 2024 and week 7
+        Then an error message "Employee with those initials not found" should be given
 
-    ##  Scenario: User searches for schedule of an employee with week over 52
+    Scenario: User searches for schedule of an employee with week over 52
+        When the employee searches for the schedule of the employee with initials "Huba" for the year 2024 and week 53
+        Then an error message "Week value error" should be given
 
-    ##  Scenario: User searches for schedule of an employee with week 0
+    Scenario: User searches for schedule of an employee with week 0
+        When the employee searches for the schedule of the employee with initials "Huba" for the year 2024 and week 0
+        Then an error message "Week value error" should be given
 
+  ##Scenario: User searches for schedule of an employee with no week
+  ##  When the employee searches for the schedule of the employee with initials "Huba" for the year 2024 and week ""
+  ##  Then an error message "No week is given" should be given
+
+ ## Scenario: User searches for schedule of an employee with no year
+ ##   When the employee searches for the schedule of the employee with initials "Huba" for the year "" and week 7
+  ##  Then an error message "No year is given" should be given

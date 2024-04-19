@@ -55,13 +55,14 @@ public class EmployeeLogController extends CommonElementsController{
         try {
             Employee employee = App.database.getEmployee(initials);
             ActivityLog weekActivities = employee.getActivityLog().getWeekActivities(year, week);
-            mondayListView.getItems().addAll(weekActivities.getMondayActivities());
-            tuesdayListView.getItems().addAll(weekActivities.getTuesdayActivities());
-            wednesdayListView.getItems().addAll(weekActivities.getWednesdayActivities());
-            thursdayListView.getItems().addAll(weekActivities.getThursdayActivities());
-            fridayListView.getItems().addAll(weekActivities.getFridayActivities());
-            saturdayListView.getItems().addAll(weekActivities.getSaturdayActivities());
-            sundayListView.getItems().addAll(weekActivities.getSundayActivities());
+            int weekOfYear = Integer.parseInt(week);
+            mondayListView.getItems().addAll(weekActivities.getMondayActivities(weekOfYear));
+            tuesdayListView.getItems().addAll(weekActivities.getTuesdayActivities(weekOfYear));
+            wednesdayListView.getItems().addAll(weekActivities.getWednesdayActivities(weekOfYear));
+            thursdayListView.getItems().addAll(weekActivities.getThursdayActivities(weekOfYear));
+            fridayListView.getItems().addAll(weekActivities.getFridayActivities(weekOfYear));
+            saturdayListView.getItems().addAll(weekActivities.getSaturdayActivities(weekOfYear));
+            sundayListView.getItems().addAll(weekActivities.getSundayActivities(weekOfYear));
         } catch (Exception e) {
             System.out.println(e.getMessage());;
         }
