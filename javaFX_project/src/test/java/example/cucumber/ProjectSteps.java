@@ -381,15 +381,17 @@ public class ProjectSteps {
 
 	@Given("an activity is open")
 	public void anActivityIsOpen() {
-		if(activity.getCompletedStatus()) {
+		if (activity.getCompletedStatus()) {
 			activity.completeActivity();
 		}
 		assertFalse(activity.getCompletedStatus());
 	}
+
 	@When("the user closes the activity")
 	public void theUserClosesTheActivity() {
 		activity.completeActivity();
 	}
+
 	@Then("the activity is completed")
 	public void theActivityIsCompleted() {
 		assertTrue(activity.getCompletedStatus());
@@ -397,15 +399,17 @@ public class ProjectSteps {
 
 	@Given("an activity is closed")
 	public void anActivityIsClosed() {
-		if(!activity.getCompletedStatus()) {
+		if (!activity.getCompletedStatus()) {
 			activity.completeActivity();
 		}
 		assertTrue(activity.getCompletedStatus());
 	}
+
 	@When("the user opens the activity")
 	public void theUserOpensTheActivity() {
 		activity.completeActivity();
 	}
+
 	@Then("the activity is not completed")
 	public void theActivityIsNotCompleted() {
 		assertFalse(activity.getCompletedStatus());
@@ -422,47 +426,87 @@ public class ProjectSteps {
 
 	@Then("the user gets the number of activities completed and the total number of activities")
 	public void theUserGetsTheNumberOfActivitiesCompletedAndTheTotalNumberOfActivities() {
-		assertEquals("0/0",project.getActivitiesCompleted());
+		assertEquals("0/0", project.getActivitiesCompleted());
 	}
 
-	@And("the employee with initials {string} has registered {string} hours for the activity {string} on the date {string}")
+	@Given("the employee with initials {string} has registered {string} hours for the activity {string} on the date {string}")
 	public void theEmployeeWithInitialsHasRegisteredHoursForTheActivityOnTheDate(String initials, String hours, String activityName, String date) {
-			try {
-				// Retrieve the employee from the database using the initials
-				Employee employee = database.getEmployee(initials);
+		try {
+			// Retrieve the employee from the database using the initials
+			Employee employee = database.getEmployee(initials);
 
-				// Retrieve the activity from the project using the activity name
-				Activity activity = project.getActivity(activityName);
+			// Retrieve the activity from the project using the activity name
+			Activity activity = project.getActivity(activityName);
 
-				// Parse the date into a Calendar object
-				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-				Date parsedDate = format.parse(date);
-				Calendar calendar = Calendar.getInstance();
-				calendar.setTime(parsedDate);
+			// Parse the date into a Calendar object
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			Date parsedDate = format.parse(date);
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(parsedDate);
 
-				// Register the hours for the activity on the specified date
-				employee.getActivityLog().registerHours(calendar, activity, hours);
-				activity.registerHours(Integer.parseInt(hours));
-			} catch (ParseException e) {
-				if (date.isEmpty()) {
-					errorMessage.setErrorMessage("Date missing");
-				} else {
-					errorMessage.setErrorMessage(e.getMessage());
-				}
-			} catch (Exception e) {
+			// Register the hours for the activity on the specified date
+			employee.getActivityLog().registerHours(calendar, activity, hours);
+			activity.registerHours(Integer.parseInt(hours));
+			System.out.println(employee.getActivityLog());
+		} catch (ParseException e) {
+			if (date.isEmpty()) {
+				errorMessage.setErrorMessage("Date missing");
+			} else {
 				errorMessage.setErrorMessage(e.getMessage());
 			}
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
 		}
+	}
 
-	@Then("the selected week should contain the following details")
-	public void theSelectedWeekShouldContainTheFollowingDetails(DataTable expectedDetailsTable) {
+	@Then("the selected week for employee with initials {string} should contain the following details")
+	public void theSelectedWeekShouldContainTheFollowingDetails(String initials,  DataTable table) throws Exception {
+		Employee employee = database.getEmployee(initials);
+
 		// Convert the expected details into a list of maps for easier comparison
-		List<Map<String, String>> expectedDetails = expectedDetailsTable.asMaps(String.class, String.class);
+		List<Map<String, String>> rows = table.asMaps(String.class, String.class);
+		for (Map<String, String> columns : rows) {
+			String expectedDate = columns.get("Date");
+			String expectedActivityName = columns.get("Activity Name");
+			String expectedHours = columns.get("Hours");
 
-		// Retrieve the actual details of the selected week
-		List<Map<String, String>> actualDetails = getWeekActivities();
+			String year = expectedDate.substring(0, 4);
+			String week = expectedDate.substring(5, 7);
 
-		// Compare the actual details with the expected details
-		assertEquals(expectedDetails, actualDetails);
+			// Retrieve the actual details of the selected week
+			ActivityLog actualDetails = employee.getActivityLog().getWeekActivities(year, week);
+
+			// Convert the date to a Calendar object
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			Date parsedDate = format.parse(expectedDate);
+			Calendar expectedCalendar = Calendar.getInstance();
+			expectedCalendar.setTime(parsedDate);
+
+			// Get the activities for the expected date
+			Map<Activity, Integer> activitiesForDate = actualDetails.getDateActivities(expectedCalendar);
+
+			// Check if the activitiesForDate is not null
+			if (activitiesForDate != null) {
+				// Check if the activity with the expected name exists for the date
+				boolean activityExists = activitiesForDate.keySet().stream()
+						.anyMatch(activity -> activity.getName().equals(expectedActivityName));
+
+				// Check if the hours for the activity match the expected hours
+				boolean hoursMatch = activitiesForDate.values().stream()
+						.anyMatch(hours -> hours == Integer.parseInt(expectedHours));
+
+				// Assert that the activity exists and the hours match
+				assertTrue(activityExists && hoursMatch);
+			} else {
+				// If activitiesForDate is null, then there are no activities for the specified date
+				fail("No activities for the specified date");
+			}
+		}
+	}
+
+	@When("the employee searches for the schedule of the employee\\(s) with initials {string} for the year {int} and week {int}")
+	public void theEmployeeSearchesForTheScheduleOfTheEmployeeSWithInitialsForTheYearAndWeek(String initials, int year, int week) {
+
 	}
 }
+
