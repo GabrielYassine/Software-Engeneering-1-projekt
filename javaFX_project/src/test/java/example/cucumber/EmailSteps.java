@@ -1,33 +1,30 @@
 package example.cucumber;
 
 import dtu.app.ui.classes.*;
-import dtu.app.ui.pages.App;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.en_old.Ac;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.assertTrue;
 
 public class EmailSteps {
     private Database database;
-    private App app;
     private ErrorMessageHolder errorMessageHolder;
-    private MockEmailServer emailServer;
+    private DateServer dateServer;
     private Employee employee;
+    private Email email;
 
-    public EmailSteps(App app, Database database, ErrorMessageHolder errorMessageHolder, MockEmailServer emailServer) {
-        this.app = app;
+    public EmailSteps(Database database, ErrorMessageHolder errorMessageHolder, DateServer dateServer) {
         this.database = database;
         this.errorMessageHolder = errorMessageHolder;
-        this.emailServer = emailServer;
+        this.dateServer = dateServer;
     }
 
     @Given("that there is an employee {string}")
@@ -41,20 +38,17 @@ public class EmailSteps {
         assertFalse(database.hasEmployeeRegistered(employee));
     }
 
-    @Then("the employee should receive the notification {string}")
-    public void theEmployeeShouldReceiveTheNotification(String notification) {
-        try {
-            database.sendNotification(notification);
-        } catch (Exception e) {
-            errorMessageHolder.setErrorMessage(e.getMessage());
-        }
-        verify(emailServer.getMockEmailServer()).sendEmail(employee.getInitials(), "Work", notification);
+    @Given("the employee has registered his daily work for the current day")
+    public void theEmployeeHasRegisteredHisDailyWorkForTheCurrentDay() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
     }
+
 
     @Given("the employee is working on {int} activities in a week")
     public void theEmployeeIsWorkingOnActivitiesInAWeek(Integer activityCount) {
         exampleActivities(activityCount);
-        assertThat(employee.getActivityCount(), is(equalTo(activityCount)));
+        assertThat(employee.getActiveActivityCount(dateServer.getWeek()), is(equalTo(activityCount)));
     }
 
     public Project exampleProject() {
@@ -66,9 +60,30 @@ public class EmailSteps {
 
     public void exampleActivities(int n) {
         Project exampleProject = exampleProject();
+        int startWeek = dateServer.getWeek();
+        int endWeek = startWeek + 4;
 
         for (int i = 0; i < n; i++) {
-            new Activity(exampleProject, "Activity" + i, "5", "1", "10", List.of(employee));
+            new Activity(exampleProject, "Activity" + i, "5", startWeek + "", endWeek + "", List.of(employee));
+        }
+    }
+
+
+    @Then("the email with subject {string} and text {string} is in the employees inbox")
+    public void theEmailWithSubjectAndTextIsInTheEmployeesInbox(String subject, String text) {
+        assertThat(email.getSubject(),is(equalTo(subject)));
+        assertThat(email.getText(),is(equalTo(text)));
+        assertTrue(employee.getInboxStream().anyMatch(e -> e.getText().equals(email.getText()) && e.getSubject().equals(email.getSubject())));
+    }
+
+    @When("the system sends a reminder email with subject {string} and text {string}")
+    public void theSystemSendsAReminderEmailWithSubjectAndText(String subject, String text) {
+        email = new Email(subject,text);
+
+        try {
+            database.sendEmail(subject,text);
+        } catch (Exception e) {
+            errorMessageHolder.setErrorMessage(e.getMessage());
         }
     }
 }

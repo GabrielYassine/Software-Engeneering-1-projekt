@@ -11,7 +11,6 @@ import java.util.List;
 public class Database {
     private final List<Employee> employeeRepository = new ArrayList<>();
     private final List<Project> projectRepository = new ArrayList<>();
-    private Email email;
     private DateServer dateServer = new DateServer();
     public Project selectedProject;
     public Activity selectedActivity;
@@ -30,14 +29,6 @@ public class Database {
 
     public void setSelectedActivity(Activity activity) {
         this.selectedActivity = activity;
-    }
-
-    public void setEmailServer(Email email) {
-        this.email = email;
-    }
-
-    public void setDateServer(DateServer dateServer) {
-        this.dateServer = dateServer;
     }
 
     public List<Project> getProjects() {
@@ -78,10 +69,10 @@ public class Database {
         return employee.hasRegistered(date);
     }
 
-    public void sendNotification(String text) throws Exception {
-        for (Employee employee : employeeRepository) {
-            if (!hasEmployeeRegistered(employee)) {
-                employee.sendEmailNotification(email, text);
+    public void sendEmail(String subject, String text) throws Exception {
+        for (Employee e : employeeRepository) {
+            if (!hasEmployeeRegistered(e)) {
+                e.sendEmailNotification(subject, text);
             }
         }
     }

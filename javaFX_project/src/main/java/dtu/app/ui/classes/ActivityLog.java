@@ -114,6 +114,7 @@ public class ActivityLog {
     public List<String> getSundayActivities(int weekOfYear) {
         return getDayActivities(weekOfYear, Calendar.SUNDAY);
     }
+
     public List<String> getDayActivities(int weekOfYear, int dayOfWeek) {
         parseAndValidateWeek(String.valueOf(weekOfYear));
         List<String> activities = new ArrayList<>();

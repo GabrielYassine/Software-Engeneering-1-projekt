@@ -3,13 +3,14 @@ package dtu.app.ui.classes;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Employee {
 
     private final String initials;
     private final ActivityLog activityLog;
-
     private List<Activity> activities = new ArrayList<>();
+    private List<Email> inbox = new ArrayList<>();
 
     public Employee(Database database, String initials) {
         if (initials == null || initials.isEmpty()) {
@@ -20,8 +21,9 @@ public class Employee {
         database.appendEmployee(this);
     }
 
-    public void sendEmailNotification(Email email, String text) {
-        email.sendEmail(initials, "Work", text);
+    public void sendEmailNotification(String subject, String text) {
+        Email email = new Email(subject, text);
+        inbox.add(email);
     }
 
     public boolean hasRegistered(Calendar date) {
@@ -32,22 +34,29 @@ public class Employee {
         return initials;
     }
 
-
+    public Stream<Email> getInboxStream() {
+        return inbox.stream();
+    }
 
     public boolean isActivityActive(Activity activity, int selectedWeek) {
-        // Note: Grunden til at noget af det her er lidt mærkeligt, er fordi jeg prøver at tage hensyn til at en aktivitet der starter uge 52 og slutter uge 7 skal tages hensyn til.
         int endWeekTemp = activity.getEndWeek();
         endWeekTemp = activity.getStartWeek() > endWeekTemp ? endWeekTemp + 52 : endWeekTemp;
 
         return activity.getStartWeek() <= selectedWeek && endWeekTemp >= selectedWeek;
     }
 
-    public void updateActivityCount(int n) {
-        // activityCount += n; // FIX DET HER
+    public int getActiveActivityCount(int selectedWeek) {
+        int count = 0;
+        for (Activity a : activities) {
+            if (isActivityActive(a, selectedWeek)) {
+                count++;
+            }
+        }
+        return count;
     }
 
-    public int getActivityCount() {
-        return 0; // FIX DET HER
+    public void addActivity(Activity a) {
+        activities.add(a);
     }
 
     public ActivityLog getActivityLog() {

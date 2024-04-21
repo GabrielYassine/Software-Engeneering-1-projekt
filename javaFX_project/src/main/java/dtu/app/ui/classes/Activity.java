@@ -1,12 +1,15 @@
 package dtu.app.ui.classes;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import dtu.app.ui.classes.Project;
 
 public class Activity {
     private List<Employee> employees;
     private final Project project;
+    private DateServer dateServer = new DateServer();
     private String name;
     private int budgetHours;
     private int startWeek;
@@ -90,23 +93,29 @@ public class Activity {
     }
 
     public void addEmployee(Employee e) {
+        int currentWeek = dateServer.getWeek();
+
         if (employees == null) {
             employees = new ArrayList<>();
         }
-        if (e.getActivityCount() < 20) {
-            e.updateActivityCount(1);
+
+        if (e.getActiveActivityCount(currentWeek) < 20) {
             employees.add(e);
+            e.addActivity(this);
         }
     }
 
     public void addEmployees(List<Employee> PotentialEmployees) {
+        int currentWeek = dateServer.getWeek();
+
         if (employees == null) {
             employees = new ArrayList<>();
         }
+
         for (Employee e : PotentialEmployees) {
-            if (e.getActivityCount() < 20) { // send noget information til useren
-                e.updateActivityCount(1);
+            if (e.getActiveActivityCount(currentWeek) < 20) {
                 employees.add(e);
+                e.addActivity(this);
             }
         }
     }
