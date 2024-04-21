@@ -556,11 +556,9 @@ public class ProjectSteps {
 
 	@When("the employee searches for the schedule of the employee with initials {string} for the year {string} and week {int}")
 	public void theEmployeeSearchesForTheScheduleOfTheEmployeeWithInitialsForTheYearAndWeek(String initials, String year, int week) {
-
 		try {
 			Employee employee = database.getEmployee(initials);
 			this.weekActivities = employee.getActivityLog().getWeekActivities(year, String.valueOf(week));
-			this.selectedWeek = year;
 		} catch (Exception e){
 			errorMessage.setErrorMessage(e.getMessage());
 		}

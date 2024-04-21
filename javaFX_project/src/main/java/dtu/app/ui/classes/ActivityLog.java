@@ -78,6 +78,7 @@ public class ActivityLog {
 
 
     public ActivityLog getWeekActivities(String year, String week) {
+        parseAndValidateYear(year);
         int yearInt = Integer.parseInt(year);
         int weekInt = parseAndValidateWeek(week);
 
