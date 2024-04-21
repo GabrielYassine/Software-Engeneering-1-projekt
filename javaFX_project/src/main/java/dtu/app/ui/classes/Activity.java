@@ -104,7 +104,7 @@ public class Activity {
             employees = new ArrayList<>();
         }
         for (Employee e : PotentialEmployees) {
-            if (e.getActivityCount() < 20) {
+            if (e.getActivityCount() < 20) { // send noget information til useren
                 e.updateActivityCount(1);
                 employees.add(e);
             }
