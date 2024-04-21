@@ -1,7 +1,6 @@
 package example.cucumber;
 
 import dtu.app.ui.classes.*;
-import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -9,15 +8,16 @@ import io.cucumber.java.en.When;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class EmailSteps {
-    private Database database;
-    private ErrorMessageHolder errorMessageHolder;
-    private DateServer dateServer;
+    private final Database database;
+    private final ErrorMessageHolder errorMessageHolder;
+    private final DateServer dateServer;
     private Employee employee;
     private Email email;
 
@@ -39,16 +39,18 @@ public class EmailSteps {
     }
 
     @Given("the employee has registered his daily work for the current day")
-    public void theEmployeeHasRegisteredHisDailyWorkForTheCurrentDay() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    public void theEmployeeHasRegisteredHisDailyWorkForTheCurrentDay() throws Exception {
+        Project exampleProject = exampleProject();
+
+        employee.getActivityLog().registerHours(dateServer.getDate(), new Activity(exampleProject, "Activity", "10", "1", "2", List.of(employee)), "15");
+        assertTrue(database.hasEmployeeRegistered(employee));
     }
 
 
     @Given("the employee is working on {int} activities in a week")
-    public void theEmployeeIsWorkingOnActivitiesInAWeek(Integer activityCount) {
-        exampleActivities(activityCount);
-        assertThat(employee.getActiveActivityCount(dateServer.getWeek()), is(equalTo(activityCount)));
+    public void theEmployeeIsWorkingOnActivitiesInAWeek(Integer int1) {
+        exampleActivities(int1);
+        assertThat(employee.getActiveActivityCount(dateServer.getWeek()), is(equalTo(int1)));
     }
 
     public Project exampleProject() {
@@ -60,28 +62,27 @@ public class EmailSteps {
 
     public void exampleActivities(int n) {
         Project exampleProject = exampleProject();
-        int startWeek = dateServer.getWeek();
-        int endWeek = startWeek + 4;
+        String startWeek = String.valueOf(dateServer.getWeek());
+        String endWeek = String.valueOf(dateServer.getWeek() + 4);
 
         for (int i = 0; i < n; i++) {
-            new Activity(exampleProject, "Activity" + i, "5", startWeek + "", endWeek + "", List.of(employee));
+            new Activity(exampleProject, "Activity" + i, "5", startWeek, endWeek, List.of(employee));
         }
     }
 
 
     @Then("the email with subject {string} and text {string} is in the employees inbox")
     public void theEmailWithSubjectAndTextIsInTheEmployeesInbox(String subject, String text) {
+        email = new Email(subject,text);
         assertThat(email.getSubject(),is(equalTo(subject)));
         assertThat(email.getText(),is(equalTo(text)));
         assertTrue(employee.getInboxStream().anyMatch(e -> e.getText().equals(email.getText()) && e.getSubject().equals(email.getSubject())));
     }
 
-    @When("the system sends a reminder email with subject {string} and text {string}")
-    public void theSystemSendsAReminderEmailWithSubjectAndText(String subject, String text) {
-        email = new Email(subject,text);
-
+    @When("the system sends a reminder email")
+    public void theSystemSendsAReminderEmail() {
         try {
-            database.sendEmail(subject,text);
+            database.sendEmail();
         } catch (Exception e) {
             errorMessageHolder.setErrorMessage(e.getMessage());
         }

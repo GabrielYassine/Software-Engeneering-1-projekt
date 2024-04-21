@@ -15,12 +15,12 @@ Feature: send reminder
   Scenario: Employee receives a reminder for unregistered daily work
     Given that there is an employee "Huba"
     And the employee has not registered his daily work for the current day
-    When the system sends a reminder email with subject "Work" and text "Register your daily work"
+    When the system sends a reminder email
     Then the email with subject "Work" and text "Register your daily work" is in the employees inbox
 
-#  Scenario: Employee exceeds the maximum activity limit
-#    Given that there is an employee "Huba"
-#    And the employee is working on 20 activities in a week
-#    When the employee with initials "Huba" registers 10 hours on the activity "New Activity" on the date "2021-06-01"
-#    Then the system sends a reminder email
-#    Then the employee should receive the notification "You're working on too many activities"
+  Scenario: Employee exceeds the maximum activity limit
+    Given that there is an employee "Huba"
+    And the employee has registered his daily work for the current day
+    And the employee is working on 21 activities in a week
+    When the system sends a reminder email
+    Then the email with subject "Work" and text "You're working on too many activities" is in the employees inbox

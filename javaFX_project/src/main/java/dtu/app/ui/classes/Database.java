@@ -11,7 +11,7 @@ import java.util.List;
 public class Database {
     private final List<Employee> employeeRepository = new ArrayList<>();
     private final List<Project> projectRepository = new ArrayList<>();
-    private DateServer dateServer = new DateServer();
+    private final DateServer dateServer = new DateServer();
     public Project selectedProject;
     public Activity selectedActivity;
 
@@ -69,10 +69,13 @@ public class Database {
         return employee.hasRegistered(date);
     }
 
-    public void sendEmail(String subject, String text) throws Exception {
+    public void sendEmail() throws Exception {
         for (Employee e : employeeRepository) {
             if (!hasEmployeeRegistered(e)) {
-                e.sendEmailNotification(subject, text);
+                e.sendEmailNotification("Work", "Register your daily work");
+            }
+            if (e.getActiveActivityCount(dateServer.getWeek()) >= 21) {
+                e.sendEmailNotification("Work", "You're working on too many activities");
             }
         }
     }

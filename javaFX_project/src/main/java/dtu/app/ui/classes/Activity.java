@@ -99,7 +99,7 @@ public class Activity {
             employees = new ArrayList<>();
         }
 
-        if (e.getActiveActivityCount(currentWeek) < 20) {
+        if (e.getActiveActivityCount(currentWeek) <= 20) {
             employees.add(e);
             e.addActivity(this);
         }
@@ -113,7 +113,7 @@ public class Activity {
         }
 
         for (Employee e : PotentialEmployees) {
-            if (e.getActiveActivityCount(currentWeek) < 20) {
+            if (e.getActiveActivityCount(currentWeek) <= 20) {
                 employees.add(e);
                 e.addActivity(this);
             }

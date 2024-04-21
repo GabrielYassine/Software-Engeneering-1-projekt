@@ -9,8 +9,8 @@ public class Employee {
 
     private final String initials;
     private final ActivityLog activityLog;
-    private List<Activity> activities = new ArrayList<>();
-    private List<Email> inbox = new ArrayList<>();
+    private final List<Activity> activities = new ArrayList<>();
+    private final List<Email> inbox = new ArrayList<>();
 
     public Employee(Database database, String initials) {
         if (initials == null || initials.isEmpty()) {
@@ -22,8 +22,7 @@ public class Employee {
     }
 
     public void sendEmailNotification(String subject, String text) {
-        Email email = new Email(subject, text);
-        inbox.add(email);
+        inbox.add(new Email(subject, text));
     }
 
     public boolean hasRegistered(Calendar date) {
