@@ -34,21 +34,12 @@ public class Employee {
 
 
 
-    public int getActivityCount(Activity activity, int selectedWeek) {
-
+    public boolean isActivityActive(Activity activity, int selectedWeek) {
         // Note: Grunden til at noget af det her er lidt mærkeligt, er fordi jeg prøver at tage hensyn til at en aktivitet der starter uge 52 og slutter uge 7 skal tages hensyn til.
         int endWeekTemp = activity.getEndWeek();
-        if (activity.getStartWeek() > endWeekTemp) {
-            endWeekTemp += 52;
+        endWeekTemp = activity.getStartWeek() > endWeekTemp ? endWeekTemp + 52 : endWeekTemp;
 
-        }
-        int count = 0;
-        for (Activity a : activities) {
-            if (activity.getStartWeek() <= selectedWeek && endWeekTemp >= selectedWeek) {
-                count++;
-            }
-        }
-        return count;
+        return activity.getStartWeek() <= selectedWeek && endWeekTemp >= selectedWeek;
     }
 
     public void updateActivityCount(int n) {
