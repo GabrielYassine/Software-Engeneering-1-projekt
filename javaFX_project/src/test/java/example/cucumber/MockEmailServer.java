@@ -1,18 +1,18 @@
 package example.cucumber;
 
 import dtu.app.ui.classes.Database;
-import dtu.app.ui.classes.EmailServer;
+import dtu.app.ui.classes.Email;
 
 import static org.mockito.Mockito.mock;
 
 public class MockEmailServer {
-    private EmailServer emailServer = mock(EmailServer.class);
+    private Email email = mock(Email.class);
 
     public MockEmailServer(Database database) {
-        database.setEmailServer(emailServer);
+        database.setEmailServer(email);
     }
 
-    public EmailServer getMockEmailServer() {
-        return emailServer;
+    public Email getMockEmailServer() {
+        return email;
     }
 }

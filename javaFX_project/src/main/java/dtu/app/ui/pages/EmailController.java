@@ -1,5 +1,19 @@
 package dtu.app.ui.pages;
 
-public class EmailController {
+import dtu.app.ui.classes.Email;
+import javafx.fxml.FXML;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
+public class EmailController {
+    @FXML
+    public TableView<Email> emailTableView;
+    @FXML
+    private TableColumn<Email, String> subjectColumn;
+
+    @FXML
+    private void initialize() {
+        subjectColumn.setCellValueFactory(new PropertyValueFactory<>("Subject"));
+    }
 }

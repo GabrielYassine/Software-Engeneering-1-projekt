@@ -6,9 +6,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.app.ui.pages.EmailController">
     <children>
         <fx:include source="backButton.fxml"/>
-        <Label text="Hej med dig"/>
+        <TableView fx:id="emailTableView" minHeight="150">
+            <columns>
+                <TableColumn fx:id="subjectColumn" text="Subject">
+                    <cellValueFactory><PropertyValueFactory property="Subject"/></cellValueFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
     </children>
 </VBox>

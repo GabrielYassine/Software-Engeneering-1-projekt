@@ -21,6 +21,6 @@ public class MenuController {
     }
     @FXML
     private void switchToEmail() throws IOException {
-        App.setRoot("email");
+        App.setRoot("emailPage");
     }
 }

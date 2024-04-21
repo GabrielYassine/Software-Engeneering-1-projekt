@@ -18,8 +18,8 @@ public class Employee {
         database.appendEmployee(this);
     }
 
-    public void sendEmailNotification(EmailServer emailServer, String text) {
-        emailServer.sendEmail(initials, "Work", text);
+    public void sendEmailNotification(Email email, String text) {
+        email.sendEmail(initials, "Work", text);
     }
 
     public boolean hasRegistered(Calendar date) {
