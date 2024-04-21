@@ -10,10 +10,13 @@ public class EmailController {
     @FXML
     public TableView<Email> emailTableView;
     @FXML
+    private TableColumn<Email, String> contentsColumn;
+    @FXML
     private TableColumn<Email, String> subjectColumn;
 
     @FXML
     private void initialize() {
         subjectColumn.setCellValueFactory(new PropertyValueFactory<>("Subject"));
+        contentsColumn.setCellValueFactory(new PropertyValueFactory<>("Contents"));
     }
 }
