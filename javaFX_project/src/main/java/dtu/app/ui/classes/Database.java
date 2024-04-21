@@ -74,7 +74,7 @@ public class Database {
             if (!hasEmployeeRegistered(e)) {
                 e.sendEmailNotification("Work", "Register your daily work");
             }
-            if (e.getActiveActivityCount(dateServer.getWeek()) >= 21) {
+            if (e.getActiveActivityCount(dateServer.getWeek()) > 20) {
                 e.sendEmailNotification("Work", "You're working on too many activities");
             }
         }
