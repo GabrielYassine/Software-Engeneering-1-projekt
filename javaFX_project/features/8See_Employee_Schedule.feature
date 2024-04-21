@@ -52,6 +52,6 @@ Feature: See Employee Schedule
       When the employee searches for the schedule of the employee with initials "Huba" for the year 2024 and week ""
       Then an error message "No week is given" should be given
 
- ## Scenario: User searches for schedule of an employee with no year
- ##   When the employee searches for the schedule of the employee with initials "Huba" for the year "" and week 7
-  ##  Then an error message "No year is given" should be given
+   Scenario: User searches for schedule of an employee with no year
+      When the employee searches for the schedule of the employee with initials "Huba" for the year "" and week 7
+      Then an error message "No year is given" should be given

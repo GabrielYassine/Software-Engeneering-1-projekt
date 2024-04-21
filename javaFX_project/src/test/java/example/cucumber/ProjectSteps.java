@@ -543,13 +543,8 @@ public class ProjectSteps {
 
     @When("the employee searches for the schedule of the employee with initials {string} for the year {int} and week {string}")
     public void theEmployeeSearchesForTheScheduleOfTheEmployeeWithInitialsForTheYearAndWeek(String initials, int year, String week) {
-		if (week.isEmpty()) {
-			errorMessage.setErrorMessage("No week is given");
-			return;
 
-		}
-
-		try{
+		try {
 			Employee employee = database.getEmployee(initials);
 			this.weekActivities = employee.getActivityLog().getWeekActivities(String.valueOf(year), week);
 			this.selectedWeek = week;
@@ -557,11 +552,18 @@ public class ProjectSteps {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 
-
-
-
-
-
-
     }
+
+	@When("the employee searches for the schedule of the employee with initials {string} for the year {string} and week {int}")
+	public void theEmployeeSearchesForTheScheduleOfTheEmployeeWithInitialsForTheYearAndWeek(String initials, String year, int week) {
+
+		try {
+			Employee employee = database.getEmployee(initials);
+			this.weekActivities = employee.getActivityLog().getWeekActivities(year, String.valueOf(week));
+			this.selectedWeek = year;
+		} catch (Exception e){
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+
 }

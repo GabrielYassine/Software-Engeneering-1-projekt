@@ -57,6 +57,9 @@ public class ActivityLog {
         }
     }
     private int parseAndValidateWeek(String week) {
+        if (week == null || week.isEmpty()) {
+            throw new IllegalArgumentException("No week is given");
+        }
         try {
             int weekNumber = Integer.parseInt(week);
             if (weekNumber == 0 || weekNumber > 52) {
@@ -67,6 +70,13 @@ public class ActivityLog {
             throw new IllegalArgumentException("Week value error");
         }
     }
+    private void parseAndValidateYear(String year) {
+        if (year == null || year.isEmpty()) {
+            throw new IllegalArgumentException("No year is given");
+        }
+    }
+
+
     public ActivityLog getWeekActivities(String year, String week) {
         int yearInt = Integer.parseInt(year);
         int weekInt = parseAndValidateWeek(week);
