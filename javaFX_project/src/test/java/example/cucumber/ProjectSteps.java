@@ -252,7 +252,7 @@ public class ProjectSteps {
 			String expectedEndWeek = columns.get("End Week");
 			String expectedInitials = columns.get("Initials");
 			assertEquals(expectedName, activity.getName());
-			assertEquals(Integer.parseInt(expectedBudgetHours), activity.getBudgetHours());
+			assertEquals(Double.parseDouble(expectedBudgetHours), activity.getBudgetHours(), 0);
 			assertEquals(Integer.parseInt(expectedStartWeek), activity.getStartWeek());
 			assertEquals(Integer.parseInt(expectedEndWeek), activity.getEndWeek());
 			List<Employee> employees = activity.getEmployees();
@@ -371,8 +371,8 @@ public class ProjectSteps {
 	@Then("the activity {string} should have {int} hours registered in total")
 	public void theActivityShouldHaveHoursRegisteredInTotal(String activityName, int totalHours) {
 		Activity activity = project.getActivity(activityName);
-		int registeredHours = activity.getHoursSpent();
-		assertEquals(totalHours, registeredHours);
+		double registeredHours = activity.getHoursSpent();
+		assertEquals(totalHours, registeredHours, 0);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////

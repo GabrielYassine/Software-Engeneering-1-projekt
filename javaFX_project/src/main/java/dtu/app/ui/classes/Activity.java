@@ -11,10 +11,10 @@ public class Activity {
     private final Project project;
     private DateServer dateServer = new DateServer();
     private String name;
-    private int budgetHours;
+    private double budgetHours;
     private int startWeek;
     private int endWeek;
-    private int hoursSpent = 0;
+    private double hoursSpent = 0;
 
     private boolean completed = false;
 
@@ -63,11 +63,11 @@ public class Activity {
         }
     }
 
-    private int parseAndValidateHours(String budgetHours) {
+    private double parseAndValidateHours(String budgetHours) {
         try {
-            int hours = Integer.parseInt(budgetHours);
+            double hours = Double.parseDouble(budgetHours);
             return hours;
-        } catch (NumberFormatException e) {
+        } catch (NullPointerException e) {
             throw new IllegalArgumentException("Budget hours missing");
         }
     }
@@ -132,7 +132,7 @@ public class Activity {
         employees.removeIf(e -> !projectEmployees.contains(e));
     }
 
-    public void registerHours(int hours) {
+    public void registerHours(double hours) {
         hoursSpent += hours;
     }
 
@@ -151,11 +151,11 @@ public class Activity {
         return endWeek;
     }
 
-    public int getBudgetHours() {
+    public double getBudgetHours() {
         return budgetHours;
     }
 
-    public int getHoursSpent() {
+    public double getHoursSpent() {
         return hoursSpent;
     }
 
