@@ -584,5 +584,27 @@ public class ProjectSteps {
 	public void theEmployeeWithInitialsIsSelected(String initials) throws Exception {
 		employee = database.getEmployee(initials);
 	}
+
+	@Then("the system shows the following availability calendar for the month {string} in the year {int}")
+	public void theSystemShowsTheFollowingAvailabilityCalendarForTheMonthInTheYear(String month, int year, DataTable expectedAvailabilityTable) {
+		try {
+			// Convert the month name to a number
+			String monthNumber = employee.getActivityLog().convertMonthNameToNumber(month);
+
+			// Retrieve the actual availability calendar for the specified month and year
+			Map<Integer, Integer> actualAvailability = employee.getAvailability(String.valueOf(year), monthNumber);
+
+			// Convert the expected availability calendar from DataTable to a Map
+			Map<Integer, Integer> expectedAvailability = new HashMap<>();
+			for (Map<String, String> row : expectedAvailabilityTable.asMaps(String.class, String.class)) {
+				expectedAvailability.put(Integer.parseInt(row.get("Week")), Integer.parseInt(row.get("Availability")));
+			}
+
+			// Compare the actual availability calendar with the expected one
+			assertEquals(expectedAvailability, actualAvailability);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
 }
 

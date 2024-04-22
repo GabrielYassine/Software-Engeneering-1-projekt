@@ -20,17 +20,16 @@ Feature: show available employees
     Scenario: User successfully views availability calendar
       Given the employee with initials "Huba" is selected
       When you search after year "2024" and the month "february"
-#      Then the system shows the following availability calendar for the month "february" in the year 2024
-#        | Initials | First week | Second week | Third week | Fourth week | Fifth week |
-#        | Huba     | 1          | 1           | 1          | 0           | 0          |
-#        | Abed     | 1          | 2           | 2          | 1           | 1          |
-#        | Dora     | 1          | 2           | 2          | 1           | 1          |
-#        | Jama     | 1          | 2           | 2          | 1           | 1          |
+      Then the system shows the following availability calendar for the month "february" in the year 2024
+        | Initials | First week | Second week | Third week | Fourth week | Fifth week |
+        | Huba     | 1          | 1           | 1          | 0           | 0          |
+        | Abed     | 1          | 2           | 2          | 1           | 1          |
+        | Dora     | 1          | 2           | 2          | 1           | 1          |
+        | Jama     | 1          | 2           | 2          | 1           | 1          |
 
 #    Scenario: User writes an invalid month
 #      When you search after year "2024" and the month "februa"
 #      Then an error message "Month value error" should be given
-    # THrow exception med month error
 
 #   Scenario: User checks for year 0
 #      When you search after year "0" and the month "february"
