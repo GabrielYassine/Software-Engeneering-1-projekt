@@ -177,14 +177,7 @@ public class Activity {
     }
 
     public String getStatus() {
-        double halfBudgetHours = budgetHours / 2.0;
-        if (hoursSpent < halfBudgetHours) {
-            return "Good";
-        } else if (hoursSpent <= budgetHours) {
-            return "Nearing budget";
-        } else {
-            return "Over budget";
-        }
+        return hoursSpent + "/" + budgetHours;
     }
     public boolean getCompletedStatus() {
         return completed;
