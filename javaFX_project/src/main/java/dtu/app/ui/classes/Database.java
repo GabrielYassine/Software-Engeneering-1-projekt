@@ -9,7 +9,6 @@ import java.util.List;
  */
 
 public class Database {
-    private List<Project> projects = new ArrayList<>();
     private final List<Employee> employeeRepository = new ArrayList<>();
     private final List<Project> projectRepository = new ArrayList<>();
     private final DateServer dateServer = new DateServer();
@@ -129,7 +128,4 @@ public class Database {
         employee1.getActivityLog().registerHours(date7, activity1, "5");
     }
 
-    public void addProject(Project project) {
-        this.projects.add(project);
-    }
 }

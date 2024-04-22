@@ -19,9 +19,9 @@ Feature: See Employee Schedule
       Then the selected week for employee with initials "Huba" should contain the following details
         | Date       | Activity Name | Hours |
         | 2024-02-10 | New Activity  | 5     |
-   #   And the weekday 7 for the employee with initials "Huba" should contain the following details
-   #   | Activity Name | Hours |
-   #   | New Activity  | 5     |
+#      And the weekday 7 for the employee with initials "Huba" should contain the following details
+#      | Activity Name | Hours |
+#      | New Activity  | 5     |
 
     Scenario: Employee searches for schedule of a specific employee for a week without any registered hours
         When the employee searches for the schedule of the employee with initials "Huba" for the year 2024 and week 7
@@ -55,3 +55,7 @@ Feature: See Employee Schedule
    Scenario: User searches for schedule of an employee with no year
       When the employee searches for the schedule of the employee with initials "Huba" for the year "" and week 7
       Then an error message "No year is given" should be given
+
+  Scenario: User searches for schedule of an employee for year 0
+      When the employee searches for the schedule of the employee with initials "Huba" for the year 0 and week 7
+      Then an error message "Year value error" should be given

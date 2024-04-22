@@ -46,6 +46,10 @@ public class ActivityInfoController extends CommonElementsController {
 
         updateCompletionStatus(activity);
         updateActivityInfo(activity);
+        String startWeek = String.valueOf(activity.getStartWeek());
+        String endWeek = String.valueOf(activity.getEndWeek());
+        startWeekValue.setText(startWeek);
+        endWeekValue.setText(endWeek);
 
         datePicker.addEventFilter(KeyEvent.KEY_TYPED, KeyEvent::consume);
         setupNumericTextFieldListeners(hoursField);

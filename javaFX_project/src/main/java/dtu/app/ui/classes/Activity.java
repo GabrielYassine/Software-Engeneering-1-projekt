@@ -15,8 +15,6 @@ public class Activity {
     private int startWeek;
     private int endWeek;
     private double hoursSpent = 0;
-    private int year;
-    private int month;
 
     private boolean completed = false;
 
@@ -190,11 +188,4 @@ public class Activity {
     }
 
 
-    public int getYear() {
-        return year;
-    }
-
-    public int getMonth() {
-        return month;
-    }
 }

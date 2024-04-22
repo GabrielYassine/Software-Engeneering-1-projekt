@@ -25,8 +25,6 @@ public class ProjectSteps {
 	private Activity activity;
 	private ActivityLog weekActivities;
 	private String selectedWeek;
-	private List<Activity> activitiesForMonth;
-
 
 	public ProjectSteps(App app) {
 		this.app = app;
@@ -457,6 +455,10 @@ public class ProjectSteps {
 
 	@When("the employee searches for the schedule of the employee(s) with initials {string} for the year {int} and week {int}")
 	public void theEmployeeSearchesForTheScheduleOfTheEmployeeSWithInitialsForTheYearAndWeek(String initials, int year, int week) throws Exception {
+		if (year == 0) {
+			errorMessage.setErrorMessage("Year value error");
+			return;
+		}
 		try {
 			Employee employee = database.getEmployee(initials);
 			this.weekActivities = employee.getActivityLog().getWeekActivities(String.valueOf(year), String.valueOf(week));
@@ -535,6 +537,7 @@ public class ProjectSteps {
 
 				// If no activities were found, assert that dateActivities is empty
 				if (!activityFound) {
+					System.out.println("Hello");
 					assertTrue(dateActivities.isEmpty());
 				}
 			}
@@ -567,39 +570,15 @@ public class ProjectSteps {
 	}
 
 
-	@And("there is a project with name {string} that contains employee(s).")
-		public void thereIsAProjectWithNameThatContainsEmployeeS(String projectName) {
-
-		}
-
-	@And("there is a project with name {string} that contains an employee {string}.")
-	public void thereIsAProjectWithNameThatContainsAnEmployee(String projectName, String employeeInitials) throws Exception {
-		// Create a new project with the given name
-		Project project = new Project(database, projectName, new ArrayList<>(), null);
-
-		// Add an employee to the project
-		// The employee's initials are given by the second parameter
-		Employee employee = new Employee(database, employeeInitials);
-		project.addEmployee(employee);
-
-		// Add the project to the database
-		database.addProject(project);
-		// Create a new activity
-		Activity activity = new Activity(project, "Activity Name", "5", "1", "52", List.of(employee));
-		// Add the activity to the project
-		project.addActivity(activity);
+	@When("you search after year {string} and the month {string}")
+	public void youSearchAfterYearAndTheMonth(String year, String month) throws Exception {
+		String monthNumber = employee.getActivityLog().convertMonthNameToNumber(month);
+		Map<Integer, Integer> availabilityForMonth = employee.getAvailability(year, monthNumber);
 	}
 
-
-
-	@When("you search after year {int} and month {int}")
-	public void youSearchAfterYearAndMonth(int year, int month) {
-		// employee is a class variable and has a method getActivitiesForMonth
-		activitiesForMonth = employee.getActivitiesForMonth(year, month);
-	}
-
-	@Then("the system will show display the following details")
-	public void theSystemWillShowDisplayTheFollowingDetails() {
+	@Given("the employee with initials {string} is selected")
+	public void theEmployeeWithInitialsIsSelected(String initials) throws Exception {
+		employee = database.getEmployee(initials);
 	}
 }
 

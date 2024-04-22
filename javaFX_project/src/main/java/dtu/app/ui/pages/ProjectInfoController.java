@@ -16,6 +16,7 @@ public class ProjectInfoController extends CommonElementsController {
     public TableView<Activity> activityTableView;
     public TableColumn<Activity, String> nameColumn;
     public TableColumn<Activity, Boolean> completedColumn;
+    public Button viewAvailabilitySchedule;
     @FXML
     private TableColumn<Activity, String> statusColumn;
 
@@ -67,7 +68,10 @@ public class ProjectInfoController extends CommonElementsController {
             }
         });
     }
-
+    @FXML
+    private void switchToAvailabilitySchedule() throws IOException {
+        App.setRoot("availabilitySchedule");
+    }
     @FXML
     private void createActivity() throws IOException {
         Project selectedProject = App.database.selectedProject;

@@ -74,7 +74,16 @@ public class ActivityLog {
         if (year == null || year.isEmpty()) {
             throw new IllegalArgumentException("No year is given");
         }
+        int yearNumber = Integer.parseInt(year);
+        try {
+            if (yearNumber == 0) {
+                throw new IllegalArgumentException("Year value error");
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Year value error");
+        }
     }
+
 
 
     public ActivityLog getWeekActivities(String year, String week) {
@@ -177,4 +186,39 @@ public class ActivityLog {
     public int getSize() {
         return dateLog.size();
     }
+
+    public List<Activity> getActivitiesForDay(Date date) {
+        // Convert the Date to a Calendar instance
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        // Get the activities for the given date
+        Map<Activity, Double> activitiesForDayMap = dateLog.get(calendar);
+
+        // If there are no activities for the given date, return an empty list
+        if (activitiesForDayMap == null) {
+            return new ArrayList<>();
+        }
+
+        // Return a new list containing the activities for the given date
+        return new ArrayList<>(activitiesForDayMap.keySet());
+    }
+    public String convertMonthNameToNumber(String monthName) {
+        switch (monthName.toLowerCase()) {
+            case "january": return "1";
+            case "february": return "2";
+            case "march": return "3";
+            case "april": return "4";
+            case "may": return "5";
+            case "june": return "6";
+            case "july": return "7";
+            case "august": return "8";
+            case "september": return "9";
+            case "october": return "10";
+            case "november": return "11";
+            case "december": return "12";
+            default: throw new IllegalArgumentException("Invalid month name");
+        }
+    }
+
 }
