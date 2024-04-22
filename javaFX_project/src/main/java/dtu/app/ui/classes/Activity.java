@@ -14,19 +14,23 @@ public class Activity {
     private double budgetHours;
     private int startWeek;
     private int endWeek;
+
+    private int startYear;
+    private int endYear;
     private double hoursSpent = 0;
 
     private boolean completed = false;
 
-    public Activity(Project project, String name, String budgetHours, String startWeek, String endWeek, List<Employee> employees) {
+    public Activity(Project project, String name, String budgetHours, String startWeek, String endWeek, List<Employee> employees, String startYear, String endYear) {
         validateProject(project);
         this.project = project;
         validateName(name, project);
         this.name = name;
-
         this.budgetHours = parseAndValidateHours(budgetHours);
         this.startWeek = parseAndValidateWeek(startWeek, "Start week value error");
         this.endWeek = parseAndValidateWeek(endWeek, "End week value error");
+        this.startYear = parseAndValidateYear(startYear, "Start year value error");
+        this.endYear = parseAndValidateYear(endYear, "End year value error");
         this.employees = new ArrayList<>(employees);
         this.completed = false;
         addEmployees(employees);
@@ -69,6 +73,18 @@ public class Activity {
             return hours;
         } catch (NullPointerException e) {
             throw new IllegalArgumentException("Budget hours missing");
+        }
+    }
+
+    private int parseAndValidateYear(String year, String errorMessage) {
+        try {
+            int yearNumber = Integer.parseInt(year);
+            if (yearNumber == 0) {
+                throw new IllegalArgumentException(errorMessage);
+            }
+            return yearNumber;
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(errorMessage);
         }
     }
 

@@ -41,8 +41,8 @@ public class EmailSteps {
     @Given("the employee has registered his daily work for the current day")
     public void theEmployeeHasRegisteredHisDailyWorkForTheCurrentDay() throws Exception {
         Project exampleProject = exampleProject();
-
-        employee.getActivityLog().registerHours(dateServer.getDate(), new Activity(exampleProject, "Activity", "10", "1", "2", List.of(employee)), "15");
+        Activity a = new Activity(exampleProject, "Activity", "10", "1", "2", List.of(employee), "2024", "2024");
+        employee.getActivityLog().registerHours(dateServer.getDate(), a, "5");
         assertTrue(database.hasEmployeeRegistered(employee));
     }
 
@@ -62,11 +62,16 @@ public class EmailSteps {
 
     public void exampleActivities(int n) {
         Project exampleProject = exampleProject();
-        String startWeek = String.valueOf(dateServer.getWeek());
-        String endWeek = String.valueOf(dateServer.getWeek() + 4);
+        int currentWeek = dateServer.getWeek();
+        int currentYear = dateServer.getYear();
 
         for (int i = 0; i < n; i++) {
-            new Activity(exampleProject, "Activity" + i, "5", startWeek, endWeek, List.of(employee));
+            String startWeek = String.valueOf(currentWeek);
+            String endWeek = String.valueOf(currentWeek + 4);
+            String startYear = String.valueOf(currentYear);
+            String endYear = (currentWeek + 4 > 52) ? String.valueOf(currentYear + 1) : startYear;
+
+            new Activity(exampleProject, "Activity" + i, "5", startWeek, endWeek, List.of(employee), startYear, endYear);
         }
     }
 

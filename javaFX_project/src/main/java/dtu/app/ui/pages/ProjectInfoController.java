@@ -17,6 +17,8 @@ public class ProjectInfoController extends CommonElementsController {
     public TableColumn<Activity, String> nameColumn;
     public TableColumn<Activity, Boolean> completedColumn;
     public Button viewAvailabilitySchedule;
+    public TextField startYearField;
+    public TextField endYearField;
     @FXML
     private TableColumn<Activity, String> statusColumn;
 
@@ -79,8 +81,10 @@ public class ProjectInfoController extends CommonElementsController {
         String budgetHours = budgetHoursField.getText();
         String startWeek = startWeekField.getText();
         String endWeek = endWeekField.getText();
+        String startYear = startYearField.getText();
+        String endYear = endYearField.getText();
         try {
-            Activity newActivity = new Activity(selectedProject, activityName, budgetHours, startWeek, endWeek, selectedEmployeesListView.getItems());
+            Activity newActivity = new Activity(selectedProject, activityName, budgetHours, startWeek, endWeek, selectedEmployeesListView.getItems(), startYear, endYear);
             activityTableView.getItems().add(newActivity);
             resetActivityCreationFields();
         } catch (Exception e) {

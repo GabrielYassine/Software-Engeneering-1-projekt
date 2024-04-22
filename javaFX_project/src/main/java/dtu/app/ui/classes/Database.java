@@ -88,8 +88,8 @@ public class Database {
 
         Project project1 = new Project(this, "Project 1", List.of(employee1, employee2, employee3, employee4), employee1);
 
-        Activity activity1 = new Activity(project1, "Activity 1", "10", "1", "10", List.of(employee1, employee2));
-        Activity activity2 = new Activity(project1, "Activity 2", "20", "11", "20", List.of(employee2, employee3, employee4));
+        Activity activity1 = new Activity(project1, "Activity 1", "10", "1", "10", List.of(employee1, employee2), "2024", "2024");
+        Activity activity2 = new Activity(project1, "Activity 2", "20", "11", "20", List.of(employee2, employee3, employee4), "2024", "2024");
 
         // email
         employee1.sendEmailNotification("Work", "Ice cream");

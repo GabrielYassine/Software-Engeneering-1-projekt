@@ -18,4 +18,9 @@ public class DateServer {
         Calendar calendar = new GregorianCalendar();
         return calendar.get(Calendar.WEEK_OF_YEAR);
     }
+
+    public int getYear() {
+        Calendar calendar = new GregorianCalendar();
+        return calendar.get(Calendar.YEAR);
+    }
 }

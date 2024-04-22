@@ -223,6 +223,8 @@ public class ProjectSteps {
 			String budgetHours = columns.get("Budget Hours");
 			String startWeek = columns.get("Start Week");
 			String endWeek = columns.get("End Week");
+			String startYear = columns.get("Start Year");
+			String endYear = columns.get("End Year");
 			String initials = columns.get("Initials");
 			List<Employee> employees = new ArrayList<>();
 			if (initials != null && !initials.isEmpty()) {
@@ -235,7 +237,7 @@ public class ProjectSteps {
 				}
 			}
 			try {
-				activity = new Activity(project, name, budgetHours, startWeek, endWeek, employees);
+				activity = new Activity(project, name, budgetHours, startWeek, endWeek, employees, startYear, endYear);
 			} catch (Exception e) {
 				errorMessage.setErrorMessage(e.getMessage());
 			}
@@ -286,6 +288,8 @@ public class ProjectSteps {
 			String budgetHours = columns.get("Budget Hours");
 			String startWeek = columns.get("Start Week");
 			String endWeek = columns.get("End Week");
+			String startYear = columns.get("Start Year");
+			String endYear = columns.get("End Year");
 			String initials = columns.get("Initials");
 
 			List<Employee> employees = new ArrayList<>();
@@ -300,7 +304,7 @@ public class ProjectSteps {
 			}
 
 			try {
-				activity = new Activity(project, name, budgetHours, startWeek, endWeek, employees);
+				activity = new Activity(project, name, budgetHours, startWeek, endWeek, employees, startYear, endYear);
 			} catch (Exception e) {
 				errorMessage.setErrorMessage(e.getMessage());
 			}
