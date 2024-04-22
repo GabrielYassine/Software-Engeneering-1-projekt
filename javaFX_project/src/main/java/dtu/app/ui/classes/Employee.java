@@ -37,6 +37,10 @@ public class Employee {
         return inbox.stream();
     }
 
+    public List<Email> getInbox() {
+        return inbox;
+    }
+
     public boolean isActivityActive(Activity activity, int selectedWeek) {
         int endWeekTemp = activity.getEndWeek();
         endWeekTemp = activity.getStartWeek() > endWeekTemp ? endWeekTemp + 52 : endWeekTemp;

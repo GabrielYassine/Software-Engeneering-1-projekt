@@ -91,6 +91,10 @@ public class Database {
         Activity activity1 = new Activity(project1, "Activity 1", "10", "1", "10", List.of(employee1, employee2));
         Activity activity2 = new Activity(project1, "Activity 2", "20", "11", "20", List.of(employee2, employee3, employee4));
 
+        // email
+        employee1.sendEmailNotification("Work", "Ice cream");
+        employee2.sendEmailNotification("Work", "Hello Gabriel");
+
         // register activities today
         Calendar date1 = Calendar.getInstance();
         employee1.getActivityLog().registerHours(date1, activity1, "5");
