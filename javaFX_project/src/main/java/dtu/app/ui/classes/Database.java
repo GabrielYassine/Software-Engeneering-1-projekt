@@ -93,6 +93,7 @@ public class Database {
 
         // email
         employee1.sendEmailNotification("Work", "Ice cream");
+        employee1.sendEmailNotification("Work", "Ilias er dum");
         employee2.sendEmailNotification("Work", "Hello Gabriel");
 
         // register activities today
