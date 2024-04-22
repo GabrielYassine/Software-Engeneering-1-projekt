@@ -173,6 +173,7 @@ public class ActivityLog {
         return sb.toString();
     }
 
+
     public int getSize() {
         return dateLog.size();
     }

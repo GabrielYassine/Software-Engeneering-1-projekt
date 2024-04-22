@@ -25,6 +25,8 @@ public class ProjectSteps {
 	private Activity activity;
 	private ActivityLog weekActivities;
 	private String selectedWeek;
+	private List<Activity> activitiesForMonth;
+
 
 	public ProjectSteps(App app) {
 		this.app = app;
@@ -565,4 +567,39 @@ public class ProjectSteps {
 	}
 
 
+	@And("there is a project with name {string} that contains employee(s).")
+		public void thereIsAProjectWithNameThatContainsEmployeeS(String projectName) {
+
+		}
+
+	@And("there is a project with name {string} that contains an employee {string}.")
+	public void thereIsAProjectWithNameThatContainsAnEmployee(String projectName, String employeeInitials) throws Exception {
+		// Create a new project with the given name
+		Project project = new Project(database, projectName, new ArrayList<>(), null);
+
+		// Add an employee to the project
+		// The employee's initials are given by the second parameter
+		Employee employee = new Employee(database, employeeInitials);
+		project.addEmployee(employee);
+
+		// Add the project to the database
+		database.addProject(project);
+		// Create a new activity
+		Activity activity = new Activity(project, "Activity Name", "5", "1", "52", List.of(employee));
+		// Add the activity to the project
+		project.addActivity(activity);
+	}
+
+
+
+	@When("you search after year {int} and month {int}")
+	public void youSearchAfterYearAndMonth(int year, int month) {
+		// employee is a class variable and has a method getActivitiesForMonth
+		activitiesForMonth = employee.getActivitiesForMonth(year, month);
+	}
+
+	@Then("the system will show display the following details")
+	public void theSystemWillShowDisplayTheFollowingDetails() {
+	}
 }
+

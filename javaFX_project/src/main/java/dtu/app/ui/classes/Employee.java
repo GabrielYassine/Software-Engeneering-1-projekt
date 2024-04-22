@@ -70,4 +70,14 @@ public class Employee {
     public String toString() {
         return initials;
     }
+
+    public List<Activity> getActivitiesForMonth(int year, int month) {
+List<Activity> activitiesForMonth = new ArrayList<>();
+        for (Activity a : activities) {
+            if (a.getYear() == year && a.getMonth() == month) {
+                activitiesForMonth.add(a);
+            }
+        }
+        return activitiesForMonth;
+    }
 }
