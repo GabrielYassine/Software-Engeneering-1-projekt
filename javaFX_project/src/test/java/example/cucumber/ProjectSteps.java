@@ -360,9 +360,9 @@ public class ProjectSteps {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(parsedDate);
 
-			Map<Activity, Integer> hoursLog = employee.getActivityLog().getDateActivities(calendar);
-			int registeredHours = hoursLog.get(activity);
-			assertEquals(expectedHours, registeredHours);
+			Map<Activity, Double> hoursLog = employee.getActivityLog().getDateActivities(calendar);
+			double registeredHours = hoursLog.get(activity);
+			assertEquals(expectedHours, registeredHours,0);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -486,12 +486,12 @@ public class ProjectSteps {
 				calendar.setTime(parsedDate);
 
 				// Get the activities for the expected date
-				Map<Activity, Integer> dateActivities = weekActivities.getDateActivities(calendar);
+				Map<Activity, Double> dateActivities = weekActivities.getDateActivities(calendar);
 
 				// Check that the activity with the expected name exists and has the expected hours
 				boolean activityFound = false;
-				for (Map.Entry<Activity, Integer> entry : dateActivities.entrySet()) {
-					if (entry.getKey().getName().equals(expectedActivityName) && entry.getValue().equals(Integer.parseInt(expectedHours))) {
+				for (Map.Entry<Activity, Double> entry : dateActivities.entrySet()) {
+					if (entry.getKey().getName().equals(expectedActivityName) && entry.getValue().equals(Double.parseDouble(expectedHours))) {
 						activityFound = true;
 						break;
 					}
