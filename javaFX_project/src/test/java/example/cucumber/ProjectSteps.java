@@ -578,6 +578,7 @@ public class ProjectSteps {
 	public void youSearchAfterYearAndTheMonth(String year, String month) throws Exception {
 		String monthNumber = employee.getActivityLog().convertMonthNameToNumber(month);
 		Map<Integer, Integer> availabilityForMonth = employee.getAvailability(year, monthNumber);
+
 	}
 
 	@Given("the employee with initials {string} is selected")

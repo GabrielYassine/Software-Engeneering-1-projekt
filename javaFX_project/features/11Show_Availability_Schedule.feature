@@ -27,9 +27,10 @@ Feature: show available employees
         | Dora     | 1          | 2           | 2          | 1           | 1          |
         | Jama     | 1          | 2           | 2          | 1           | 1          |
 
-#    Scenario: User writes an invalid month
-#      When you search after year "2024" and the month "februa"
-#      Then an error message "Month value error" should be given
+    Scenario: User writes an invalid month
+        Given the employee with initials "Huba" is selected
+        When you search after year "2024" and the month "februa"
+        Then an error message "Month value error" should be given
 
 #   Scenario: User checks for year 0
 #      When you search after year "0" and the month "february"

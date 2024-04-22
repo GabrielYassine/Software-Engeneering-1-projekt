@@ -217,7 +217,7 @@ public class ActivityLog {
             case "october": return "10";
             case "november": return "11";
             case "december": return "12";
-            default: throw new IllegalArgumentException("Invalid month name");
+            default: throw new IllegalArgumentException("Month value error");
         }
     }
 
