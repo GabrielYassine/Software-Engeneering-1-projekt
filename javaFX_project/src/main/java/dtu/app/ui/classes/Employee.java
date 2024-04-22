@@ -71,6 +71,9 @@ public class Employee {
     }
 
     public Map<Integer, Integer> getAvailability(String year, String month) {
+        if (year.isEmpty() || year == null){
+            throw new IllegalArgumentException("Year value error");
+        }
         Map<Integer, Integer> availabilityForMonth = new HashMap<>();
 
         // Convert year and month to integers

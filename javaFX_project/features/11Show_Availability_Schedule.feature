@@ -32,14 +32,17 @@ Feature: show available employees
         When you search after year "2024" and the month "februa"
         Then an error message "Month value error" should be given
 
-#   Scenario: User checks for year 0
-#      When you search after year "0" and the month "february"
-#      Then an error message "Year value error" should be given
+     Scenario: User checks for year 0
+        Given the employee with initials "Huba" is selected
+        When you search after year "0" and the month "february"
+        Then an error message "Start year value error" should be given
 
-#    Scenario: User writes no month
-#        When you search after year "2024" and the month ""
-#        Then an error message "Month value error" should be given
+    Scenario: User writes no month
+        Given the employee with initials "Huba" is selected
+        When you search after year "2024" and the month ""
+        Then an error message "Month value error" should be given
 
-#    Scenario: User writes no year
-#        When you search after year "" and the month "february"
-#        Then an error message "Year value error" should be given
+    Scenario: User writes no year
+       Given the employee with initials "Huba" is selected
+       When you search after year "" and the month "february"
+       Then an error message "Year value error" should be given
