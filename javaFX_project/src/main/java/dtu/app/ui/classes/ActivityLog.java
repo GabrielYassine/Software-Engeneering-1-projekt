@@ -7,7 +7,7 @@ import java.time.temporal.WeekFields;
 import java.util.*;
 
 public class ActivityLog {
-    private final Map<Calendar, Map<Activity, Integer>> dateLog;
+    private final Map<Calendar, Map<Activity, Double>> dateLog;
     private final List<Calendar> registeredDates;
 
     public ActivityLog() {
@@ -15,10 +15,10 @@ public class ActivityLog {
         this.registeredDates = new ArrayList<>();
     }
 
-    public void addActivity(Calendar date, Activity activity, int hours) {
-        Map<Activity, Integer> hoursLog = dateLog.getOrDefault(date, new HashMap<>());
+    public void addActivity(Calendar date, Activity activity, double hours) {
+        Map<Activity, Double> hoursLog = dateLog.getOrDefault(date, new HashMap<>());
         if (hoursLog.containsKey(activity)) {
-            int existingHours = hoursLog.get(activity);
+            double existingHours = hoursLog.get(activity);
             hoursLog.put(activity, existingHours + hours);
         } else {
             hoursLog.put(activity, hours);
@@ -26,18 +26,18 @@ public class ActivityLog {
         dateLog.put(date, hoursLog);
     }
 
-    public void editActivity(Calendar date, Activity activity, int hours) {
-        Map<Activity, Integer> hoursLog = dateLog.get(date);
+    public void editActivity(Calendar date, Activity activity, double hours) {
+        Map<Activity, Double> hoursLog = dateLog.get(date);
         hoursLog.put(activity, hours);
         dateLog.put(date, hoursLog);
     }
 
     public void registerHours(Calendar date, Activity activity, String hours) throws Exception {
-        int hoursInt = parseAndValidateHours(hours);
+        double hoursDouble = parseAndValidateHours(hours);
         if (date == null || activity == null) {
             throw new Exception("Insufficient or incorrect information given");
         }
-        addActivity(date, activity, hoursInt);
+        addActivity(date, activity, hoursDouble);
         hasRegistered(date);
     }
 
@@ -45,14 +45,14 @@ public class ActivityLog {
         registeredDates.add(date);
     }
 
-    private int parseAndValidateHours(String registeredHours) {
+    private double parseAndValidateHours(String registeredHours) {
         try {
-            int hours = Integer.parseInt(registeredHours);
+            double hours = Double.parseDouble(registeredHours);
             if (hours == 0) {
                 throw new IllegalArgumentException("Hours missing");
             }
             return hours;
-        } catch (NumberFormatException e) {
+        } catch (NullPointerException e) {
             throw new IllegalArgumentException("Registered hours value error");
         }
     }
@@ -85,12 +85,12 @@ public class ActivityLog {
         ActivityLog weekActivities = new ActivityLog();
         WeekFields weekFields = WeekFields.of(Locale.getDefault());
 
-        for (Map.Entry<Calendar, Map<Activity, Integer>> entry : dateLog.entrySet()) {
+        for (Map.Entry<Calendar, Map<Activity, Double>> entry : dateLog.entrySet()) {
 
             LocalDate date = entry.getKey().getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             if (date.getYear() == yearInt && date.get(weekFields.weekOfWeekBasedYear()) == weekInt) {
 
-                for (Map.Entry<Activity, Integer> activityEntry : entry.getValue().entrySet()) {
+                for (Map.Entry<Activity, Double> activityEntry : entry.getValue().entrySet()) {
                     weekActivities.addActivity(entry.getKey(), activityEntry.getKey(), activityEntry.getValue());
                 }
             }
@@ -129,9 +129,9 @@ public class ActivityLog {
     public List<String> getDayActivities(int weekOfYear, int dayOfWeek) {
         parseAndValidateWeek(String.valueOf(weekOfYear));
         List<String> activities = new ArrayList<>();
-        for (Map.Entry<Calendar, Map<Activity, Integer>> entry : dateLog.entrySet()) {
+        for (Map.Entry<Calendar, Map<Activity, Double>> entry : dateLog.entrySet()) {
             if (entry.getKey().get(Calendar.DAY_OF_WEEK) == dayOfWeek && entry.getKey().get(Calendar.WEEK_OF_YEAR) == weekOfYear) {
-                for (Map.Entry<Activity, Integer> activityEntry : entry.getValue().entrySet()) {
+                for (Map.Entry<Activity, Double> activityEntry : entry.getValue().entrySet()) {
                     String activityInfo = activityEntry.getKey().getName() + "-" +
                             activityEntry.getValue();
                     activities.add(activityInfo);
@@ -142,11 +142,11 @@ public class ActivityLog {
         return activities;
     }
 
-    public Map<Activity, Integer> getDateActivities(Calendar date) {
+    public Map<Activity, Double> getDateActivities(Calendar date) {
         return dateLog.get(date);
     }
 
-    public Map<Calendar, Map<Activity, Integer>> getDateLog() {
+    public Map<Calendar, Map<Activity, Double>> getDateLog() {
         return dateLog;
     }
 
@@ -160,10 +160,10 @@ public class ActivityLog {
         StringBuilder sb = new StringBuilder();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        for (Map.Entry<Calendar, Map<Activity, Integer>> entry : dateLog.entrySet()) {
+        for (Map.Entry<Calendar, Map<Activity, Double>> entry : dateLog.entrySet()) {
             sb.append("Date: ").append(sdf.format(entry.getKey().getTime())).append("\n");
 
-            for (Map.Entry<Activity, Integer> activityEntry : entry.getValue().entrySet()) {
+            for (Map.Entry<Activity, Double> activityEntry : entry.getValue().entrySet()) {
                 sb.append("Activity: ").append(activityEntry.getKey().getName()).append("\n")
                         .append("Hours: ").append(activityEntry.getValue()).append("\n");
             }

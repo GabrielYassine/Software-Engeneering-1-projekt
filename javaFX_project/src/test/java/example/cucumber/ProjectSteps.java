@@ -252,7 +252,7 @@ public class ProjectSteps {
 			String expectedEndWeek = columns.get("End Week");
 			String expectedInitials = columns.get("Initials");
 			assertEquals(expectedName, activity.getName());
-			assertEquals(Integer.parseInt(expectedBudgetHours), activity.getBudgetHours());
+			assertEquals(Double.parseDouble(expectedBudgetHours), activity.getBudgetHours(), 0);
 			assertEquals(Integer.parseInt(expectedStartWeek), activity.getStartWeek());
 			assertEquals(Integer.parseInt(expectedEndWeek), activity.getEndWeek());
 			List<Employee> employees = activity.getEmployees();
@@ -360,9 +360,9 @@ public class ProjectSteps {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(parsedDate);
 
-			Map<Activity, Integer> hoursLog = employee.getActivityLog().getDateActivities(calendar);
-			int registeredHours = hoursLog.get(activity);
-			assertEquals(expectedHours, registeredHours);
+			Map<Activity, Double> hoursLog = employee.getActivityLog().getDateActivities(calendar);
+			double registeredHours = hoursLog.get(activity);
+			assertEquals(expectedHours, registeredHours,0);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -371,8 +371,8 @@ public class ProjectSteps {
 	@Then("the activity {string} should have {int} hours registered in total")
 	public void theActivityShouldHaveHoursRegisteredInTotal(String activityName, int totalHours) {
 		Activity activity = project.getActivity(activityName);
-		int registeredHours = activity.getHoursSpent();
-		assertEquals(totalHours, registeredHours);
+		double registeredHours = activity.getHoursSpent();
+		assertEquals(totalHours, registeredHours, 0);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -486,12 +486,12 @@ public class ProjectSteps {
 				calendar.setTime(parsedDate);
 
 				// Get the activities for the expected date
-				Map<Activity, Integer> dateActivities = weekActivities.getDateActivities(calendar);
+				Map<Activity, Double> dateActivities = weekActivities.getDateActivities(calendar);
 
 				// Check that the activity with the expected name exists and has the expected hours
 				boolean activityFound = false;
-				for (Map.Entry<Activity, Integer> entry : dateActivities.entrySet()) {
-					if (entry.getKey().getName().equals(expectedActivityName) && entry.getValue().equals(Integer.parseInt(expectedHours))) {
+				for (Map.Entry<Activity, Double> entry : dateActivities.entrySet()) {
+					if (entry.getKey().getName().equals(expectedActivityName) && entry.getValue().equals(Double.parseDouble(expectedHours))) {
 						activityFound = true;
 						break;
 					}
@@ -563,5 +563,6 @@ public class ProjectSteps {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
+
 
 }

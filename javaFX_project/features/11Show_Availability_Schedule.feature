@@ -2,12 +2,24 @@ Feature: show available employees
   Description: the user can view available employees
   Actor: employee
 
-#  Scenario: An employee is available
-#    Given that there is an employee "huba"
-#    And the employee is working on less than 20 activities in a week
-#    When the system checks if the employee is available
-#    Then the employee is available
-#
+  Background:
+    Given there are employees with the following initials
+      | Initials |
+      | Huba     |
+      | Abed     |
+    And there is a project with name "New Project" that contains employee(s).
+    When you search after a specific year and month
+    Then the system will show display the following details
+      | Date       | Activity Name | Hours | Activities |
+      | 2024-02-10 | New Activity  | 5     | 0/20       |
+
+
+    Scenario: An employee is available
+      Given that there is an employee "huba"
+      And the employee is working on less than 20 activities in a week
+      When the system checks if the employee is available
+      Then the employee is available
+
 #  Scenario: Multiple employees are available
 #    Given that there are 10 employees
 #    And some employees are working on less than 20 activities in a week

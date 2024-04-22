@@ -66,7 +66,7 @@ public class CommonElementsController {
     public void setupNumericTextFieldListeners(TextField... textFields) {
         for (TextField textField : textFields) {
             textField.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (!newValue.matches("\\d*") || newValue.length() > 4 ) {
+                if (!newValue.matches("\\d*\\.?\\d?") || newValue.length() > 4) {
                     textField.setText(oldValue);
                 }
             });

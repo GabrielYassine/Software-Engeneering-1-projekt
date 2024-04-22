@@ -11,10 +11,10 @@ public class Activity {
     private final Project project;
     private DateServer dateServer = new DateServer();
     private String name;
-    private int budgetHours;
+    private double budgetHours;
     private int startWeek;
     private int endWeek;
-    private int hoursSpent = 0;
+    private double hoursSpent = 0;
 
     private boolean completed = false;
 
@@ -63,11 +63,11 @@ public class Activity {
         }
     }
 
-    private int parseAndValidateHours(String budgetHours) {
+    private double parseAndValidateHours(String budgetHours) {
         try {
-            int hours = Integer.parseInt(budgetHours);
+            double hours = Double.parseDouble(budgetHours);
             return hours;
-        } catch (NumberFormatException e) {
+        } catch (NullPointerException e) {
             throw new IllegalArgumentException("Budget hours missing");
         }
     }
@@ -132,13 +132,14 @@ public class Activity {
         employees.removeIf(e -> !projectEmployees.contains(e));
     }
 
-    public void registerHours(int hours) {
+    public void registerHours(double hours) {
         hoursSpent += hours;
     }
 
     public void completeActivity() {
         completed = !completed;
     }
+
     public String getName() {
         return name;
     }
@@ -151,11 +152,11 @@ public class Activity {
         return endWeek;
     }
 
-    public int getBudgetHours() {
+    public double getBudgetHours() {
         return budgetHours;
     }
 
-    public int getHoursSpent() {
+    public double getHoursSpent() {
         return hoursSpent;
     }
 
@@ -176,14 +177,7 @@ public class Activity {
     }
 
     public String getStatus() {
-        double halfBudgetHours = budgetHours / 2.0;
-        if (hoursSpent < halfBudgetHours) {
-            return "Good";
-        } else if (hoursSpent <= budgetHours) {
-            return "Nearing budget";
-        } else {
-            return "Over budget";
-        }
+        return hoursSpent + "/" + budgetHours;
     }
     public boolean getCompletedStatus() {
         return completed;
