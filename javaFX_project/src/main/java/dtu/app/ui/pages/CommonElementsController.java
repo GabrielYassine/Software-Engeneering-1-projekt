@@ -76,7 +76,7 @@ public class CommonElementsController {
     public void setupLetterTextFieldListeners(TextField... textFields) {
         for (TextField textField : textFields) {
             textField.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (!newValue.matches("[a-zA-Z]*") || newValue.length() > 4) {
+                if (!newValue.matches("[a-zA-Z]*") || newValue.length() > 10) {
                     textField.setText(oldValue);
                 }
             });

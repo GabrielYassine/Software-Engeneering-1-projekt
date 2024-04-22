@@ -25,7 +25,7 @@ public class AvailabilityScheduleController extends CommonElementsController{
 
     public void initialize() {
         setupNumericTextFieldListeners(yearField);
-        setupNumericTextFieldListeners(monthField);
+        setupLetterTextFieldListeners(monthField);
 
         yearNumber.setText("No year chosen");
         monthNumber.setText("No month chosen");
@@ -40,6 +40,6 @@ public class AvailabilityScheduleController extends CommonElementsController{
     }
 
     public void displayMonth(String year, String month) throws Exception {
-        // Implement the logic to display the month availability here
+        Week1.getItems().addAll()
     }
 }
