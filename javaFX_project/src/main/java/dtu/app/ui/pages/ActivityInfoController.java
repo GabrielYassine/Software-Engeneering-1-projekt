@@ -86,7 +86,6 @@ public class ActivityInfoController extends CommonElementsController {
             Employee employee = activity.getProject().getEmployee(initials);
             Calendar calendar = getCalendarFromSelectedDate(selectedDate);
             String hours = hoursField.getText();
-
             registerHoursForEmployee(employee, calendar, activity, hours);
             updateActivityInfo(activity);
             resetActivityCreationFields();
@@ -104,7 +103,7 @@ public class ActivityInfoController extends CommonElementsController {
 
     private void registerHoursForEmployee(Employee employee, Calendar calendar, Activity activity, String hours) throws Exception {
         employee.getActivityLog().registerHours(calendar, activity, hours);
-        activity.registerHours(Integer.parseInt(hours));
+        activity.registerHours(Double.parseDouble(hours));
     }
 
     private void resetActivityCreationFields() {

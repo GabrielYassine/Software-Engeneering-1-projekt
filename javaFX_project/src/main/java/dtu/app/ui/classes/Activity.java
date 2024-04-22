@@ -139,6 +139,7 @@ public class Activity {
     public void completeActivity() {
         completed = !completed;
     }
+
     public String getName() {
         return name;
     }
