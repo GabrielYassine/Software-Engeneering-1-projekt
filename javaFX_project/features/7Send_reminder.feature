@@ -2,16 +2,6 @@ Feature: send reminder
   Description: the system sends an employee an important reminder
   Actor: system
 
-#  Scenario: User signs into email with existing employee initials
-#    Given that there is an employee "Huba"
-#    When the employee signs into their email using their initials
-#    Then the employee is logged in
-
-#  Scenario: User signs into email nonexistent employee initials
-#    Given that there is an employee "Huba"
-#    When the employee signs into their email using wrong initials
-#    Then the employee is not logged in
-
   Scenario: Employee receives a reminder for unregistered daily work
     Given that there is an employee "Huba"
     And the employee has not registered his daily work for the current day
