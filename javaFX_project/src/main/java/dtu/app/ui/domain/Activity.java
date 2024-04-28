@@ -24,17 +24,6 @@ public class Activity extends AbstractActivity{
         project.addActivity(this);
     }
 
-    // Method overload because there are two different cases where the name validation is needed.
-
-    private double parseAndValidateHours(String budgetHours) {
-        try {
-            double hours = Double.parseDouble(budgetHours);
-            return hours;
-        } catch (NullPointerException e) {
-            throw new IllegalArgumentException("Budget hours missing");
-        }
-    }
-
     public void editActivity(Activity activity, String newName, double newBudgetHours, int newStartWeek, int newEndWeek, List<Employee> newEmployees, int newStartYear, int newEndYear) {
         this.name = newName;
         this.budgetHours = newBudgetHours;
@@ -89,9 +78,8 @@ public class Activity extends AbstractActivity{
         employees.removeIf(e -> !projectEmployees.contains(e));
     }
 
-    public void registerHours(String hours) {
-        double hoursDouble = parseAndValidateHours(hours);
-        hoursSpent += hoursDouble;
+    public void registerHours(double hours) {
+        hoursSpent += hours;
     }
 
     public void switchCompletionStatus() {

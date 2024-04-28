@@ -5,8 +5,10 @@ import dtu.app.ui.domain.*;
 import dtu.app.ui.errorMessageHolders.ErrorMessageHolder;
 import dtu.app.ui.info.ActivityInfo;
 import dtu.app.ui.info.EmployeeInfo;
+import dtu.app.ui.info.FixedActivityInfo;
 import dtu.app.ui.info.ProjectInfo;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.*;
@@ -141,5 +143,54 @@ public class ActivitySteps {
 	@Then("the activity with name {string} is not completed")
 	public void theActivityWithNameIsNotCompleted(String activityName) throws Exception {
 		assertEquals("Not completed", application.getActivity(application.getSelectedProject(), activityName).getCompletionStatus());
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Feature: Create fixed activity
+
+    @When("the employee with initials {string} creates a fixed activity with the following details")
+    public void theEmployeeWithInitialsCreatesAFixedActivityWithTheFollowingDetails(String initials, DataTable table) throws Exception {
+		List<Map<String, String>> rows = table.asMaps(String.class, String.class);
+		for (Map<String, String> columns : rows) {
+			String name = columns.get("Name");
+			String startWeek = columns.get("Start Week");
+			String endWeek = columns.get("End Week");
+			String startYear = columns.get("Start Year");
+			String endYear = columns.get("End Year");
+
+			try {
+				EmployeeInfo employee = application.getEmployee(initials);
+				application.setEmployee(employee);
+				application.createFixedActivity(employee, name, startWeek, endWeek, startYear, endYear);
+			} catch (Exception e) {
+				errorMessage.setErrorMessage(e.getMessage());
+			}
+		}
+    }
+
+	@Then("the employee should have a fixed activity with the following details")
+	public void theEmployeeShouldHaveAFixedActivityWithTheFollowingDetails(DataTable table) throws Exception {
+		List<Map<String, String>> rows = table.asMaps(String.class, String.class);
+		for (Map<String, String> columns : rows) {
+			String expectedName = columns.get("Name");
+			String expectedStartWeek = columns.get("Start Week");
+			String expectedEndWeek = columns.get("End Week");
+			String expectedStartYear = columns.get("Start Year");
+			String expectedEndYear = columns.get("End Year");
+
+			EmployeeInfo employee = application.getSelectedEmployee();
+			List<FixedActivityInfo> activities = application.getFixedActivitiesForEmployee(employee);
+			for (FixedActivityInfo activity : activities) {
+				if (activity.getName().equals(expectedName)) {
+					assertEquals(expectedName, activity.getName());
+					assertEquals(Integer.parseInt(expectedStartWeek), activity.getStartWeek());
+					assertEquals(Integer.parseInt(expectedEndWeek), activity.getEndWeek());
+					assertEquals(Integer.parseInt(expectedStartYear), activity.getStartYear());
+					assertEquals(Integer.parseInt(expectedEndYear), activity.getEndYear());
+					break;
+				}
+			}
+		}
 	}
 }

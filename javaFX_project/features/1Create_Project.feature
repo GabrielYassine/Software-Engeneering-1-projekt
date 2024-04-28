@@ -4,7 +4,6 @@ Feature: Create Project
 
   Background:
     Given there are employees with the following initials
-      | Initials |
       | Huba     |
       | Abed     |
       | Dora     |

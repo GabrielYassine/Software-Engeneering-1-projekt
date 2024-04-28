@@ -39,3 +39,13 @@ Feature: Register time on activity
   Scenario: User registers time on activity with no date
     When the employee with initials "Huba" registers "10" hours on the activity "New Activity" on the date ""
     Then an error message "Error registering hours" should be given
+
+  Scenario: User registers time on activity with hours that is not modulo 0.5
+    When the employee with initials "Huba" registers "10.3" hours on the activity "New Activity" on the date "2021-06-01"
+    Then the activity "New Activity" should have "10.5" hours registered by "Huba" on the date "2021-06-01"
+    And the activity "New Activity" should have "10.5" hours registered in total
+
+  Scenario: User registers time on activity with hours that is not modulo 0.5
+    When the employee with initials "Huba" registers "10.2" hours on the activity "New Activity" on the date "2021-06-01"
+    Then the activity "New Activity" should have "10.0" hours registered by "Huba" on the date "2021-06-01"
+    And the activity "New Activity" should have "10.0" hours registered in total

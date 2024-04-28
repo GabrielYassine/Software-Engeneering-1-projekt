@@ -3,14 +3,10 @@ package dtu.app.ui;
 import dtu.app.ui.domain.*;
 import dtu.app.ui.errorMessageHolders.ErrorMessageHolder;
 import dtu.app.ui.info.*;
-import dtu.app.ui.pages.App;
-
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
-
 public class ApplicationProjects {
 
     private final Database database;
@@ -23,8 +19,6 @@ public class ApplicationProjects {
 
     /**
      * This method converts a Calendar object to a LocalDate object
-     * @param calendar
-     * @return
      */
 
     private LocalDate convertCalendarToLocalDate(Calendar calendar) {
@@ -33,7 +27,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns the ErrorMessageHolder object
-     * @return
      */
     public ErrorMessageHolder getErrorMessage() {
         return errorMessage;
@@ -41,8 +34,6 @@ public class ApplicationProjects {
 
     /**
      * This method creates an Employee object
-     * @param initial
-     * @return
      */
     public Employee createEmployee(String initial) {
         return new Employee(database, initial);
@@ -50,9 +41,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns an EmployeeInfo object
-     * @param initial
-     * @return
-     * @throws Exception
      */
 
     public EmployeeInfo getEmployee(String initial) throws Exception {
@@ -67,11 +55,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns a Project object
-     * @param name
-     * @param employeeInfos
-     * @param projectLeaderInfo
-     * @return
-     * @throws Exception
      */
 
     public Project createProject(String name, List<EmployeeInfo> employeeInfos, EmployeeInfo projectLeaderInfo) throws Exception {
@@ -93,9 +76,6 @@ public class ApplicationProjects {
 
     /**
      * This method adds an Employee object to a Project object
-     * @param projectInfo
-     * @param employee
-     * @throws Exception
      */
 
     public void addEmployeeToProject(ProjectInfo projectInfo, Employee employee) throws Exception {
@@ -104,12 +84,7 @@ public class ApplicationProjects {
     }
 
     /**
-     * This methods edits a projects details
-     * @param projectInfo
-     * @param name
-     * @param projectLeaderInitials
-     * @param employeeInfos
-     * @throws Exception
+     * This method edits a projects details
      */
 
     public void editProject(ProjectInfo projectInfo, String name, String projectLeaderInitials, List<EmployeeInfo> employeeInfos) throws Exception {
@@ -127,9 +102,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns a ProjectInfo object
-     * @param id
-     * @return
-     * @throws Exception
      */
 
     public ProjectInfo getProject(String id) throws Exception {
@@ -141,7 +113,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns the selected project
-     * @return
      */
 
     public ProjectInfo getSelectedProject() throws Exception {
@@ -150,7 +121,6 @@ public class ApplicationProjects {
 
     /**
      * This method sets the selected project
-     * @param project
      */
 
     public void setProject(ProjectInfo project) {
@@ -159,10 +129,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns the selected project leader
-     * @param projectInfo
-     * @param activityName
-     * @return
-     * @throws Exception
      */
 
     public ActivityInfo getActivity(ProjectInfo projectInfo, String activityName) throws Exception {
@@ -173,8 +139,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns the selected activity
-     * @return
-     * @throws Exception
      */
 
     public ActivityInfo getSelectedActivity() throws Exception {
@@ -183,7 +147,6 @@ public class ApplicationProjects {
 
     /**
      * This method sets the selected activity
-     * @param activity
      */
 
     public void setActivity(ActivityInfo activity) {
@@ -192,8 +155,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns the selected employee
-     * @return
-     * @throws Exception
      */
 
     public EmployeeInfo getSelectedEmployee() throws Exception {
@@ -202,7 +163,6 @@ public class ApplicationProjects {
 
     /**
      * This method sets the selected employee
-     * @param employee
      */
 
     public void setEmployee(EmployeeInfo employee) {
@@ -211,16 +171,6 @@ public class ApplicationProjects {
 
     /**
      * This method creates an Activity object
-     * @param projectInfo
-     * @param name
-     * @param budgetHours
-     * @param startWeek
-     * @param endWeek
-     * @param employeeInfos
-     * @param startYear
-     * @param endYear
-     * @return
-     * @throws Exception
      */
 
     public Activity createActivity(ProjectInfo projectInfo, String name, String budgetHours, String startWeek, String endWeek, List<EmployeeInfo> employeeInfos, String startYear, String endYear) throws Exception {
@@ -245,17 +195,11 @@ public class ApplicationProjects {
 
     /**
      * This method creates a FixedActivity object
-     * @param employeeInfo
-     * @param name
-     * @param startWeek
-     * @param endWeek
-     * @param startYear
-     * @param endYear
-     * @throws Exception
      */
 
     public void createFixedActivity(EmployeeInfo employeeInfo, String name, String startWeek, String endWeek, String startYear, String endYear) throws Exception {
         Employee employee = findEmployee(employeeInfo);
+        validateName(name, employee);
         int startWeekInt = parseAndValidateWeek(startWeek);
         int endWeekInt = parseAndValidateWeek(endWeek);
         int startYearInt = parseAndValidateYear(startYear);
@@ -265,15 +209,6 @@ public class ApplicationProjects {
 
     /**
      * This method edits an Activity object
-     * @param activityInfo
-     * @param name
-     * @param budgetHours
-     * @param startWeek
-     * @param endWeek
-     * @param employeeInfos
-     * @param startYear
-     * @param endYear
-     * @throws Exception
      */
 
     public void editActivity(ActivityInfo activityInfo, String name, String budgetHours, String startWeek, String endWeek, List<EmployeeInfo> employeeInfos, String startYear, String endYear) throws Exception {
@@ -295,12 +230,6 @@ public class ApplicationProjects {
 
     /**
      * This method registers hours on an Activity object
-     * @param employeeInfo
-     * @param date
-     * @param activityInfo
-     * @param hours
-     * @param projectInfo
-     * @throws Exception
      */
 
     public void registerHours(EmployeeInfo employeeInfo, String date, ActivityInfo activityInfo, String hours, ProjectInfo projectInfo) throws Exception {
@@ -317,7 +246,7 @@ public class ApplicationProjects {
             Activity activity = findActivity(projectToUse, activityInfo);
 
             employee.getActivityLog().registerHours(localDate, activity, hoursDouble);
-            activity.registerHours(hours);
+            activity.registerHours(hoursDouble);
         } catch (Exception e) {
             throw new Exception("Error registering hours");
         }
@@ -325,10 +254,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns the registered hours for an employee on a specific day
-     * @param employeeInfo
-     * @param date
-     * @return
-     * @throws Exception
      */
 
     public Map<Activity, Double> getEmployeesRegisteredHoursForADay(EmployeeInfo employeeInfo, String date) throws Exception {
@@ -349,10 +274,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns the registered hours for an employee on a specific activity on a specific day
-     * @param hoursLog
-     * @param activityInfo
-     * @return
-     * @throws Exception
      */
 
     public double getEmployeeRegisteredHoursOnActivityForDay(Map<Activity, Double> hoursLog, ActivityInfo activityInfo) throws Exception {
@@ -362,8 +283,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns the total hours spent on an activity
-     * @param activityInfo
-     * @return
      */
 
     public double getActivityTotalHours(ActivityInfo activityInfo) {
@@ -372,9 +291,6 @@ public class ApplicationProjects {
 
     /**
      * This method completes or uncompletes an activity
-     * @param projectInfo
-     * @param activityInfo
-     * @throws Exception
      */
 
     public void switchActivityCompletion(ProjectInfo projectInfo, ActivityInfo activityInfo) throws Exception {
@@ -384,9 +300,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns the completion status of a project
-     * @param projectInfo
-     * @return
-     * @throws Exception
      */
 
     public String getProjectCompletionStatus(ProjectInfo projectInfo) throws Exception {
@@ -396,9 +309,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns the completion status of an activity
-     * @param activityInfo
-     * @return
-     * @throws Exception
      */
 
     public String getActivityCompletionStatus(ActivityInfo activityInfo) throws Exception {
@@ -406,12 +316,7 @@ public class ApplicationProjects {
     }
 
     /**
-     * This methods gets the registered hours for an employee for a specific week
-     * @param employeeInfo
-     * @param year
-     * @param week
-     * @return
-     * @throws Exception
+     * This method gets the registered hours for an employee for a specific week
      */
 
     public ActivityLogInfo getEmployeeWeekLog(EmployeeInfo employeeInfo, String year, String week) throws Exception {
@@ -425,9 +330,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns the dates for a specific week in a specific year
-     * @param year
-     * @param week
-     * @return
      */
 
     public List<String> getWeekDates(String year, String week) {
@@ -444,7 +346,6 @@ public class ApplicationProjects {
 
     /**
      * this method sets a specific log in the employees schedule as the selected log
-     * @param logDetails
      */
 
     public void setSelectedEmployeeLog(List<String> logDetails) {
@@ -453,7 +354,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns the selected log in the employees schedule
-     * @return
      */
 
     public List<String> getSelectedEmployeeLog() {
@@ -462,7 +362,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns the hours spent on a specific activity on a specific date
-     * @return
      */
 
     public String getSelectedEmployeeLogHours(String projectID, String activityName, String date, String employeeInitials) throws Exception {
@@ -480,13 +379,6 @@ public class ApplicationProjects {
 
     /**
      * This method edits the hours spent on a specific activity on a specific date
-     * @param projectID
-     * @param activityName
-     * @param date
-     * @param employeeInitials
-     * @param oldHours
-     * @param newHours
-     * @throws Exception
      */
 
     public void editEmployeeLogHours(String projectID, String activityName, String date, String employeeInitials, String oldHours, String newHours) throws Exception {
@@ -502,11 +394,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns a list of the active activities for an employee in a specific year and month
-     * @param e
-     * @param year
-     * @param month
-     * @return
-     * @throws Exception
      */
 
     public List<Integer> getAvailability(EmployeeInfo e, String year, String month) throws Exception {
@@ -525,13 +412,13 @@ public class ApplicationProjects {
 
     /**
      * This method parses and validates the hours worked or budget hours
-     * @param registeredHours
-     * @return
      */
 
     private double parseAndValidateHours(String registeredHours) {
         try {
-            return Double.parseDouble(registeredHours);
+            double hours = Double.parseDouble(registeredHours);
+            hours = Math.round(hours * 2) / 2.0;
+            return hours;
         } catch (NullPointerException e) {
             throw new IllegalArgumentException("Hours missing");
         }
@@ -539,8 +426,6 @@ public class ApplicationProjects {
 
     /**
      * This method parses and validates the year
-     * @param year
-     * @return
      */
 
     public int parseAndValidateYear(String year) {
@@ -557,8 +442,6 @@ public class ApplicationProjects {
 
     /**
      * This method parses and validates the week
-     * @param week
-     * @return
      */
 
     public int parseAndValidateWeek(String week) {
@@ -575,8 +458,6 @@ public class ApplicationProjects {
 
     /**
      * This method parses and validates the month
-     * @param month
-     * @return
      */
 
     public int parseAndValidateMonth(String month) {
@@ -593,8 +474,6 @@ public class ApplicationProjects {
 
     /**
      * This method validates the name of an activity or employee or project
-     * @param name
-     * @param project
      */
 
     public void validateName(String name, Project project) {
@@ -610,8 +489,6 @@ public class ApplicationProjects {
 
     /**
      * This method validates the name of an activity or project while editing
-     * @param name
-     * @param project
      */
 
     private void validateNameEdit(String name, Project project) {
@@ -626,12 +503,26 @@ public class ApplicationProjects {
         throw new IllegalArgumentException("Activity not found in project");
     }
 
+    /**
+     * This method validates the name of a fixed activity
+     */
+
+    private void validateName(String name, Employee employee) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name missing");
+        }
+        for (FixedActivity fa : employee.getFixedActivities()) {
+            if (fa.getName().equals(name)) {
+                throw new IllegalArgumentException("Fixed activity with this name already exists for the employee");
+            }
+        }
+    }
+
 
     //////////////////////////// CONTROLLER METHODS ////////////////////////////
 
     /**
      * This method initializes the test run
-     * @throws Exception
      */
 
     public void initializeTestRun() throws Exception {
@@ -640,7 +531,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns a list of all employees in the application
-     * @return
      */
 
     public List<EmployeeInfo> getEmployeesInApp() {
@@ -653,7 +543,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns a list of all projects in the application
-     * @return
      */
 
     public List<ProjectInfo> getProjectsInApp() {
@@ -666,7 +555,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns a list of all activities in a project
-     * @return
      */
 
     public List<ActivityInfo> getActivitiesInProject(ProjectInfo project) throws Exception {
@@ -680,7 +568,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns a list of all fixed activities for an employee
-     * @return
      */
 
     public List<FixedActivityInfo> getFixedActivitiesForEmployee(EmployeeInfo employee) throws Exception {
@@ -694,9 +581,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns a list of employees in a project
-     * @param selectedProject
-     * @return
-     * @throws Exception
      */
 
     public List<EmployeeInfo> getEmployeesInProject(ProjectInfo selectedProject) throws Exception {
@@ -711,10 +595,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns a list of employees in an activity
-     * @param project
-     * @param activity
-     * @return
-     * @throws Exception
      */
 
     public List<EmployeeInfo> getEmployeesInActivity(ProjectInfo project, ActivityInfo activity) throws Exception {
@@ -729,9 +609,6 @@ public class ApplicationProjects {
 
     /**
      * This method return the Employee object from an EmployeeInfo object
-     * @param employee
-     * @return
-     * @throws Exception
      */
 
     public Employee findEmployee(EmployeeInfo employee) throws Exception {
@@ -741,9 +618,6 @@ public class ApplicationProjects {
 
     /**
      * This method returns the Project object from a ProjectInfo object
-     * @param project
-     * @return
-     * @throws Exception
      */
 
     public Project findProject(ProjectInfo project) throws Exception {
@@ -771,7 +645,6 @@ public class ApplicationProjects {
                 dayLog.putAll(entry.getValue());
             }
         }
-
         return dayLog;
     }
 }
