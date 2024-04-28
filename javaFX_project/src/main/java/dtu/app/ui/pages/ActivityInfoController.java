@@ -58,7 +58,6 @@ public class ActivityInfoController extends CommonElementsController {
         updateCompletionStatus(activity);
 
         datePicker.addEventFilter(KeyEvent.KEY_TYPED, KeyEvent::consume);
-        setupNumericTextFieldListeners(hoursField);
 
         employeeColumn.setCellValueFactory(new PropertyValueFactory<>("initials"));
         selectedEmployeesTableView.getItems().addAll(App.application.getEmployeesInActivity(project, activity));

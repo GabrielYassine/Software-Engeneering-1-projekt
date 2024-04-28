@@ -53,8 +53,9 @@ public class EmployeeLogController extends CommonElementsController{
     public Label sundayDateValue;
 
     public void initialize() {
-        setupNumericTextFieldListeners(yearField);
-        setupNumericTextFieldListeners(weekField);
+        setupNumericTextFieldListeners(4, yearField);
+        setupNumericTextFieldListeners(2, weekField);
+
         EmployeesComboBox.setItems(FXCollections.observableArrayList(App.application.getEmployeesInApp()));
 
         yearNumber.setText("No year chosen");

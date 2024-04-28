@@ -37,8 +37,7 @@ public class ProjectsController extends CommonElementsController {
 
     @FXML
     private void initialize() throws Exception {
-
-        // Set up table columns
+        super.setupLetterTextFieldListeners(activityNameField);
         idColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
         employeeSizeColumn.setCellValueFactory(new PropertyValueFactory<>("EmployeesSize"));
@@ -49,7 +48,6 @@ public class ProjectsController extends CommonElementsController {
         employeesListView.getItems().addAll(App.application.getEmployeesInApp());
         projectLeaderComboBox.setItems(selectedEmployeesListView.getItems());
 
-        // Set row click action to open project info page
         setRowClickAction(projectsTableView, clickedRow -> {
             App.application.setProject(clickedRow);
             try {
@@ -67,8 +65,8 @@ public class ProjectsController extends CommonElementsController {
             EmployeeInfo projectLeader = projectLeaderComboBox.getSelectionModel().getSelectedItem();
             List<EmployeeInfo> employees = new ArrayList<>(selectedEmployeesListView.getItems());
             App.application.createProject(projectName, employees, projectLeader);
-            // Reset fields
-            initialize();
+
+            refreshPage();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -82,5 +80,14 @@ public class ProjectsController extends CommonElementsController {
     @FXML
     public void removeEmployee(ActionEvent actionEvent) {
         super.removeEmployee(employeesListView, selectedEmployeesListView);
+    }
+
+    public void refreshPage() throws Exception {
+        TextField[] textFields = new TextField[]{activityNameField};
+        DatePicker[] datePickers = new DatePicker[]{};
+        ListView<?>[] listViews = new ListView<?>[]{employeesListView, selectedEmployeesListView};
+        TableView<?>[] tableViews = new TableView<?>[]{projectsTableView};
+        clearFields(textFields,datePickers, listViews, tableViews);
+        initialize();
     }
 }

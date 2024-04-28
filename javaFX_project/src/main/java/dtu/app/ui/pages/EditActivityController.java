@@ -32,7 +32,7 @@ public class EditActivityController extends CommonElementsController{
     private TextField endWeekField;
 
     public void initialize() throws Exception {
-        super.setupNumericTextFieldListeners(budgetHoursField, startWeekField, endWeekField);
+        super.setupNumericTextFieldListeners(2, startWeekField, endWeekField);
 
         ActivityInfo activity = App.application.getSelectedActivity();
         ProjectInfo project = App.application.getSelectedProject();

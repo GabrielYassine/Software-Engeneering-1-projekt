@@ -53,7 +53,7 @@ public class ProjectInfoController extends CommonElementsController {
     @FXML
 
     private void initialize() throws Exception {
-        super.setupNumericTextFieldListeners(budgetHoursField, startWeekField, endWeekField);
+        super.setupNumericTextFieldListeners(2, startWeekField, endWeekField);
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         employeeSizeColumn.setCellValueFactory(new PropertyValueFactory<>("employeesSize"));
