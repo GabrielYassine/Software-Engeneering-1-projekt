@@ -1,8 +1,11 @@
 package dtu.app.ui.pages;
 
-import dtu.app.ui.classes.Activity;
-import dtu.app.ui.classes.Employee;
-import dtu.app.ui.classes.Project;
+import dtu.app.ui.domain.Activity;
+import dtu.app.ui.domain.Employee;
+import dtu.app.ui.domain.Project;
+import dtu.app.ui.info.ActivityInfo;
+import dtu.app.ui.info.EmployeeInfo;
+import dtu.app.ui.info.ProjectInfo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -13,19 +16,27 @@ import java.io.IOException;
 public class ProjectInfoController extends CommonElementsController {
     @FXML
     public Button createActivityButton;
-    public TableView<Activity> activityTableView;
-    public TableColumn<Activity, String> nameColumn;
-    public TableColumn<Activity, Boolean> completedColumn;
+    @FXML
+    public TableView<ActivityInfo> activityTableView;
+    @FXML
+    public TableColumn<ActivityInfo, String> nameColumn;
+    @FXML
+    public TableColumn<ActivityInfo, Boolean> completedColumn;
+    @FXML
     public Button viewAvailabilitySchedule;
+    @FXML
     public TextField startYearField;
+    @FXML
     public TextField endYearField;
     @FXML
-    private TableColumn<Activity, String> statusColumn;
-
-    public TableColumn<Activity, Integer> employeeSizeColumn;
-
+    private TableColumn<ActivityInfo, String> statusColumn;
+    @FXML
+    public TableColumn<ActivityInfo, Integer> employeeSizeColumn;
+    @FXML
     public Label projectNameValue;
+    @FXML
     public Label projectLeaderValue;
+    @FXML
     public Button editButton;
     @FXML
     private TextField activityNameField;
@@ -35,21 +46,22 @@ public class ProjectInfoController extends CommonElementsController {
     private TextField startWeekField;
     @FXML
     private TextField endWeekField;
+    @FXML
+    private ListView<EmployeeInfo> selectedEmployeesListView;
+    @FXML
+    private ListView<EmployeeInfo> employeesListView;
+    @FXML
 
-    @FXML
-    private ListView<Employee> selectedEmployeesListView;
-    @FXML
-    private ListView<Employee> employeesListView;
-    @FXML
-    private void initialize() {
+    private void initialize() throws Exception {
         super.setupNumericTextFieldListeners(budgetHoursField, startWeekField, endWeekField);
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         employeeSizeColumn.setCellValueFactory(new PropertyValueFactory<>("employeesSize"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-        completedColumn.setCellValueFactory(new PropertyValueFactory<>("completedStatus"));
+        completedColumn.setCellValueFactory(new PropertyValueFactory<>("completionStatus"));
 
-        Project selectedProject = App.database.selectedProject;
+        ProjectInfo selectedProject = App.application.getSelectedProject();
+
         projectNameValue.setText(selectedProject.getName());
 
         if (selectedProject.getProjectLeader() != null) {
@@ -58,11 +70,11 @@ public class ProjectInfoController extends CommonElementsController {
             projectLeaderValue.setText("No leader assigned");
         }
 
-        activityTableView.getItems().addAll(selectedProject.getActivities());
-        employeesListView.getItems().addAll(selectedProject.getEmployees());
+        activityTableView.getItems().addAll(App.application.getActivitiesInProject(selectedProject));
+        employeesListView.getItems().addAll(App.application.getEmployeesInProject(selectedProject));
 
         setRowClickAction(activityTableView, clickedRow -> {
-            App.database.setSelectedActivity(clickedRow);
+            App.application.setActivity(clickedRow);
             try {
                 App.setRoot("activityInfo");
             } catch (IOException e) {
@@ -75,8 +87,8 @@ public class ProjectInfoController extends CommonElementsController {
         App.setRoot("availabilitySchedule");
     }
     @FXML
-    private void createActivity() throws IOException {
-        Project selectedProject = App.database.selectedProject;
+    private void createActivity() throws Exception {
+        ProjectInfo selectedProject = App.application.getSelectedProject();
         String activityName = activityNameField.getText();
         String budgetHours = budgetHoursField.getText();
         String startWeek = startWeekField.getText();
@@ -84,9 +96,9 @@ public class ProjectInfoController extends CommonElementsController {
         String startYear = startYearField.getText();
         String endYear = endYearField.getText();
         try {
-            Activity newActivity = new Activity(selectedProject, activityName, budgetHours, startWeek, endWeek, selectedEmployeesListView.getItems(), startYear, endYear);
-            activityTableView.getItems().add(newActivity);
-            resetActivityCreationFields();
+            App.application.createActivity(selectedProject, activityName, budgetHours, startWeek, endWeek, selectedEmployeesListView.getItems(), startYear, endYear);
+            // Reset fields
+            initialize();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -98,10 +110,6 @@ public class ProjectInfoController extends CommonElementsController {
 
     public void removeEmployee(ActionEvent actionEvent) {
         super.removeEmployee(employeesListView, selectedEmployeesListView);
-    }
-
-    private void resetActivityCreationFields() {
-        super.resetActivityCreationFields(activityNameField, budgetHoursField, startWeekField, endWeekField, employeesListView, selectedEmployeesListView, null, null, null);
     }
 
     @FXML

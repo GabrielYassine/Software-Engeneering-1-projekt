@@ -1,12 +1,24 @@
 package dtu.app.ui.pages;
 
-import dtu.app.ui.classes.Employee;
+import dtu.app.ui.domain.Activity;
+import dtu.app.ui.domain.Employee;
+import dtu.app.ui.info.ActivityLogInfo;
+import dtu.app.ui.info.EmployeeInfo;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import dtu.app.ui.classes.ActivityLog;
+import dtu.app.ui.domain.ActivityLog;
+
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class EmployeeLogController extends CommonElementsController{
     @FXML
@@ -30,41 +42,100 @@ public class EmployeeLogController extends CommonElementsController{
     public Label yearNumber;
     public Label weekNumber;
     public Label initialsValue;
+    @FXML
+    public ComboBox<EmployeeInfo> EmployeesComboBox;
+    public Label mondayDateValue;
+    public Label tuesdayDateValue;
+    public Label wednesdayDateValue;
+    public Label thursdayDateValue;
+    public Label fridayDateValue;
+    public Label saturdayDateValue;
+    public Label sundayDateValue;
 
     public void initialize() {
-        setupLetterTextFieldListeners(initialsField);
         setupNumericTextFieldListeners(yearField);
         setupNumericTextFieldListeners(weekField);
+        EmployeesComboBox.setItems(FXCollections.observableArrayList(App.application.getEmployeesInApp()));
 
         yearNumber.setText("No year chosen");
         weekNumber.setText("No week chosen");
         initialsValue.setText("No employee chosen");
+
+        setupListViewClickHandler(mondayListView, mondayDateValue);
+        setupListViewClickHandler(tuesdayListView, tuesdayDateValue);
+        setupListViewClickHandler(wednesdayListView, wednesdayDateValue);
+        setupListViewClickHandler(thursdayListView, thursdayDateValue);
+        setupListViewClickHandler(fridayListView, fridayDateValue);
+        setupListViewClickHandler(saturdayListView, saturdayDateValue);
+        setupListViewClickHandler(sundayListView, sundayDateValue);
+    }
+
+    private void setupListViewClickHandler(ListView<String> listView, Label dateLabel) {
+        listView.setOnMouseClicked(event -> {
+            if (!listView.getSelectionModel().isEmpty() && event.getClickCount() == 2) {
+                String selectedItem = listView.getSelectionModel().getSelectedItem();
+                EmployeeInfo employeeInfo = EmployeesComboBox.getSelectionModel().getSelectedItem();
+
+                List<String> items = new ArrayList<>();
+                items.add((selectedItem.split("\n")[0]));
+                items.add((selectedItem.split("\n")[1]));
+                items.add((dateLabel.getText()));
+                items.add(employeeInfo.getInitials());
+                App.application.setSelectedEmployeeLog(items);
+                try {
+                    // You can now use the date variable as needed
+                    App.setRoot("employeeLogInfo");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void selectWeek(ActionEvent actionEvent) throws Exception {
-        String initials = initialsField.getText();
+        EmployeeInfo employeeInfo = EmployeesComboBox.getSelectionModel().getSelectedItem();
         String year = yearField.getText();
         String week = weekField.getText();
-        displayWeek(initials, year, week);
-        initialsValue.setText(initials);
+
+        initialsValue.setText(employeeInfo.getInitials());
         yearNumber.setText(year);
         weekNumber.setText(week);
+
+        ActivityLogInfo employeeLog = App.application.getEmployeeWeekLog(employeeInfo, year, week);
+        setupLists(employeeInfo, employeeLog, year, week);
     }
 
-    public void displayWeek(String initials, String year, String week) throws Exception {
+    public void setupLists(EmployeeInfo e, ActivityLogInfo a, String year, String week) {
+        addActivitiesToView(mondayListView,App.application.getEmployeeDayLog(e, a, "Monday"));
+        addActivitiesToView(tuesdayListView, App.application.getEmployeeDayLog(e, a, "Tuesday"));
+        addActivitiesToView(wednesdayListView, App.application.getEmployeeDayLog(e, a, "Thursday"));
+        addActivitiesToView(thursdayListView, App.application.getEmployeeDayLog(e, a, "Thursday"));
+        addActivitiesToView(fridayListView, App.application.getEmployeeDayLog(e, a, "Friday"));
+        addActivitiesToView(saturdayListView, App.application.getEmployeeDayLog(e, a, "Saturday"));
+        addActivitiesToView(sundayListView, App.application.getEmployeeDayLog(e, a, "Sunday"));
+
+        mondayDateValue.setText(App.application.getWeekDates(year, week).get(0));
+        tuesdayDateValue.setText(App.application.getWeekDates(year, week).get(1));
+        wednesdayDateValue.setText(App.application.getWeekDates(year, week).get(2));
+        thursdayDateValue.setText(App.application.getWeekDates(year, week).get(3));
+        fridayDateValue.setText(App.application.getWeekDates(year, week).get(4));
+        saturdayDateValue.setText(App.application.getWeekDates(year, week).get(5));
+        sundayDateValue.setText(App.application.getWeekDates(year, week).get(6));
+    }
+
+    private void addActivitiesToView(ListView<String> listView, Map<Activity, Double> activities) {
+        for (Map.Entry<Activity, Double> entry : activities.entrySet()) {
+            int projectID = entry.getKey().getProject().getID();
+            listView.getItems().add(projectID + "\n" + entry.getKey().getName() + "\n" + entry.getValue() + " hours");
+        }
+    }
+
+    public void SwitchToFixedActvities(ActionEvent actionEvent) {
         try {
-            Employee employee = App.database.getEmployee(initials);
-            ActivityLog weekActivities = employee.getActivityLog().getWeekActivities(year, week);
-            int weekOfYear = Integer.parseInt(week);
-            mondayListView.getItems().addAll(weekActivities.getMondayActivities(weekOfYear));
-            tuesdayListView.getItems().addAll(weekActivities.getTuesdayActivities(weekOfYear));
-            wednesdayListView.getItems().addAll(weekActivities.getWednesdayActivities(weekOfYear));
-            thursdayListView.getItems().addAll(weekActivities.getThursdayActivities(weekOfYear));
-            fridayListView.getItems().addAll(weekActivities.getFridayActivities(weekOfYear));
-            saturdayListView.getItems().addAll(weekActivities.getSaturdayActivities(weekOfYear));
-            sundayListView.getItems().addAll(weekActivities.getSundayActivities(weekOfYear));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());;
+            App.application.setEmployee(EmployeesComboBox.getSelectionModel().getSelectedItem());
+            App.setRoot("fixedActivities");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -1,4 +1,4 @@
-package dtu.app.ui.classes;
+package dtu.app.ui.domain;
 import java.time.ZonedDateTime;
 
 public class CalendarActivity {

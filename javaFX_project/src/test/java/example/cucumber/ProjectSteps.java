@@ -1,614 +1,234 @@
 package example.cucumber;
 
-import dtu.app.ui.classes.*;
-import dtu.app.ui.pages.App;
+import dtu.app.ui.ApplicationProjects;
+import dtu.app.ui.domain.*;
+import dtu.app.ui.errorMessageHolders.ErrorMessageHolder;
+import dtu.app.ui.info.EmployeeInfo;
+import dtu.app.ui.info.ProjectInfo;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Given;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-
-import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 public class ProjectSteps {
 
-	private final App app;
-	private Database database;
-	private final ErrorMessageHolder errorMessage;
-	private Employee employee;
-	private Project project;
-	private Activity activity;
-	private ActivityLog weekActivities;
-	private String selectedWeek;
+    private final ApplicationProjects application;
+    private final ErrorMessageHolder errorMessage;
 
-	public ProjectSteps(App app) {
-		this.app = app;
-		this.errorMessage = new ErrorMessageHolder();
-		this.database = new Database();
-	}
+    public ProjectSteps(ApplicationProjects application) {
+        this.application = application;
+        this.errorMessage = application.getErrorMessage();
+    }
 
-	////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
 
-	// Feature: Create a project
+    // Feature: Create project
 
-	@Given("there are employees with the following initials")
-	public void thereAreEmployeesWithTheFollowingInitials(List<String> initials) throws Exception {
-		for (String initial : initials) {
-			employee = new Employee(database, initial);
-		}
-	}
+    @Given("there are employees with the following initials")
+    public void thereAreEmployeesWithTheFollowingInitials(List<String> initials) throws Exception {
+        for (String initial : initials) {
+            Employee employee = application.createEmployee(initial);
+        }
+    }
 
-	@When("the user creates a project with the following details")
-	public void theUserCreatesAProjectWithTheFollowingDetails(DataTable table) throws Exception {
-		List<Map<String, String>> rows = table.asMaps(String.class, String.class);
-		for (Map<String, String> columns : rows) {
-			String name = columns.get("Name");
-			String initials = columns.get("Initials");
-			String projectLeaderInitials = columns.get("ProjectLeader");
-			Employee projectLeader = database.getEmployee(projectLeaderInitials);
-			List<Employee> employees = new ArrayList<>();
-			if (initials != null && !initials.isEmpty()) {
-				for (String initial : initials.split(", ")) {
-					employees.add(database.getEmployee(initial));
-				}
-			}
-			try {
-				project = new Project(database, name, employees, projectLeader);
-			} catch (Exception e) {
-				errorMessage.setErrorMessage(e.getMessage());
-			}
-		}
-	}
+    @When("the user creates a project with the following details")
+    public void theUserCreatesAProjectWithTheFollowingDetails(DataTable table) throws Exception {
+        List<Map<String, String>> rows = table.asMaps(String.class, String.class);
+        for (Map<String, String> columns : rows) {
+            String name = columns.get("Name");
+            String initials = columns.get("Initials");
+            String projectLeaderInitials = columns.get("ProjectLeader");
 
-	@Then("the project should have the following details")
-	public void theProjectShouldHaveTheFollowingDetails(DataTable table) {
-		List<Map<String, String>> rows = table.asMaps(String.class, String.class);
-		for (Map<String, String> columns : rows) {
-			String name = columns.get("Name");
-			String projectLeaderInitials = columns.get("ProjectLeader");
-			String employeeInitials = columns.get("Initials");
-			assertEquals(name, project.getName());
+            List<EmployeeInfo> employees = new ArrayList<>();
 
-			if (projectLeaderInitials == null || projectLeaderInitials.isEmpty()) {
-				assertNull(project.getProjectLeader());
-			} else {
-				assertEquals(projectLeaderInitials, project.getProjectLeader().getInitials());
-			}
+            try {
+                if (initials != null && !initials.isEmpty()) {
+                    for (String initial : initials.split(", ")) {
+                        employees.add(application.getEmployee(initial));
+                    }
+                }
+                EmployeeInfo projectLeader = null;
+                if (projectLeaderInitials != null && !projectLeaderInitials.isEmpty()) {
+                    projectLeader = application.getEmployee(projectLeaderInitials);
+                }
+                application.setProject(new ProjectInfo(application.createProject(name, employees, projectLeader)));
+            } catch (Exception e) {
+                errorMessage.setErrorMessage(e.getMessage());
+            }
+        }
+    }
 
-			List<Employee> employees = project.getEmployees();
-			for (Employee employee : employees) {
-				if (employee.getInitials().equals(employeeInitials)) {
-					assertEquals(employeeInitials, employee.getInitials());
-					break;
-				}
-			}
-		}
-	}
+    @Then("the project should have the following details")
+    public void theProjectShouldHaveTheFollowingDetails(DataTable table) throws Exception {
+        List<Map<String, String>> rows = table.asMaps(String.class, String.class);
+        for (Map<String, String> columns : rows) {
+            String id = columns.get("ID");
+            String name = columns.get("Name");
+            String initials = columns.get("Initials");
+            String projectLeaderInitials = columns.get("ProjectLeader");
+            List<Employee> employees = new ArrayList<>();
 
-	@Then("the project should be created")
-	public void theProjectShouldBeCreated() {
-		assertThat(database.getProjects(), hasItem(project));
-	}
+            ProjectInfo projectInfo = application.getProject(id);
 
-	@Then("the project should not be created")
-	public void theProjectShouldNotBeCreated() {
-		assertThat(database.getProjects(), not(hasItem(project)));
-	}
+            assertEquals(id, String.valueOf(projectInfo.getID()));
+            assertEquals(name, projectInfo.getName());
 
-	@Then("an error message {string} should be given")
-	public void anErrorMessageShouldBeGiven(String expectedErrorMessage) {
-		assertEquals(expectedErrorMessage, errorMessage.getErrorMessage());
-	}
+            if (projectLeaderInitials != null && !projectLeaderInitials.isEmpty()) {
+                assertEquals(projectLeaderInitials, projectInfo.getProjectLeader().getInitials());
+            } else {
+                assertNull(projectInfo.getProjectLeader());
+            }
 
-	////////////////////////////////////////////////////////////////////////////////////////////
+            List<String> employeeInitials = projectInfo.getEmployeeInitials();
+            List<String> expectedEmployeeInitialsList = new ArrayList<>();
+            if (initials != null && !initials.isEmpty()) {
+                expectedEmployeeInitialsList = Arrays.asList(initials.split(", "));
+            }
+            assertEquals(expectedEmployeeInitialsList, employeeInitials);
+        }
+    }
 
-	// Feature: Edit a project
+    @Then("the project should be created")
+    public void theProjectShouldBeCreated() throws Exception {
+        assertNotNull(application.getSelectedProject());
+    }
 
-	@Given("there is a project with name {string}")
+    @Then("the project should not be created")
+    public void theProjectShouldNotBeCreated() throws Exception {
+        assertNull(application.getSelectedProject());
+    }
+
+    @Then("an error message {string} should be given")
+    public void anErrorMessageShouldBeGiven(String expectedErrorMessage) {
+        assertEquals(expectedErrorMessage, errorMessage.getErrorMessage());
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////
+
+    // Feature: Edit project
+
+    @Given("there is a project with name {string}")
 	public void thereIsAProjectWithName(String name) throws Exception {
-		project = new Project(database, name, new ArrayList<>(), null);
+        application.setProject(new ProjectInfo(application.createProject(name, new ArrayList<>(), null)));;
 	}
-
 
 	@Given("there are employees with the following initials in the project")
-	public void thereAreEmployeesWithTheFollowingInitialsInTheProject(List<String> initials) {
+	public void thereAreEmployeesWithTheFollowingInitialsInTheProject(List<String> initials) throws Exception {
 		for (String initial : initials) {
-			Employee employee = new Employee(database, initial);
-			project.addEmployee(employee);
+            Employee employee = application.createEmployee(initial);
+            application.addEmployeeToProject(application.getSelectedProject(), employee);
 		}
 	}
+    @When("the employee edits the project with ID {string} name to {string}, the project leader to {string}, and the project members to {string}")
+    public void theEmployeeEditsTheProjectWithIDNameToTheProjectLeaderToAndTheProjectMembersTo(String id, String newName, String newProjectLeaderInitials, String newEmployeeInitials) throws Exception {
+        ProjectInfo projectToEdit = application.getProject(id);
+        List<EmployeeInfo> employees = new ArrayList<>();
 
-	@When("the employee edits the project name to {string}, the project leader to {string}, and the project members to {string}")
-	public void theEmployeeEditsTheProjectNameToTheProjectLeaderToAndTheProjectMembersTo(String newName, String newProjectLeaderInitials, String newEmployeeInitials) throws Exception {
-		List<Employee> employees = new ArrayList<>();
-		if (newEmployeeInitials != null && !newEmployeeInitials.isEmpty()) {
-			for (String initial : newEmployeeInitials.split(", ")) {
-				employees.add(database.getEmployee(initial));
-			}
-		}
-		try {
-			project.editProject(newName, newProjectLeaderInitials, employees);
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
+        if (newEmployeeInitials != null && !newEmployeeInitials.isEmpty()) {
+            for (String initial : newEmployeeInitials.split(", ")) {
+                employees.add(application.getEmployee(initial));
+            }
+        }
+        try {
+            application.editProject(projectToEdit, newName, newProjectLeaderInitials, employees);
+        } catch (Exception e) {
+            errorMessage.setErrorMessage(e.getMessage());
+        }
+    }
 
-	@Then("the project name should be {string}, the project leader should be {string}, and the project members should be {string}")
-	public void theProjectNameShouldBeTheProjectLeaderShouldBeAndTheProjectMembersShouldBe(String expectedProjectName, String expectedProjectLeaderInitials, String expectedEmployeeInitials) {
-		assertEquals(expectedProjectName, project.getName());
-		if (expectedProjectLeaderInitials == null || expectedProjectLeaderInitials.isEmpty()) {
-			assertNull(project.getProjectLeader());
-		} else {
-			assertEquals(expectedProjectLeaderInitials, project.getProjectLeader().getInitials());
-		}
-		List<Employee> employees = project.getEmployees();
-		for (Employee employee : employees) {
-			if (employee.getInitials().equals(expectedEmployeeInitials)) {
-				assertEquals(expectedEmployeeInitials, employee.getInitials());
-				break;
-			}
-		}
-	}
+    @Then("the project with ID {string} name should be {string}, the project leader should be {string}, and the project members should be {string}")
+    public void theProjectWithIDNameShouldBeTheProjectLeaderShouldBeAndTheProjectMembersShouldBe(String id, String expectedProjectName, String expectedProjectLeaderInitials, String expectedEmployeeInitials) throws Exception {
+        ProjectInfo projectInfo = application.getProject(id);
 
-	@Given("there are project with following details")
-	public void thereAreProjectWithFollowingDetails(DataTable table) throws Exception {
-		List<Map<String, String>> rows = table.asMaps(String.class, String.class);
-		for (Map<String, String> columns : rows) {
-			String id = columns.get("ID");
-			String name = columns.get("Name");
-			String initials = columns.get("Initials");
-			String projectLeaderInitials = columns.get("ProjectLeader");
-			Employee projectLeader = database.getEmployee(projectLeaderInitials);
-			List<Employee> employees = new ArrayList<>();
-			if (initials != null && !initials.isEmpty()) {
-				for (String initial : initials.split(", ")) {
-					employees.add(database.getEmployee(initial));
-				}
-			}
-			project = new Project(database, name, employees, projectLeader);
-		}
-	}
+        assertEquals(expectedProjectName, projectInfo.getName());
 
-	@When("the employee edits the project with ID {string}'s name to {string}, the project leader to {string}, and the project members to {string}")
-	public void theEmployeeEditsTheProjectWithIDSNameToTheProjectLeaderToAndTheProjectMembersTo(String id, String newName, String newProjectLeaderInitials, String newEmployeeInitials) throws Exception {
-		Project projectToEdit = database.getProject(Integer.parseInt(id));
-		List<Employee> employees = new ArrayList<>();
-		if (newEmployeeInitials != null && !newEmployeeInitials.isEmpty()) {
-			for (String initial : newEmployeeInitials.split(", ")) {
-				employees.add(database.getEmployee(initial));
-			}
-		}
-		try {
-			projectToEdit.editProject(newName, newProjectLeaderInitials, employees);
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
+        if (expectedProjectLeaderInitials == null || expectedProjectLeaderInitials.isEmpty()) {
+            assertNull(projectInfo.getProjectLeader());
+        } else {
+            assertEquals(expectedProjectLeaderInitials, projectInfo.getProjectLeader().getInitials());
+        }
 
-	@Then("the project with ID {string}'s name should be {string}, the project leader should be {string}, and the project members should be {string}")
-	public void theProjectWithIDSNameShouldBeTheProjectLeaderShouldBeAndTheProjectMembersShouldBe(String id, String expectedProjectName, String expectedProjectLeaderInitials, String expectedEmployeeInitials) throws Exception {
-		Project projectToCheck = database.getProject(Integer.parseInt(id));
-		assertEquals(expectedProjectName, projectToCheck.getName());
-		assertEquals(expectedProjectLeaderInitials, projectToCheck.getProjectLeader().getInitials());
+        List<String> employeeInitials = projectInfo.getEmployeeInitials();
+        List<String> expectedEmployeeInitialsList = new ArrayList<>();
+        if (expectedEmployeeInitials != null && !expectedEmployeeInitials.isEmpty()) {
+            expectedEmployeeInitialsList = Arrays.asList(expectedEmployeeInitials.split(", "));
+        }
+        assertEquals(expectedEmployeeInitialsList, employeeInitials);
+    }
 
-		List<Employee> employees = projectToCheck.getEmployees();
-		for (Employee employee : employees) {
-			if (employee.getInitials().equals(expectedEmployeeInitials)) {
-				assertEquals(expectedEmployeeInitials, employee.getInitials());
-				break;
-			}
-		}
-	}
+    @Given("there are projects with following details")
+    public void thereAreProjectWithFollowingDetails(DataTable table) throws Exception {
+        List<Map<String, String>> rows = table.asMaps(String.class, String.class);
+        for (Map<String, String> columns : rows) {
+            String id = columns.get("ID");
+            String name = columns.get("Name");
+            String initials = columns.get("Initials");
+            String projectLeaderInitials = columns.get("ProjectLeader");
 
-	@Then("the project with ID {string}'s name should still be {string}")
-	public void theProjectWithIDSNameShouldStillBe(String id, String expectedProjectName) throws Exception {
-		Project projectToCheck = database.getProject(Integer.parseInt(id));
-		assertEquals(expectedProjectName, projectToCheck.getName());
-	}
+            EmployeeInfo projectLeader = null;
+            if (projectLeaderInitials != null && !projectLeaderInitials.isEmpty()) {
+                projectLeader = application.getEmployee(projectLeaderInitials);
+            }
 
-	////////////////////////////////////////////////////////////////////////////////////////////
+            List<EmployeeInfo> employees = new ArrayList<>();
+            if (initials != null && !initials.isEmpty()) {
+                for (String initial : initials.split(", ")) {
+                    employees.add(application.getEmployee(initial));
+                }
+            }
+            application.createProject(name, employees, projectLeader);
+        }
+    }
 
-	// Feature: Create an activity
+    @When("the employee edits the project with ID {string}'s name to {string}, the project leader to {string}, and the project members to {string}")
+    public void theEmployeeEditsTheProjectWithIDSNameToTheProjectLeaderToAndTheProjectMembersTo(String id, String newName, String newProjectLeaderInitials, String newEmployeeInitials) throws Exception {
+        ProjectInfo projectToEdit = application.getProject(id);
+        List<EmployeeInfo> employees = new ArrayList<>();
+        if (newEmployeeInitials != null && !newEmployeeInitials.isEmpty()) {
+            for (String initial : newEmployeeInitials.split(", ")) {
+                employees.add(application.getEmployee(initial));
+            }
+        }
+        try {
+            application.editProject(projectToEdit, newName, newProjectLeaderInitials, employees);
+        } catch (Exception e) {
+            errorMessage.setErrorMessage(e.getMessage());
+        }
+    }
 
-	@When("the user creates an activity with the following details")
-	public void theUserCreatesAnActivityWithTheFollowingDetails(DataTable table) {
-		List<Map<String, String>> rows = table.asMaps(String.class, String.class);
-		for (Map<String, String> columns : rows) {
-			String name = columns.get("Name");
-			String budgetHours = columns.get("Budget Hours");
-			String startWeek = columns.get("Start Week");
-			String endWeek = columns.get("End Week");
-			String startYear = columns.get("Start Year");
-			String endYear = columns.get("End Year");
-			String initials = columns.get("Initials");
-			List<Employee> employees = new ArrayList<>();
-			if (initials != null && !initials.isEmpty()) {
-				for (String initial : initials.split(", ")) {
-					try {
-						employees.add(database.getEmployee(initial));
-					} catch (Exception e) {
-						errorMessage.setErrorMessage(e.getMessage());
-					}
-				}
-			}
-			try {
-				activity = new Activity(project, name, budgetHours, startWeek, endWeek, employees, startYear, endYear);
-			} catch (Exception e) {
-				errorMessage.setErrorMessage(e.getMessage());
-			}
-		}
-	}
+    @Then("the project with ID {string}'s name should be {string}, the project leader should be {string}, and the project members should be {string}")
+    public void theProjectWithIDSNameShouldBeTheProjectLeaderShouldBeAndTheProjectMembersShouldBe(String id, String expectedProjectName, String expectedProjectLeaderInitials, String expectedEmployeeInitials) throws Exception {
+        ProjectInfo projectInfo = application.getProject(id);
+        assertEquals(expectedProjectName, projectInfo.getName());
 
-	@And("the activity should have the following details")
-	public void theActivityShouldHaveTheFollowingDetails(DataTable table) {
-		List<Map<String, String>> rows = table.asMaps(String.class, String.class);
-		for (Map<String, String> columns : rows) {
-			String expectedName = columns.get("Name");
-			String expectedBudgetHours = columns.get("Budget Hours");
-			String expectedStartWeek = columns.get("Start Week");
-			String expectedEndWeek = columns.get("End Week");
-			String expectedInitials = columns.get("Initials");
-			assertEquals(expectedName, activity.getName());
-			assertEquals(Double.parseDouble(expectedBudgetHours), activity.getBudgetHours(), 0);
-			assertEquals(Integer.parseInt(expectedStartWeek), activity.getStartWeek());
-			assertEquals(Integer.parseInt(expectedEndWeek), activity.getEndWeek());
-			List<Employee> employees = activity.getEmployees();
-			for (Employee employee : employees) {
-				if (employee.getInitials().equals(expectedInitials)) {
-					assertEquals(expectedInitials, employee.getInitials());
-					break;
-				}
-			}
-		}
-	}
+        if (expectedProjectLeaderInitials == null || expectedProjectLeaderInitials.isEmpty()) {
+            assertNull(projectInfo.getProjectLeader());
+        } else {
+            assertEquals(expectedProjectLeaderInitials, projectInfo.getProjectLeader().getInitials());
+        }
 
-	@Then("the activity should be created")
-	public void theActivityShouldBeCreated() {
-		assertThat(project.getActivities(), hasItem(activity));
-	}
+        List<String> employeeInitials = projectInfo.getEmployeeInitials();
+        List<String> expectedEmployeeInitialsList = new ArrayList<>();
+        if (expectedEmployeeInitials != null && !expectedEmployeeInitials.isEmpty()) {
+            expectedEmployeeInitialsList = Arrays.asList(expectedEmployeeInitials.split(", "));
+        }
+        assertEquals(expectedEmployeeInitialsList, employeeInitials);
+    }
 
-	@Then("the activity should not be created")
-	public void theActivityShouldNotBeCreated() {
-		assertThat(project.getActivities(), not(hasItem(activity)));
-	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////
-
-	// Feature: Edit an activity
-
-	@And("there is an activity with name {string} in the project, with the following details")
-	public void thereIsAnActivityWithNameInTheProjectWithTheFollowingDetails(String name, DataTable table) {
-		List<Map<String, String>> rows = table.asMaps(String.class, String.class);
-		for (Map<String, String> columns : rows) {
-			String budgetHours = columns.get("Budget Hours");
-			String startWeek = columns.get("Start Week");
-			String endWeek = columns.get("End Week");
-			String startYear = columns.get("Start Year");
-			String endYear = columns.get("End Year");
-			String initials = columns.get("Initials");
-
-			List<Employee> employees = new ArrayList<>();
-			if (initials != null && !initials.isEmpty()) {
-				for (String initial : initials.split(", ")) {
-					try {
-						employees.add(database.getEmployee(initial));
-					} catch (Exception e) {
-						errorMessage.setErrorMessage(e.getMessage());
-					}
-				}
-			}
-
-			try {
-				activity = new Activity(project, name, budgetHours, startWeek, endWeek, employees, startYear, endYear);
-			} catch (Exception e) {
-				errorMessage.setErrorMessage(e.getMessage());
-			}
-		}
-	}
-
-	@When("the user edits the activity with the following details")
-	public void theEmployeeEditsTheActivityWithTheFollowingDetails(DataTable table) {
-		List<Map<String, String>> rows = table.asMaps(String.class, String.class);
-		for (Map<String, String> columns : rows) {
-			String newName = columns.get("Name");
-			String newBudgetHours = columns.get("Budget Hours");
-			String newStartWeek = columns.get("Start Week");
-			String newEndWeek = columns.get("End Week");
-
-			try {
-				activity.editActivity(newName, newBudgetHours, newStartWeek, newEndWeek);
-			} catch (Exception e) {
-				errorMessage.setErrorMessage(e.getMessage());
-			}
-		}
-	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////
-
-	// Feature: Register hours
-
-	@When("the employee with initials {string} registers {int} hours on the activity {string} on the date {string}")
-	public void theEmployeeWithInitialsRegistersHoursOnTheActivityOnTheDate(String initials, int hours, String activityName, String date) throws Exception {
-		try {
-			Employee employee = project.getEmployee(initials);
-			Activity activity = project.getActivity(activityName);
-			Calendar calendar = Calendar.getInstance();
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			Date parsedDate = format.parse(date);
-			calendar.setTime(parsedDate);
-			employee.getActivityLog().registerHours(calendar, activity, String.valueOf(hours));
-			activity.registerHours(hours);
-		} catch (ParseException e) {
-			if (date.isEmpty()) {
-				errorMessage.setErrorMessage("Date missing");
-			} else {
-				errorMessage.setErrorMessage(e.getMessage());
-			}
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
-
-	@Then("the activity {string} should have {int} hours registered by {string} on the date {string}")
-	public void theActivityShouldHaveHoursRegisteredByOnTheDate(String activityName, int expectedHours, String initials, String date) throws Exception {
-		try {
-			Activity activity = project.getActivity(activityName);
-			Employee employee = project.getEmployee(initials);
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			Date parsedDate = format.parse(date);
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(parsedDate);
-
-			Map<Activity, Double> hoursLog = employee.getActivityLog().getDateActivities(calendar);
-			double registeredHours = hoursLog.get(activity);
-			assertEquals(expectedHours, registeredHours,0);
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
-
-	@Then("the activity {string} should have {int} hours registered in total")
-	public void theActivityShouldHaveHoursRegisteredInTotal(String activityName, int totalHours) {
-		Activity activity = project.getActivity(activityName);
-		double registeredHours = activity.getHoursSpent();
-		assertEquals(totalHours, registeredHours, 0);
-	}
-
-	////////////////////////////////////////////////////////////////////////////////
-
-	// Feature: Complete activity
-
-	@Given("an activity is open")
-	public void anActivityIsOpen() {
-		if (activity.getCompletedStatus()) {
-			activity.completeActivity();
-		}
-		assertFalse(activity.getCompletedStatus());
-	}
-
-	@When("the user closes the activity")
-	public void theUserClosesTheActivity() {
-		activity.completeActivity();
-	}
-
-	@Then("the activity is completed")
-	public void theActivityIsCompleted() {
-		assertTrue(activity.getCompletedStatus());
-	}
-
-	@Given("an activity is closed")
-	public void anActivityIsClosed() {
-		if (!activity.getCompletedStatus()) {
-			activity.completeActivity();
-		}
-		assertTrue(activity.getCompletedStatus());
-	}
-
-	@When("the user opens the activity")
-	public void theUserOpensTheActivity() {
-		activity.completeActivity();
-	}
-
-	@Then("the activity is not completed")
-	public void theActivityIsNotCompleted() {
-		assertFalse(activity.getCompletedStatus());
-	}
-
-	////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
 
 	// Feature: Show completion status on project
 
-	@When("the user checks the completion status")
-	public void theUserChecksTheCompletionStatus() {
-
-	}
-
-	@Then("the user gets the number of activities completed and the total number of activities")
-	public void theUserGetsTheNumberOfActivitiesCompletedAndTheTotalNumberOfActivities() {
-		assertEquals("0/0", project.getActivitiesCompleted());
-	}
-
-	@Given("the employee with initials {string} has registered {string} hours for the activity {string} on the date {string}")
-	public void theEmployeeWithInitialsHasRegisteredHoursForTheActivityOnTheDate(String initials, String hours, String activityName, String date) {
-		try {
-			Employee employee = database.getEmployee(initials);
-			Activity activity = project.getActivity(activityName);
-
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			Date parsedDate = format.parse(date);
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(parsedDate);
-
-			employee.getActivityLog().registerHours(calendar, activity, hours);
-			activity.registerHours(Integer.parseInt(hours));
-		} catch (ParseException e) {
-			if (date.isEmpty()) {
-				errorMessage.setErrorMessage("Date missing");
-			} else {
-				errorMessage.setErrorMessage(e.getMessage());
-			}
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
-
-	@When("the employee searches for the schedule of the employee(s) with initials {string} for the year {int} and week {int}")
-	public void theEmployeeSearchesForTheScheduleOfTheEmployeeSWithInitialsForTheYearAndWeek(String initials, int year, int week) throws Exception {
-		if (year == 0) {
-			errorMessage.setErrorMessage("Year value error");
-			return;
-		}
-		try {
-			Employee employee = database.getEmployee(initials);
-			this.weekActivities = employee.getActivityLog().getWeekActivities(String.valueOf(year), String.valueOf(week));
-			this.selectedWeek = String.valueOf(week);
-		}
-		catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
-
-	@Then("the selected week for employee with initials {string} should contain the following details")
-	public void theSelectedWeekForEmployeeWithInitialsShouldContainTheFollowingDetails(String initials, DataTable table) throws ParseException {
-		try {
-			List<Map<String, String>> rows = table.asMaps(String.class, String.class);
-			for (Map<String, String> columns : rows) {
-				String expectedDate = columns.get("Date");
-				String expectedActivityName = columns.get("Activity Name");
-				String expectedHours = columns.get("Hours");
-
-				// If expectedDate is null or empty, skip this iteration
-				if (expectedDate == null || expectedDate.isEmpty()) {
-					continue;
-				}
-
-				// Convert the expectedDate to a Calendar instance
-				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-				Date parsedDate = format.parse(expectedDate);
-				Calendar calendar = Calendar.getInstance();
-				calendar.setTime(parsedDate);
-
-				// Get the activities for the expected date
-				Map<Activity, Double> dateActivities = weekActivities.getDateActivities(calendar);
-
-				// Check that the activity with the expected name exists and has the expected hours
-				boolean activityFound = false;
-				for (Map.Entry<Activity, Double> entry : dateActivities.entrySet()) {
-					if (entry.getKey().getName().equals(expectedActivityName) && entry.getValue().equals(Double.parseDouble(expectedHours))) {
-						activityFound = true;
-						break;
-					}
-				}
-
-				assertTrue("Activity with name '" + expectedActivityName + "' and hours '" + expectedHours + "' not found for date '" + expectedDate + "'", activityFound);
-			}
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
-
-	@Then("the weekday {int} for the employee with initials {string} should contain the following details")
-	public void theDayForEmployeeWithInitialsShouldContainTheFollowingDetails(Integer dayOfWeek, String initials, DataTable table) throws Exception {
-		try {
-			// Convert the expected details into a list of maps for easier comparison
-			List<Map<String, String>> rows = table.asMaps(String.class, String.class);
-			for (Map<String, String> columns : rows) {
-				String expectedActivityName = columns.get("Activity Name");
-				String expectedHours = columns.get("Hours");
-
-				// Retrieve the employee
-				Employee employee = database.getEmployee(initials);
-
-				int weekOfYear = Integer.parseInt(selectedWeek);
-
-				// Get the activities for the expected day of the week
-				List<String> dateActivities = employee.getActivityLog().getDayActivities(weekOfYear, dayOfWeek);
-
-				// Check that the activity with the expected name exists and has the expected hours
-				boolean activityFound = false;
-				for (String activityInfo : dateActivities) {
-					String[] activityInfoParts = activityInfo.split("-");
-					if (activityInfoParts[0].equals(expectedActivityName) && activityInfoParts[1].equals(expectedHours)) {
-						activityFound = true;
-						break;
-					}
-				}
-
-				// If no activities were found, assert that dateActivities is empty
-				if (!activityFound) {
-					System.out.println("Hello");
-					assertTrue(dateActivities.isEmpty());
-				}
-			}
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
-
-    @When("the employee searches for the schedule of the employee with initials {string} for the year {int} and week {string}")
-    public void theEmployeeSearchesForTheScheduleOfTheEmployeeWithInitialsForTheYearAndWeek(String initials, int year, String week) {
-
-		try {
-			Employee employee = database.getEmployee(initials);
-			this.weekActivities = employee.getActivityLog().getWeekActivities(String.valueOf(year), week);
-			this.selectedWeek = week;
-		} catch (Exception e){
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-
+    @Then("the completion status should be {string}")
+    public void theCompletionStatusShouldBe(String expectedCompletionStatus) throws Exception {
+        ProjectInfo projectInfo = application.getSelectedProject();
+        String completionStatus = application.getProjectCompletionStatus(projectInfo);
+        assertEquals(expectedCompletionStatus, completionStatus);
     }
 
-	@When("the employee searches for the schedule of the employee with initials {string} for the year {string} and week {int}")
-	public void theEmployeeSearchesForTheScheduleOfTheEmployeeWithInitialsForTheYearAndWeek(String initials, String year, int week) {
-		try {
-			Employee employee = database.getEmployee(initials);
-			this.weekActivities = employee.getActivityLog().getWeekActivities(year, String.valueOf(week));
-		} catch (Exception e){
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
+    //////////////////////////////////////////////////////////////////////////////////////
 
-
-	@When("you search after year {string} and the month {string}")
-	public void youSearchAfterYearAndTheMonth(String year, String month) throws Exception {
-		try {
-			String monthNumber = employee.getActivityLog().convertMonthNameToNumber(month);
-			Map<Integer, Integer> availabilityForMonth = employee.getAvailability(year, monthNumber);
-		} catch(Exception e){
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
-
-	@Given("the employee with initials {string} is selected")
-	public void theEmployeeWithInitialsIsSelected(String initials) throws Exception {
-		employee = database.getEmployee(initials);
-	}
-
-	@Then("the system shows the following availability calendar for the month {string} in the year {int}")
-	public void theSystemShowsTheFollowingAvailabilityCalendarForTheMonthInTheYear(String month, int year, DataTable expectedAvailabilityTable) {
-		try {
-			// Convert the month name to a number
-			String monthNumber = employee.getActivityLog().convertMonthNameToNumber(month);
-
-			// Retrieve the actual availability calendar for the specified month and year
-			Map<Integer, Integer> actualAvailability = employee.getAvailability(String.valueOf(year), monthNumber);
-
-			// Convert the expected availability calendar from DataTable to a Map
-			Map<Integer, Integer> expectedAvailability = new HashMap<>();
-			for (Map<String, String> row : expectedAvailabilityTable.asMaps(String.class, String.class)) {
-				expectedAvailability.put(Integer.parseInt(row.get("Week")), Integer.parseInt(row.get("Availability")));
-			}
-
-			// Compare the actual availability calendar with the expected one
-			assertEquals(expectedAvailability, actualAvailability);
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
 }
 

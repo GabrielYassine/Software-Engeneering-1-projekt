@@ -1,4 +1,4 @@
-package dtu.app.ui.classes;
+package dtu.app.ui.errorMessageHolders;
 
 public class ErrorMessageHolder {
     private String errorMessage = "";

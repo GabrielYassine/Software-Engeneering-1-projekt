@@ -1,6 +1,7 @@
 package dtu.app.ui.pages;
 
-import dtu.app.ui.classes.Employee;
+import dtu.app.ui.domain.Employee;
+import dtu.app.ui.info.EmployeeInfo;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import java.io.IOException;
@@ -22,44 +23,19 @@ public class CommonElementsController {
         }
     }
 
-    public void addEmployee(ListView<Employee> employeesListView, ListView<Employee> selectedEmployeesListView) {
-        Employee selectedEmployee = employeesListView.getSelectionModel().getSelectedItem();
+    public void addEmployee(ListView<EmployeeInfo> employeesListView, ListView<EmployeeInfo> selectedEmployeesListView) {
+        EmployeeInfo selectedEmployee = employeesListView.getSelectionModel().getSelectedItem();
         if (selectedEmployee != null) {
             employeesListView.getItems().remove(selectedEmployee);
             selectedEmployeesListView.getItems().add(selectedEmployee);
         }
     }
 
-    public void removeEmployee(ListView<Employee> employeesListView, ListView<Employee> selectedEmployeesListView) {
-        Employee selectedEmployee = selectedEmployeesListView.getSelectionModel().getSelectedItem();
+    public void removeEmployee(ListView<EmployeeInfo> employeesListView, ListView<EmployeeInfo> selectedEmployeesListView) {
+        EmployeeInfo selectedEmployee = selectedEmployeesListView.getSelectionModel().getSelectedItem();
         if (selectedEmployee != null) {
             selectedEmployeesListView.getItems().remove(selectedEmployee);
             employeesListView.getItems().add(selectedEmployee);
-        }
-    }
-
-    public void resetActivityCreationFields(TextField activityNameField, TextField budgetHoursField, TextField startWeekField, TextField endWeekField, ListView<Employee> employeesListView, ListView<Employee> selectedEmployeesListView, TextField initialsField, TextField hoursField, DatePicker datePicker) {
-        List<TextField> textFields = Arrays.asList(activityNameField, budgetHoursField, startWeekField, endWeekField, initialsField, hoursField);
-        List<ListView<Employee>> listViews = Arrays.asList(employeesListView, selectedEmployeesListView);
-
-        textFields.forEach(textField -> {
-            if (textField != null) {
-                textField.clear();
-            }
-        });
-
-        listViews.forEach(listView -> {
-            if (listView != null) {
-                listView.getItems().clear();
-            }
-        });
-
-        if (employeesListView != null && App.database != null) {
-            employeesListView.getItems().addAll(App.database.getEmployees());
-        }
-
-        if (datePicker != null) {
-            datePicker.setValue(null);
         }
     }
 

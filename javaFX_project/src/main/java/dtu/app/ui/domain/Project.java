@@ -1,35 +1,31 @@
-package dtu.app.ui.classes;
+package dtu.app.ui.domain;
 
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Project {
-    private final Database app;
+    private final Database database;
     private final int ID;
     private String name;
     private final List<Activity> activities;
     private final List<Employee> employees;
     private Employee projectLeader;
 
-    public Project(Database app, String name, List<Employee> employees, Employee projectLeader) {
-        this.app = app;
+    public Project(Database database, String name, List<Employee> employees, Employee projectLeader) {
+        this.database = database;
         this.ID = generateID();
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Name missing");
-        }
         this.name = name;
         this.activities = new ArrayList<>();
         this.employees = new ArrayList<>(employees);
         this.projectLeader = projectLeader;
-        app.appendProject(this);
+        database.appendProject(this);
     }
-
     public int generateID() {
         int currentYear = Year.now().getValue() % 100;
         int serialNumber = 1;
 
-        for (Project p : app.getProjects()) {
+        for (Project p : database.getProjects()) {
             if (p.getID() / 1000 == currentYear) {
                 serialNumber = Math.max(serialNumber, p.getID() % 1000 + 1);
             }
@@ -68,15 +64,12 @@ public class Project {
     }
 
     public void editProject(String newName, String projectLeaderInitials, List<Employee> newEmployees) throws Exception {
-        if (newName == null || newName.isEmpty()) {
-            throw new IllegalArgumentException("Name missing");
-        }
         this.name = newName;
         if (projectLeaderInitials != null) {
             if (projectLeaderInitials.equals("None")) {
                 projectLeader = null;
             } else {
-                this.projectLeader = app.getEmployee(projectLeaderInitials);
+                this.projectLeader = database.getEmployee(projectLeaderInitials);
             }
         }
         employees.clear();
@@ -86,10 +79,6 @@ public class Project {
 
     public void addEmployee(Employee employee) {
         employees.add(employee);
-    }
-
-    public void clearEmployees() {
-        employees.clear();
     }
 
     private void updateData() {
@@ -108,6 +97,10 @@ public class Project {
                 projectLeader = null;
             }
         }
+    }
+
+    public void switchActivityCompletionStatus(String activityName) {
+        getActivity(activityName).switchCompletionStatus();
     }
 
     public Employee getEmployee(String initials) throws Exception {
@@ -148,17 +141,10 @@ public class Project {
         return null;
     }
 
-    public int getActivitiesSize() {
-        return activities.size();
-    }
-
-    public int getEmployeesSize() {
-        return employees.size();
-    }
-    public String getActivitiesCompleted() {
+    public String getCompletionStatus() {
         int number = 0;
-        for (Activity a: activities) {
-            if(a.getCompletedStatus()) {
+        for (Activity a : activities) {
+            if (a.getCompletedStatus()) {
                 number++;
             }
         }
@@ -173,5 +159,4 @@ public class Project {
                 "Employees: " + employees + "\n" +
                 "Activities: " + activities;
     }
-
 }

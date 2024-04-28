@@ -1,32 +1,23 @@
 package dtu.app.ui.pages;
 
+import dtu.app.ui.info.EmployeeInfo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+
+import java.util.List;
+import java.util.Map;
 
 public class AvailabilityScheduleController extends CommonElementsController{
-    @FXML
-    public ListView<String> Week1;
-    @FXML
-    public ListView<String> Week2;
-    @FXML
-    public ListView<String> Week3;
-    @FXML
-    public ListView<String> Week4;
-    @FXML
-    public ListView<String> Week5;
-
     public TextField yearField;
     public TextField monthField;
     public Label yearNumber;
     public Label monthNumber;
+    @FXML
+    public ListView<String> AvailabilitySchedule;
 
     public void initialize() {
-        setupNumericTextFieldListeners(yearField);
-        setupLetterTextFieldListeners(monthField);
-
         yearNumber.setText("No year chosen");
         monthNumber.setText("No month chosen");
     }
@@ -34,12 +25,17 @@ public class AvailabilityScheduleController extends CommonElementsController{
     public void selectMonth(ActionEvent actionEvent) throws Exception {
         String year = yearField.getText();
         String month = monthField.getText();
-        displayMonth(year, month);
         yearNumber.setText(year);
         monthNumber.setText(month);
+        displayMonth(year, month);
     }
 
     public void displayMonth(String year, String month) throws Exception {
-        Week1.getItems().addAll()
+        List<EmployeeInfo> employees = App.application.getEmployeesInApp();
+        for (EmployeeInfo employee : employees) {
+            List<Integer> availability = App.application.getAvailability(employee, year, month);
+            String availabilityString = employee.getInitials() + "          First Week: " + availability.get(0) + "          Second Week: " + availability.get(1) + "          Third Week: " + availability.get(2) + "          Fourth Week: " + availability.get(3) + "          Fifth Week: " + availability.get(4);
+            AvailabilitySchedule.getItems().add(availabilityString);
+        }
     }
 }

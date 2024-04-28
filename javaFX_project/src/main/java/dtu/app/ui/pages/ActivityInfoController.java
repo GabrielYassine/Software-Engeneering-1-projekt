@@ -1,8 +1,11 @@
 package dtu.app.ui.pages;
 
-import dtu.app.ui.classes.Activity;
-import dtu.app.ui.classes.Employee;
-import javafx.event.ActionEvent;
+import dtu.app.ui.domain.Activity;
+import dtu.app.ui.domain.Employee;
+import dtu.app.ui.info.ActivityInfo;
+import dtu.app.ui.info.EmployeeInfo;
+import dtu.app.ui.info.ProjectInfo;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -30,88 +33,60 @@ public class ActivityInfoController extends CommonElementsController {
     @FXML
     private Button editButton;
     @FXML
-    private TableView<Employee> selectedEmployeesTableView;
+    private TableView<EmployeeInfo> selectedEmployeesTableView;
     @FXML
-    private TableColumn<Employee, String> employeeColumn;
+    private TableColumn<EmployeeInfo, String> employeeColumn;
     @FXML
     private TextField initialsField;
     @FXML
     private TextField hoursField;
     @FXML
     private DatePicker datePicker;
+    @FXML
+    public ComboBox<EmployeeInfo> initialsComboBox;
 
 
-    public void initialize() {
-        Activity activity = App.database.selectedActivity;
+    public void initialize() throws Exception {
+        ProjectInfo project = App.application.getSelectedProject();
+        ActivityInfo activity = App.application.getSelectedActivity();
 
-        updateCompletionStatus(activity);
-        updateActivityInfo(activity);
         String startWeek = String.valueOf(activity.getStartWeek());
         String endWeek = String.valueOf(activity.getEndWeek());
         startWeekValue.setText(startWeek);
         endWeekValue.setText(endWeek);
+        initialsComboBox.setItems(FXCollections.observableArrayList(App.application.getEmployeesInProject(project)));
+        updateCompletionStatus(activity);
 
         datePicker.addEventFilter(KeyEvent.KEY_TYPED, KeyEvent::consume);
         setupNumericTextFieldListeners(hoursField);
-        setupLetterTextFieldListeners(initialsField);
 
         employeeColumn.setCellValueFactory(new PropertyValueFactory<>("initials"));
-        selectedEmployeesTableView.getItems().addAll(App.database.selectedActivity.getEmployees());
+        selectedEmployeesTableView.getItems().addAll(App.application.getEmployeesInActivity(project, activity));
     }
 
-    private void updateActivityInfo(Activity activity) {
-        budgetHoursValue.setText(activity.getHoursSpent() + " / " + activity.getBudgetHours());
-    }
-
-    private void updateCompletionStatus(Activity activity) {
-        if (activity.getCompletedStatus()) {
-            completionStatus.setText("Completed");
-        } else {
-            completionStatus.setText("Not completed");
-        }
+    private void updateCompletionStatus(ActivityInfo activity) throws Exception {
+        completionStatus.setText(App.application.getActivityCompletionStatus(activity));
     }
 
     @FXML
-    private void completeActivity() {
-        Activity activity = App.database.selectedActivity;
-        activity.completeActivity();
+    private void completeActivity() throws Exception {
+        ActivityInfo activity = App.application.getSelectedActivity();
+        App.application.switchActivityCompletion(App.application.getSelectedProject(), activity);
         updateCompletionStatus(activity);
     }
 
     @FXML
     private void registerHours() {
         try {
+            EmployeeInfo employeeInfo = initialsComboBox.getSelectionModel().getSelectedItem();
             LocalDate selectedDate = datePicker.getValue();
-            if (selectedDate == null) {
-                throw new Exception("Date not selected");
-            }
-            String initials = initialsField.getText();
-            Activity activity = App.database.selectedActivity;
-            Employee employee = activity.getProject().getEmployee(initials);
-            Calendar calendar = getCalendarFromSelectedDate(selectedDate);
+            String date = selectedDate.toString();
+            ActivityInfo activity = App.application.getSelectedActivity();
             String hours = hoursField.getText();
-            registerHoursForEmployee(employee, calendar, activity, hours);
-            updateActivityInfo(activity);
-            resetActivityCreationFields();
+            App.application.registerHours(employeeInfo, date, activity, hours, null);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    private Calendar getCalendarFromSelectedDate(LocalDate selectedDate) {
-        Instant instant = selectedDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(Date.from(instant));
-        return calendar;
-    }
-
-    private void registerHoursForEmployee(Employee employee, Calendar calendar, Activity activity, String hours) throws Exception {
-        employee.getActivityLog().registerHours(calendar, activity, hours);
-        activity.registerHours(Double.parseDouble(hours));
-    }
-
-    private void resetActivityCreationFields() {
-        super.resetActivityCreationFields(null, null, null, null, null, null, initialsField, hoursField, datePicker);
     }
 
     @FXML

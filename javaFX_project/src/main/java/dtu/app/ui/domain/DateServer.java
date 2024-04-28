@@ -1,4 +1,4 @@
-package dtu.app.ui.classes;
+package dtu.app.ui.domain;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -22,5 +22,10 @@ public class DateServer {
     public int getYear() {
         Calendar calendar = new GregorianCalendar();
         return calendar.get(Calendar.YEAR);
+    }
+
+    public int getMonth() {
+        Calendar calendar = new GregorianCalendar();
+        return calendar.get(Calendar.MONTH);
     }
 }

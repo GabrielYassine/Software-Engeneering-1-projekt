@@ -1,7 +1,9 @@
 package dtu.app.ui.pages;
 
-import dtu.app.ui.classes.Employee;
-import dtu.app.ui.classes.Project;
+import dtu.app.ui.domain.Employee;
+import dtu.app.ui.domain.Project;
+import dtu.app.ui.info.EmployeeInfo;
+import dtu.app.ui.info.ProjectInfo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -13,40 +15,43 @@ import java.util.List;
 
 public class ProjectsController extends CommonElementsController {
     @FXML
-    public TableView<Project> projectsTableView;
+    public TableView<ProjectInfo> projectsTableView;
     @FXML
-    private TableColumn<Project, Integer> projectCompletedColumn;
+    private TableColumn<ProjectInfo, Integer> projectCompletedColumn;
     @FXML
-    private TableColumn<Project, Integer> idColumn;
+    private TableColumn<ProjectInfo, Integer> idColumn;
     @FXML
-    private TableColumn<Project, String> nameColumn;
+    private TableColumn<ProjectInfo, String> nameColumn;
     @FXML
-    private TableColumn<Project, Integer> employeeSizeColumn;
+    private TableColumn<ProjectInfo, Integer> employeeSizeColumn;
     @FXML
-    private TableColumn<Project, Integer> activitySizeColumn;
+    private TableColumn<ProjectInfo, Integer> activitySizeColumn;
     @FXML
     public TextField activityNameField;
     @FXML
-    public ListView<Employee> employeesListView;
+    public ListView<EmployeeInfo> employeesListView;
     @FXML
-    public ComboBox<Employee> projectLeaderComboBox;
+    public ComboBox<EmployeeInfo> projectLeaderComboBox;
     @FXML
-    private ListView<Employee> selectedEmployeesListView;
+    private ListView<EmployeeInfo> selectedEmployeesListView;
 
     @FXML
     private void initialize() throws Exception {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        employeeSizeColumn.setCellValueFactory(new PropertyValueFactory<>("employeesSize"));
-        activitySizeColumn.setCellValueFactory(new PropertyValueFactory<>("activitiesSize"));
-        projectCompletedColumn.setCellValueFactory(new PropertyValueFactory<>("activitiesCompleted"));
 
-        projectsTableView.getItems().addAll(App.database.getProjects());
-        employeesListView.getItems().addAll(App.database.getEmployees());
+        // Set up table columns
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        employeeSizeColumn.setCellValueFactory(new PropertyValueFactory<>("EmployeesSize"));
+        activitySizeColumn.setCellValueFactory(new PropertyValueFactory<>("ActivitiesSize"));
+        projectCompletedColumn.setCellValueFactory(new PropertyValueFactory<>("ActivitiesCompleted"));
+
+        projectsTableView.getItems().addAll(App.application.getProjectsInApp());
+        employeesListView.getItems().addAll(App.application.getEmployeesInApp());
         projectLeaderComboBox.setItems(selectedEmployeesListView.getItems());
 
+        // Set row click action to open project info page
         setRowClickAction(projectsTableView, clickedRow -> {
-            App.database.setSelectedProject(clickedRow);
+            App.application.setProject(clickedRow);
             try {
                 App.setRoot("projectInfo");
             } catch (IOException e) {
@@ -56,15 +61,14 @@ public class ProjectsController extends CommonElementsController {
     }
 
     @FXML
-    private void createProject() throws IOException {
-        String projectName = activityNameField.getText();
-        Employee projectLeader = projectLeaderComboBox.getSelectionModel().getSelectedItem();
-
+    private void createProject() throws IOException {;
         try {
-            List<Employee> employees = new ArrayList<>(selectedEmployeesListView.getItems());
-            Project newProject = new Project(App.database, projectName, employees, projectLeader);
-            projectsTableView.getItems().add(newProject);
-            resetActivityCreationFields();
+            String projectName = activityNameField.getText();
+            EmployeeInfo projectLeader = projectLeaderComboBox.getSelectionModel().getSelectedItem();
+            List<EmployeeInfo> employees = new ArrayList<>(selectedEmployeesListView.getItems());
+            App.application.createProject(projectName, employees, projectLeader);
+            // Reset fields
+            initialize();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -78,9 +82,5 @@ public class ProjectsController extends CommonElementsController {
     @FXML
     public void removeEmployee(ActionEvent actionEvent) {
         super.removeEmployee(employeesListView, selectedEmployeesListView);
-    }
-
-    private void resetActivityCreationFields() {
-        super.resetActivityCreationFields(activityNameField, null, null, null, employeesListView, selectedEmployeesListView, null, null, null);
     }
 }

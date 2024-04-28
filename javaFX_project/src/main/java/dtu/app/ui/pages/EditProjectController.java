@@ -1,7 +1,9 @@
 package dtu.app.ui.pages;
 
-import dtu.app.ui.classes.Employee;
-import dtu.app.ui.classes.Project;
+import dtu.app.ui.domain.Employee;
+import dtu.app.ui.domain.Project;
+import dtu.app.ui.info.EmployeeInfo;
+import dtu.app.ui.info.ProjectInfo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -15,25 +17,25 @@ import java.util.List;
 public class EditProjectController extends CommonElementsController{
 
     @FXML
-    public ListView<Employee> selectedEmployeesListView;
+    public ListView<EmployeeInfo> selectedEmployeesListView;
     @FXML
     public ComboBox<String> projectLeaderComboBox;
     @FXML
-    public ListView<Employee> employeesListView;
+    public ListView<EmployeeInfo> employeesListView;
     @FXML
     private TextField projectNameField;
 
     @FXML
-    public void initialize() {
-        Project project = App.database.selectedProject;
+    public void initialize() throws Exception {
+        ProjectInfo project = App.application.getSelectedProject();
         projectNameField.setText(project.getName());
 
-        List<Employee> allEmployees = new ArrayList<>(App.database.getEmployees());
-        List<Employee> assignedEmployees = project.getEmployees();
+        List<EmployeeInfo> allEmployees = App.application.getEmployeesInApp();
+        List<EmployeeInfo> assignedEmployees = App.application.getEmployeesInProject(project);
         allEmployees.removeAll(assignedEmployees);
         projectLeaderComboBox.getItems().add("None");
 
-        for (Employee employee : assignedEmployees) {
+        for (EmployeeInfo employee : assignedEmployees) {
             projectLeaderComboBox.getItems().add(employee.getInitials());
         }
 
@@ -47,13 +49,12 @@ public class EditProjectController extends CommonElementsController{
 
     @FXML
     private void saveChanges() throws Exception {
-        Project project = App.database.selectedProject;
+        ProjectInfo project = App.application.getSelectedProject();
         String newProjectName = projectNameField.getText();
         String projectLeaderInitials = projectLeaderComboBox.getValue();
-        List<Employee> newEmployees = new ArrayList<>(selectedEmployeesListView.getItems());
+        List<EmployeeInfo> newEmployees = new ArrayList<>(selectedEmployeesListView.getItems());
 
-        project.editProject(newProjectName, projectLeaderInitials, newEmployees);
-
+        App.application.editProject(project, newProjectName, projectLeaderInitials, newEmployees);
         new CommonElementsController().goBack();
     }
 

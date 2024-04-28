@@ -8,7 +8,7 @@
 <VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.app.ui.pages.ActivityInfoController" spacing="20">
     <children>
         <fx:include source="backButton.fxml"/>
-        <VBox alignment="CENTER" >
+        <VBox alignment="CENTER">
             <Label fx:id="activityNameValue" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-size: 40;" />
         </VBox>
         <HBox spacing="20" alignment="CENTER">
@@ -38,13 +38,12 @@
             <Label text= "Register hours for this activity" style="-fx-font-size: 20;" />
         </VBox>
         <HBox spacing="10" alignment="CENTER">
-            <TextField fx:id="initialsField" promptText="Initials" />
+            <ComboBox fx:id="initialsComboBox" />
             <TextField fx:id="hoursField" promptText="Hours" />
             <DatePicker fx:id="datePicker" />
         </HBox>
         <VBox alignment="CENTER" >
             <Button text="Register Hours" onAction="#registerHours" />
-
         </VBox>
     </children>
     <padding>

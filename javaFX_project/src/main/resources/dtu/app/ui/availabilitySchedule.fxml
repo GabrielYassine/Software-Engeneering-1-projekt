@@ -8,31 +8,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dtu.app.ui.pages.AvailabilityScheduleController">
     <children>
         <fx:include source="backButton.fxml"/>
-        <HBox spacing="10">
-            <VBox>
-                <Label text="Week 1"/>
-                <ListView fx:id="Week1" prefHeight="600" />
-            </VBox>
-            <VBox>
-                <Label text="Week 2"/>
-                <ListView fx:id="Week2" prefHeight="600" />
-            </VBox>
-            <VBox>
-                <Label text="Week 3"/>
-                <ListView fx:id="Week3" prefHeight="600" />
-            </VBox>
-            <VBox>
-                <Label text="Week 4"/>
-                <ListView fx:id="Week4" prefHeight="600" />
-            </VBox>
-            <VBox>
-                <Label text="Week 5"/>
-                <ListView fx:id="Week5" prefHeight="600" />
-            </VBox>
-        </HBox>
+        <ListView fx:id="AvailabilitySchedule"/>
         <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
             <Label fx:id="yearNumber" style="-fx-font-size: 20;" />
             <Label fx:id="monthNumber" style="-fx-font-size: 15;" />

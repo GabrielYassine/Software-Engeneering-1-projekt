@@ -1,8 +1,11 @@
 package dtu.app.ui.pages;
 
-import dtu.app.ui.classes.Activity;
-import dtu.app.ui.classes.Employee;
-import dtu.app.ui.classes.Project;
+import dtu.app.ui.domain.Activity;
+import dtu.app.ui.domain.Employee;
+import dtu.app.ui.domain.Project;
+import dtu.app.ui.info.ActivityInfo;
+import dtu.app.ui.info.EmployeeInfo;
+import dtu.app.ui.info.ProjectInfo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -14,8 +17,8 @@ import java.util.List;
 
 public class EditActivityController extends CommonElementsController{
 
-    public ListView<Employee> employeesListView;
-    public ListView<Employee> selectedEmployeesListView;
+    public ListView<EmployeeInfo> employeesListView;
+    public ListView<EmployeeInfo> selectedEmployeesListView;
     @FXML
     private TextField activityNameField;
 
@@ -28,19 +31,19 @@ public class EditActivityController extends CommonElementsController{
     @FXML
     private TextField endWeekField;
 
-    public void initialize() {
+    public void initialize() throws Exception {
         super.setupNumericTextFieldListeners(budgetHoursField, startWeekField, endWeekField);
 
-        Activity activity = App.database.selectedActivity;
-        Project project = App.database.selectedProject;
+        ActivityInfo activity = App.application.getSelectedActivity();
+        ProjectInfo project = App.application.getSelectedProject();
 
         activityNameField.setText(activity.getName());
         budgetHoursField.setText(String.valueOf(activity.getBudgetHours()));
         startWeekField.setText(String.valueOf(activity.getStartWeek()));
         endWeekField.setText(String.valueOf(activity.getEndWeek()));
 
-        List<Employee> allProjectEmployees = new ArrayList<>(project.getEmployees());
-        List<Employee> assignedEmployees = activity.getEmployees();
+        List<EmployeeInfo> allProjectEmployees = App.application.getEmployeesInProject(project);
+        List<EmployeeInfo> assignedEmployees = App.application.getEmployeesInActivity(project, activity);
         allProjectEmployees.removeAll(assignedEmployees);
 
         selectedEmployeesListView.getItems().addAll(assignedEmployees);
@@ -48,26 +51,16 @@ public class EditActivityController extends CommonElementsController{
     }
 
     @FXML
-    private void saveChanges() throws IOException {
-        Activity activity = App.database.selectedActivity;
+    private void saveChanges() throws Exception {
+        ActivityInfo activity = App.application.getSelectedActivity();
         try {
             String activityName = activityNameField.getText();
             String budgetHours = budgetHoursField.getText();
             String startWeek = startWeekField.getText();
             String endWeek = endWeekField.getText();
-
-            validateAndSaveChanges(activity, activityName, budgetHours, startWeek, endWeek);
             goBack();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }
-    }
-
-    private void validateAndSaveChanges(Activity activity, String activityName, String budgetHours, String startWeek, String endWeek) throws Exception {
-        activity.editActivity(activityName, budgetHours, startWeek, endWeek);
-        activity.clearEmployees();
-        for (Employee employee : selectedEmployeesListView.getItems()) {
-            activity.addEmployee(employee);
         }
     }
 

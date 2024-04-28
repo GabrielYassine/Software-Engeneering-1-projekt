@@ -1,4 +1,4 @@
-package dtu.app.ui.classes;
+package dtu.app.ui.domain;
 
 public class Email {
     private String subject;
