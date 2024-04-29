@@ -10,7 +10,6 @@ public class Employee {
     private final String initials;
     private final ActivityLog activityLog;
     private final List<Activity> activities = new ArrayList<>();
-
     private final List<FixedActivity> fixedActivities = new ArrayList<>();
     private final List<Email> inbox = new ArrayList<>();
 
