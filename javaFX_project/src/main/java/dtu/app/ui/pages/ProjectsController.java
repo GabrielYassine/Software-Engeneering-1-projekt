@@ -38,6 +38,7 @@ public class ProjectsController extends CommonElementsController {
     @FXML
     private void initialize() throws Exception {
         super.setupLetterTextFieldListeners(activityNameField);
+
         idColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
         employeeSizeColumn.setCellValueFactory(new PropertyValueFactory<>("EmployeesSize"));

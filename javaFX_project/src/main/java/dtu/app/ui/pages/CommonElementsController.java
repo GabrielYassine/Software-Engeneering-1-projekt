@@ -68,6 +68,16 @@ public class CommonElementsController {
         }
     }
 
+    public void setupDoubleTextFieldListeners(TextField... textFields) {
+        for (TextField textField : textFields) {
+            textField.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (!newValue.matches("\\d*(\\.\\d*)?") || newValue.chars().filter(ch -> ch == '.').count() > 1) {
+                    textField.setText(oldValue);
+                }
+            });
+        }
+    }
+
     // This method is used to set the action of double-clicking on a row in a TableView:
     public <T> void setRowClickAction(TableView<T> tableView, Consumer<T> action) {
         tableView.setRowFactory(tv -> {

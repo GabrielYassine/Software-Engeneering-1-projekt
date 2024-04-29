@@ -53,7 +53,10 @@ public class ProjectInfoController extends CommonElementsController {
     @FXML
 
     private void initialize() throws Exception {
+        super.setupLetterTextFieldListeners(activityNameField);
         super.setupNumericTextFieldListeners(2, startWeekField, endWeekField);
+        super.setupNumericTextFieldListeners(4, startYearField, endYearField);
+        super.setupDoubleTextFieldListeners(budgetHoursField);
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         employeeSizeColumn.setCellValueFactory(new PropertyValueFactory<>("employeesSize"));
@@ -97,8 +100,7 @@ public class ProjectInfoController extends CommonElementsController {
         String endYear = endYearField.getText();
         try {
             App.application.createActivity(selectedProject, activityName, budgetHours, startWeek, endWeek, selectedEmployeesListView.getItems(), startYear, endYear);
-            // Reset fields
-            initialize();
+            refreshPage();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -115,5 +117,14 @@ public class ProjectInfoController extends CommonElementsController {
     @FXML
     private void editProject() throws IOException {
         App.setRoot("editProject");
+    }
+
+    public void refreshPage() throws Exception {
+        TextField[] textFields = new TextField[]{activityNameField, budgetHoursField, startWeekField, endWeekField, startYearField, endYearField};
+        DatePicker[] datePickers = new DatePicker[]{};
+        ListView<?>[] listViews = new ListView<?>[]{employeesListView, selectedEmployeesListView};
+        TableView<?>[] tableViews = new TableView<?>[]{activityTableView};
+        clearFields(textFields,datePickers, listViews, tableViews);
+        initialize();
     }
 }

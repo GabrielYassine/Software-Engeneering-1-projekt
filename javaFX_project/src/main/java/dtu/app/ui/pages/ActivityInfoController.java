@@ -23,8 +23,6 @@ public class ActivityInfoController extends CommonElementsController {
     @FXML
     private Button completeAButton;
     @FXML
-    private Label activityNameValue;
-    @FXML
     private Label startWeekValue;
     @FXML
     private Label endWeekValue;
@@ -37,8 +35,6 @@ public class ActivityInfoController extends CommonElementsController {
     @FXML
     private TableColumn<EmployeeInfo, String> employeeColumn;
     @FXML
-    private TextField initialsField;
-    @FXML
     private TextField hoursField;
     @FXML
     private DatePicker datePicker;
@@ -47,13 +43,18 @@ public class ActivityInfoController extends CommonElementsController {
 
 
     public void initialize() throws Exception {
+        super.setupDoubleTextFieldListeners(hoursField);
+
+
         ProjectInfo project = App.application.getSelectedProject();
         ActivityInfo activity = App.application.getSelectedActivity();
 
         String startWeek = String.valueOf(activity.getStartWeek());
         String endWeek = String.valueOf(activity.getEndWeek());
+        String budgetHours = String.valueOf(activity.getBudgetHours());
         startWeekValue.setText(startWeek);
         endWeekValue.setText(endWeek);
+        budgetHoursValue.setText(budgetHours);
         initialsComboBox.setItems(FXCollections.observableArrayList(App.application.getEmployeesInProject(project)));
         updateCompletionStatus(activity);
 
@@ -83,6 +84,7 @@ public class ActivityInfoController extends CommonElementsController {
             ActivityInfo activity = App.application.getSelectedActivity();
             String hours = hoursField.getText();
             App.application.registerHours(employeeInfo, date, activity, hours, null);
+            refreshPage();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -91,6 +93,15 @@ public class ActivityInfoController extends CommonElementsController {
     @FXML
     private void editActivity() throws IOException {
         App.setRoot("editActivity");
+    }
+
+    public void refreshPage() throws Exception {
+        TextField[] textFields = new TextField[]{hoursField};
+        DatePicker[] datePickers = new DatePicker[]{datePicker};
+        ListView<?>[] listViews = new ListView<?>[]{};
+        TableView<?>[] tableViews = new TableView<?>[]{};
+        clearFields(textFields,datePickers, listViews, tableViews);
+        initialize();
     }
 
 
