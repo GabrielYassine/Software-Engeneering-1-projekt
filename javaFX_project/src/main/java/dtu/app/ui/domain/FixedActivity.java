@@ -4,10 +4,7 @@ package dtu.app.ui.domain;
 public class FixedActivity extends AbstractActivity {
     private final String name;
 
-    private final Employee employee;
-
     public FixedActivity(Employee employee, String name, int startWeek, int endWeek, int startYear, int endYear) {
-        this.employee = employee;
         this.name = name;
         this.startWeek = startWeek;
         this.endWeek = endWeek;
