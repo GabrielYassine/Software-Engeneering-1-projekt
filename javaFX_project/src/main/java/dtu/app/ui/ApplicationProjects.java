@@ -213,7 +213,7 @@ public class ApplicationProjects {
 
     public void editActivity(ActivityInfo activityInfo, String name, String budgetHours, String startWeek, String endWeek, List<EmployeeInfo> employeeInfos, String startYear, String endYear) throws Exception {
         Activity activity = findActivity(getSelectedProject(), activityInfo);
-        validateNameEdit(name, activity.getProject());
+        validateName(name, activity.getProject());
         double budgetHoursDouble = parseAndValidateHours(budgetHours);
         int startWeekInt = parseAndValidateWeek(startWeek);
         int endWeekInt = parseAndValidateWeek(endWeek);
@@ -480,27 +480,15 @@ public class ApplicationProjects {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name missing");
         }
+        ActivityInfo oldActivity = database.getSelectedActivity();
+        if (oldActivity != null && oldActivity.getName().equals(name)) {
+            return;
+        }
         for (Activity a : project.getActivities()) {
             if (a.getName().equals(name)) {
                 throw new IllegalArgumentException("Activity with this name already exists in the project");
             }
         }
-    }
-
-    /**
-     * This method validates the name of an activity or project while editing
-     */
-
-    private void validateNameEdit(String name, Project project) {
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Name missing");
-        }
-        for (Activity a : project.getActivities()) {
-            if (a.getName().equals(name)) {
-                return;
-            }
-        }
-        throw new IllegalArgumentException("Activity not found in project");
     }
 
     /**
@@ -517,7 +505,6 @@ public class ApplicationProjects {
             }
         }
     }
-
 
     //////////////////////////// CONTROLLER METHODS ////////////////////////////
 

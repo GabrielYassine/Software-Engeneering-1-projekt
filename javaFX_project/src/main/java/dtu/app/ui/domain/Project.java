@@ -33,18 +33,6 @@ public class Project {
         return currentYear * 1000 + serialNumber;
     }
 
-    public void assignToProject(Employee employee) throws Exception {
-        if (employee == null) {
-            throw new IllegalArgumentException("No employee given");
-        }
-        for (Employee e : employees) {
-            if (e.getInitials().equals(employee.getInitials())) {
-                throw new Exception("Employee already assigned to project");
-            }
-        }
-        employees.add(employee);
-    }
-
     public void assignProjectLeader(Employee employee) throws Exception {
         if (employee != null) {
             for (Employee e : employees) {
