@@ -7,10 +7,7 @@ import dtu.app.ui.info.EmployeeInfo;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import dtu.app.ui.domain.ActivityLog;
 
 import java.io.IOException;
@@ -35,8 +32,6 @@ public class EmployeeLogController extends CommonElementsController{
     public ListView<String> saturdayListView;
     @FXML
     public ListView<String> sundayListView;
-
-    public TextField initialsField;
     public TextField yearField;
     public TextField weekField;
     public Label yearNumber;
@@ -104,6 +99,7 @@ public class EmployeeLogController extends CommonElementsController{
 
         ActivityLogInfo employeeLog = App.application.getEmployeeWeekLog(employeeInfo, year, week);
         setupLists(employeeInfo, employeeLog, year, week);
+        refreshPage();
     }
 
     public void setupLists(EmployeeInfo e, ActivityLogInfo a, String year, String week) {
@@ -138,5 +134,14 @@ public class EmployeeLogController extends CommonElementsController{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void refreshPage() throws Exception {
+        TextField[] textFields = new TextField[]{yearField, weekField};
+        DatePicker[] datePickers = new DatePicker[]{};
+        ListView<?>[] listViews = new ListView<?>[]{};
+        TableView<?>[] tableViews = new TableView<?>[]{};
+        clearFields(textFields,datePickers, listViews, tableViews);
+        initialize();
     }
 }

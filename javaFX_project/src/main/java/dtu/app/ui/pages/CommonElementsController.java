@@ -61,7 +61,7 @@ public class CommonElementsController {
     public void setupLetterTextFieldListeners(TextField... textFields) {
         for (TextField textField : textFields) {
             textField.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (!newValue.matches("[a-zA-Z]*") || newValue.length() > 10) {
+                if (!newValue.matches("[a-zA-Z ]*") || newValue.length() > 10) {
                     textField.setText(oldValue);
                 }
             });
@@ -71,7 +71,7 @@ public class CommonElementsController {
     public void setupDoubleTextFieldListeners(TextField... textFields) {
         for (TextField textField : textFields) {
             textField.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (!newValue.matches("\\d*(\\.\\d*)?") || newValue.chars().filter(ch -> ch == '.').count() > 1) {
+                if (!newValue.matches("\\d*(\\.\\d*)?") || newValue.chars().filter(ch -> ch == '.').count() > 1 || newValue.length() > 5) {
                     textField.setText(oldValue);
                 }
             });

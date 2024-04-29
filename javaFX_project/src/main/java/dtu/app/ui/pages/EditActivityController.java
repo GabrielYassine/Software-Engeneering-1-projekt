@@ -19,6 +19,8 @@ public class EditActivityController extends CommonElementsController{
 
     public ListView<EmployeeInfo> employeesListView;
     public ListView<EmployeeInfo> selectedEmployeesListView;
+    public TextField startYearField;
+    public TextField endYearField;
     @FXML
     private TextField activityNameField;
 
@@ -32,8 +34,6 @@ public class EditActivityController extends CommonElementsController{
     private TextField endWeekField;
 
     public void initialize() throws Exception {
-        super.setupNumericTextFieldListeners(2, startWeekField, endWeekField);
-
         ActivityInfo activity = App.application.getSelectedActivity();
         ProjectInfo project = App.application.getSelectedProject();
 
@@ -41,6 +41,8 @@ public class EditActivityController extends CommonElementsController{
         budgetHoursField.setText(String.valueOf(activity.getBudgetHours()));
         startWeekField.setText(String.valueOf(activity.getStartWeek()));
         endWeekField.setText(String.valueOf(activity.getEndWeek()));
+        startYearField.setText(String.valueOf(activity.getStartYear()));
+        endYearField.setText(String.valueOf(activity.getEndYear()));
 
         List<EmployeeInfo> allProjectEmployees = App.application.getEmployeesInProject(project);
         List<EmployeeInfo> assignedEmployees = App.application.getEmployeesInActivity(project, activity);
@@ -48,6 +50,10 @@ public class EditActivityController extends CommonElementsController{
 
         selectedEmployeesListView.getItems().addAll(assignedEmployees);
         employeesListView.getItems().addAll(allProjectEmployees);
+
+        super.setupLetterTextFieldListeners(activityNameField);
+        super.setupNumericTextFieldListeners(2, startWeekField, endWeekField);
+        super.setupDoubleTextFieldListeners(budgetHoursField);
     }
 
     @FXML
@@ -58,6 +64,10 @@ public class EditActivityController extends CommonElementsController{
             String budgetHours = budgetHoursField.getText();
             String startWeek = startWeekField.getText();
             String endWeek = endWeekField.getText();
+            String startYear = startYearField.getText();
+            String endYear = endYearField.getText();
+            List<EmployeeInfo> newEmployees = new ArrayList<>(selectedEmployeesListView.getItems());
+            App.application.editActivity(activity, activityName, budgetHours, startWeek, endWeek, newEmployees, startYear, endYear);
             goBack();
         } catch (Exception e) {
             System.out.println(e.getMessage());

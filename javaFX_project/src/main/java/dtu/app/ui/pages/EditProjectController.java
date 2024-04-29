@@ -28,11 +28,15 @@ public class EditProjectController extends CommonElementsController{
     @FXML
     public void initialize() throws Exception {
         ProjectInfo project = App.application.getSelectedProject();
-        projectNameField.setText(project.getName());
+        String projectName = project.getName();
+        projectNameField.setText(projectName);
+        super.setupLetterTextFieldListeners(projectNameField);
 
         List<EmployeeInfo> allEmployees = App.application.getEmployeesInApp();
         List<EmployeeInfo> assignedEmployees = App.application.getEmployeesInProject(project);
         allEmployees.removeAll(assignedEmployees);
+        selectedEmployeesListView.getItems().addAll(assignedEmployees);
+        employeesListView.getItems().addAll(allEmployees);
         projectLeaderComboBox.getItems().add("None");
 
         for (EmployeeInfo employee : assignedEmployees) {
@@ -42,9 +46,6 @@ public class EditProjectController extends CommonElementsController{
         if (project.getProjectLeader() != null) {
             projectLeaderComboBox.setValue(project.getProjectLeader().getInitials());
         }
-
-        selectedEmployeesListView.getItems().addAll(assignedEmployees);
-        employeesListView.getItems().addAll(allEmployees);
     }
 
     @FXML
@@ -53,14 +54,13 @@ public class EditProjectController extends CommonElementsController{
         String newProjectName = projectNameField.getText();
         String projectLeaderInitials = projectLeaderComboBox.getValue();
         List<EmployeeInfo> newEmployees = new ArrayList<>(selectedEmployeesListView.getItems());
-
         App.application.editProject(project, newProjectName, projectLeaderInitials, newEmployees);
-        new CommonElementsController().goBack();
+        goBack();
     }
 
     @FXML
-    private void cancelEdit() throws IOException {
-        new CommonElementsController().goBack();
+    private void cancelEdit() throws Exception {
+        goBack();
     }
 
     @FXML

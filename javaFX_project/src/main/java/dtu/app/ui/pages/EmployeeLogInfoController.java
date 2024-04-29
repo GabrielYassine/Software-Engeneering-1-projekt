@@ -2,8 +2,7 @@ package dtu.app.ui.pages;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.io.IOException;
 
@@ -44,5 +43,14 @@ public class EmployeeLogInfoController extends CommonElementsController{
 
     public void cancelEdit(ActionEvent actionEvent) throws IOException {
         goBack();
+    }
+
+    public void refreshPage() throws Exception {
+        TextField[] textFields = new TextField[]{hoursTextField};
+        DatePicker[] datePickers = new DatePicker[]{};
+        ListView<?>[] listViews = new ListView<?>[]{};
+        TableView<?>[] tableViews = new TableView<?>[]{};
+        clearFields(textFields,datePickers, listViews, tableViews);
+        initialize();
     }
 }

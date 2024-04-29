@@ -8,6 +8,7 @@ import dtu.app.ui.domain.Email;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class EmployeeInfo {
     private final String initials;
@@ -18,6 +19,19 @@ public class EmployeeInfo {
         this.initials = employee.getInitials();
         this.activities = new ArrayList<>(employee.getActivities());
         this.inbox = new ArrayList<>(employee.getInbox());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EmployeeInfo that = (EmployeeInfo) o;
+        return Objects.equals(initials, that.initials);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(initials);
     }
 
     public String getInitials() {

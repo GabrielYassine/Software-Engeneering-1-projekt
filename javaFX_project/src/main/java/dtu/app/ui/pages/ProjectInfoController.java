@@ -58,14 +58,14 @@ public class ProjectInfoController extends CommonElementsController {
         super.setupNumericTextFieldListeners(4, startYearField, endYearField);
         super.setupDoubleTextFieldListeners(budgetHoursField);
 
+        ProjectInfo selectedProject = App.application.getSelectedProject();
+        projectNameValue.setText(selectedProject.getName());
+
+
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         employeeSizeColumn.setCellValueFactory(new PropertyValueFactory<>("employeesSize"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         completedColumn.setCellValueFactory(new PropertyValueFactory<>("completionStatus"));
-
-        ProjectInfo selectedProject = App.application.getSelectedProject();
-
-        projectNameValue.setText(selectedProject.getName());
 
         if (selectedProject.getProjectLeader() != null) {
             projectLeaderValue.setText(selectedProject.getProjectLeader().getInitials());
@@ -77,8 +77,8 @@ public class ProjectInfoController extends CommonElementsController {
         employeesListView.getItems().addAll(App.application.getEmployeesInProject(selectedProject));
 
         setRowClickAction(activityTableView, clickedRow -> {
-            App.application.setActivity(clickedRow);
             try {
+                App.application.setActivity(clickedRow);
                 App.setRoot("activityInfo");
             } catch (IOException e) {
                 e.printStackTrace();

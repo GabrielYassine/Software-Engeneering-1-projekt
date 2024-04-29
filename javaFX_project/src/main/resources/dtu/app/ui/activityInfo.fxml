@@ -17,10 +17,14 @@
                 <Label fx:id="startWeekValue" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <Label text="End Week:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                 <Label fx:id="endWeekValue" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <Label text="Hours worked:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                <Label fx:id="budgetHoursValue" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                <Label text="Completion status:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                <Label fx:id="completionStatus" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <Label text="Start Year:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                <Label fx:id="startYearValue" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Label text="End Year:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                <Label fx:id="endYearValue" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <Label text="Hours worked:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                <Label fx:id="budgetHoursValue" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <Label text="Completion status:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+                <Label fx:id="completionStatus" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             </GridPane>
             <TableView fx:id="selectedEmployeesTableView" minHeight ="100" maxHeight="100" prefWidth="${employeeColumn.prefWidth}">
                 <columns>

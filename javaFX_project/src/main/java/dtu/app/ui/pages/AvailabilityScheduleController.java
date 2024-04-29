@@ -18,6 +18,8 @@ public class AvailabilityScheduleController extends CommonElementsController{
     public ListView<String> AvailabilitySchedule;
 
     public void initialize() {
+        super.setupNumericTextFieldListeners(4, yearField);
+        super.setupNumericTextFieldListeners(2, monthField);
         yearNumber.setText("No year chosen");
         monthNumber.setText("No month chosen");
     }
@@ -28,6 +30,7 @@ public class AvailabilityScheduleController extends CommonElementsController{
         yearNumber.setText(year);
         monthNumber.setText(month);
         displayMonth(year, month);
+        refreshPage();
     }
 
     public void displayMonth(String year, String month) throws Exception {
@@ -37,5 +40,14 @@ public class AvailabilityScheduleController extends CommonElementsController{
             String availabilityString = employee.getInitials() + "          First Week: " + availability.get(0) + "          Second Week: " + availability.get(1) + "          Third Week: " + availability.get(2) + "          Fourth Week: " + availability.get(3) + "          Fifth Week: " + availability.get(4);
             AvailabilitySchedule.getItems().add(availabilityString);
         }
+    }
+
+    public void refreshPage() throws Exception {
+        TextField[] textFields = new TextField[]{yearField, monthField};
+        DatePicker[] datePickers = new DatePicker[]{};
+        ListView<?>[] listViews = new ListView<?>[]{};
+        TableView<?>[] tableViews = new TableView<?>[]{};
+        clearFields(textFields,datePickers, listViews, tableViews);
+        initialize();
     }
 }

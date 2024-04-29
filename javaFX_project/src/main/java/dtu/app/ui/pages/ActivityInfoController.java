@@ -20,6 +20,9 @@ import java.util.Date;
 
 public class ActivityInfoController extends CommonElementsController {
     public Label completionStatus;
+    public Label activityNameValue;
+    public Label startYearValue;
+    public Label endYearValue;
     @FXML
     private Button completeAButton;
     @FXML
@@ -45,18 +48,21 @@ public class ActivityInfoController extends CommonElementsController {
     public void initialize() throws Exception {
         super.setupDoubleTextFieldListeners(hoursField);
 
-
         ProjectInfo project = App.application.getSelectedProject();
         ActivityInfo activity = App.application.getSelectedActivity();
 
         String startWeek = String.valueOf(activity.getStartWeek());
         String endWeek = String.valueOf(activity.getEndWeek());
         String budgetHours = String.valueOf(activity.getBudgetHours());
+
+        activityNameValue.setText(activity.getName());
         startWeekValue.setText(startWeek);
         endWeekValue.setText(endWeek);
-        budgetHoursValue.setText(budgetHours);
+        startYearValue.setText(String.valueOf(activity.getStartYear()));
+        endYearValue.setText(String.valueOf(activity.getEndYear()));
+        budgetHoursValue.setText(String.valueOf(activity.getStatus()));
         initialsComboBox.setItems(FXCollections.observableArrayList(App.application.getEmployeesInProject(project)));
-        updateCompletionStatus(activity);
+        updateCompletionStatus();
 
         datePicker.addEventFilter(KeyEvent.KEY_TYPED, KeyEvent::consume);
 
@@ -64,15 +70,17 @@ public class ActivityInfoController extends CommonElementsController {
         selectedEmployeesTableView.getItems().addAll(App.application.getEmployeesInActivity(project, activity));
     }
 
-    private void updateCompletionStatus(ActivityInfo activity) throws Exception {
-        completionStatus.setText(App.application.getActivityCompletionStatus(activity));
+    private void updateCompletionStatus() throws Exception {
+        ActivityInfo activity = App.application.getSelectedActivity();
+        String completed = App.application.getActivityCompletionStatus(activity);
+        completionStatus.setText(completed);
     }
 
     @FXML
     private void completeActivity() throws Exception {
         ActivityInfo activity = App.application.getSelectedActivity();
         App.application.switchActivityCompletion(App.application.getSelectedProject(), activity);
-        updateCompletionStatus(activity);
+        updateCompletionStatus();
     }
 
     @FXML
@@ -99,7 +107,7 @@ public class ActivityInfoController extends CommonElementsController {
         TextField[] textFields = new TextField[]{hoursField};
         DatePicker[] datePickers = new DatePicker[]{datePicker};
         ListView<?>[] listViews = new ListView<?>[]{};
-        TableView<?>[] tableViews = new TableView<?>[]{};
+        TableView<?>[] tableViews = new TableView<?>[]{selectedEmployeesTableView};
         clearFields(textFields,datePickers, listViews, tableViews);
         initialize();
     }

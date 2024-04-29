@@ -9,7 +9,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class FixedActivityInfoController {
+public class FixedActivityInfoController extends CommonElementsController {
     @FXML
     private TableView<FixedActivityInfo> fixedActivityTableView;
     @FXML
@@ -36,6 +36,11 @@ public class FixedActivityInfoController {
 
     @FXML
     private void initialize() throws Exception {
+        super.setupNumericTextFieldListeners(2, startWeekField, endWeekField);
+        super.setupNumericTextFieldListeners(4, startYearField, endYearField);
+        setupLetterTextFieldListeners(activityNameField);
+
+
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         startWeekColumn.setCellValueFactory(new PropertyValueFactory<>("startWeek"));
         endWeekColumn.setCellValueFactory(new PropertyValueFactory<>("endWeek"));

@@ -98,6 +98,7 @@ public class ApplicationProjects {
         }
         Project project = findProject(projectInfo);
         project.editProject(name, projectLeaderInitials, employees);
+        setProject(new ProjectInfo(project));
     }
 
     /**
@@ -214,6 +215,7 @@ public class ApplicationProjects {
     public void editActivity(ActivityInfo activityInfo, String name, String budgetHours, String startWeek, String endWeek, List<EmployeeInfo> employeeInfos, String startYear, String endYear) throws Exception {
         Activity activity = findActivity(getSelectedProject(), activityInfo);
         validateName(name, activity.getProject());
+
         double budgetHoursDouble = parseAndValidateHours(budgetHours);
         int startWeekInt = parseAndValidateWeek(startWeek);
         int endWeekInt = parseAndValidateWeek(endWeek);
@@ -226,6 +228,7 @@ public class ApplicationProjects {
             employees.add(employee);
         }
         activity.editActivity(activity, name, budgetHoursDouble, startWeekInt, endWeekInt, employees, startYearInt, endYearInt);
+        setActivity(new ActivityInfo(activity));
     }
 
     /**
@@ -296,6 +299,8 @@ public class ApplicationProjects {
     public void switchActivityCompletion(ProjectInfo projectInfo, ActivityInfo activityInfo) throws Exception {
         Project project = findProject(projectInfo);
         project.switchActivityCompletionStatus(activityInfo.getName());
+        Activity activity = findActivity(projectInfo, activityInfo);
+        setActivity(new ActivityInfo(activity));
     }
 
     /**
@@ -304,7 +309,7 @@ public class ApplicationProjects {
 
     public String getProjectCompletionStatus(ProjectInfo projectInfo) throws Exception {
         Project project = findProject(projectInfo);
-        return project.getCompletionStatus(); // Is this okay?
+        return project.getCompletionStatus();
     }
 
     /**
