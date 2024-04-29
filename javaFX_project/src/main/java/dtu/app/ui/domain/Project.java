@@ -33,17 +33,6 @@ public class Project {
         return currentYear * 1000 + serialNumber;
     }
 
-    public void assignProjectLeader(Employee employee) throws Exception {
-        if (employee != null) {
-            for (Employee e : employees) {
-                if (e.getInitials().equals(employee.getInitials())) {
-                    this.projectLeader = employee;
-                    return;
-                }
-            }
-        }
-    }
-
     public void addActivity(Activity activity) {
         if (activity == null) {
             throw new IllegalArgumentException("No activity given");
@@ -90,16 +79,6 @@ public class Project {
     public void switchActivityCompletionStatus(String activityName) {
         getActivity(activityName).switchCompletionStatus();
     }
-
-    public Employee getEmployee(String initials) throws Exception {
-        for (Employee e : employees) {
-            if (e.getInitials().equals(initials)) {
-                return e;
-            }
-        }
-        throw new Exception("Employee not found");
-    }
-
     public int getID() {
         return ID;
     }

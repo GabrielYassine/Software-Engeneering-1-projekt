@@ -23,11 +23,6 @@ public class ActivityLog {
         dateLog.put(date, hoursLog);
     }
 
-    public void editActivity(LocalDate date, Activity activity, double hours) {
-        Map<Activity, Double> hoursLog = dateLog.get(date);
-        hoursLog.put(activity, hours);
-        dateLog.put(date, hoursLog);
-    }
 
     public void registerHours(LocalDate date, Activity activity, double hours) throws Exception {
         addActivity(date, activity, hours);

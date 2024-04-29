@@ -66,10 +66,6 @@ public class Activity extends AbstractActivity{
         }
     }
 
-    public void clearEmployees() {
-        employees = new ArrayList<>();
-    }
-
     public void updateEmployees() {
         if (employees == null) {
             return;
