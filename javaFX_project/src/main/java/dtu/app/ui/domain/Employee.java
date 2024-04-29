@@ -44,13 +44,13 @@ public class Employee {
         int startWeek = activity.getStartWeek();
         int endWeek = activity.getEndWeek();
 
-        if (year < startYear || year > endYear) {
-            return false;
+        if (year < startYear || year > endYear) { // 1
+            return false; // 2
         }
-        if (year == startYear && selectedWeek < startWeek) {
-            return false;
+        if (year == startYear && selectedWeek < startWeek) { // 3
+            return false; // 4
         }
-        return year != endYear || selectedWeek <= endWeek;
+        return year != endYear || selectedWeek <= endWeek; // 5
     }
 
     public int getActiveActivityCount(int year, int month, int weekOfMonth) {
