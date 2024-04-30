@@ -10,7 +10,7 @@ public class FrontPageController {
 
     @FXML
     private void switchToSecondary() throws Exception {
-        App.application.initializeTestRun();
+//        App.application.initializeTestRun();
         App.setRoot("menu");
     }
 }

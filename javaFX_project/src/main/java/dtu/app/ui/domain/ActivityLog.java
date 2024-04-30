@@ -49,19 +49,4 @@ public class ActivityLog {
         return dateLog.get(date);
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-
-        for (Map.Entry<LocalDate, Map<Activity, Double>> entry : dateLog.entrySet()) {
-            sb.append("Date: ").append(entry.getKey()).append("\n");
-
-            for (Map.Entry<Activity, Double> activityEntry : entry.getValue().entrySet()) {
-                sb.append("Activity: ").append(activityEntry.getKey().getName()).append("\n")
-                        .append("Hours: ").append(activityEntry.getValue()).append("\n");
-            }
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
 }

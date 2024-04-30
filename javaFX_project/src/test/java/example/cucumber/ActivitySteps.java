@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 public class ActivitySteps {
 	private final ApplicationProjects application;
     private final ErrorMessageHolder errorMessage;
+
     public ActivitySteps(ApplicationProjects application) {
 		this.application = application;
 		this.errorMessage = application.getErrorMessage();
@@ -119,6 +120,7 @@ public class ActivitySteps {
 			try {
 				ProjectInfo projectInfo = application.getSelectedProject();
 				ActivityInfo activityInfo = application.getActivity(projectInfo, name);
+				application.setActivity(activityInfo);
 				application.editActivity(activityInfo, newName, newBudgetHours, newStartWeek, newEndWeek, employees, newStartYear, newEndYear);
 			} catch (Exception e) {
 				errorMessage.setErrorMessage(e.getMessage());

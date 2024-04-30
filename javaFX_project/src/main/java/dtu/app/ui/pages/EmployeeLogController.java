@@ -73,10 +73,12 @@ public class EmployeeLogController extends CommonElementsController{
                 EmployeeInfo employeeInfo = EmployeesComboBox.getSelectionModel().getSelectedItem();
 
                 List<String> items = new ArrayList<>();
-                items.add((selectedItem.split("\n")[0]));
-                items.add((selectedItem.split("\n")[1]));
-                items.add((dateLabel.getText()));
-                items.add(employeeInfo.getInitials());
+
+                items.add((selectedItem.split("\n")[0])); // ProjectId
+                items.add((selectedItem.split("\n")[1])); // ActivityName
+                items.add((dateLabel.getText())); // Date
+                items.add(employeeInfo.getInitials()); // Initials
+
                 App.application.setSelectedEmployeeLog(items);
                 try {
                     // You can now use the date variable as needed

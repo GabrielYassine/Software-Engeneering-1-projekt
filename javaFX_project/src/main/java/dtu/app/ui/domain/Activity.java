@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Activity extends AbstractActivity{
-    private List<Employee> employees;
+    private final List<Employee> employees = new ArrayList<>();
     private final Project project;
     private final DateServer dateServer = new DateServer();
     private double budgetHours;
     private double hoursSpent = 0;
     private boolean completed = false;
 
-    public Activity(Project project, String name, Double budgetHours, int startWeek, int endWeek, List<Employee> employees, int startYear, int endYear) {
+    public Activity(Project project, String name, Double budgetHours, int startWeek, int endWeek, int startYear, int endYear) {
         this.project = project;
         this.name = name;
         this.budgetHours = budgetHours;
@@ -19,8 +19,6 @@ public class Activity extends AbstractActivity{
         this.endWeek = endWeek;
         this.startYear = startYear;
         this.endYear = endYear;
-        this.employees = new ArrayList<>(employees);
-        addEmployees(employees);
         project.addActivity(this);
     }
 
@@ -35,41 +33,11 @@ public class Activity extends AbstractActivity{
     }
 
     public void addEmployee(Employee e) {
-        int currentWeek = dateServer.getWeek();
-        int currentYear = dateServer.getYear();
-        int currentMonth = dateServer.getMonth();
-
-        if (employees == null) {
-            employees = new ArrayList<>();
-        }
-
-        if (e.getActiveActivityCount(currentYear, currentMonth, currentWeek) < 20) {
-            employees.add(e);
-            e.addActivity(this);
-        }
-    }
-
-    public void addEmployees(List<Employee> PotentialEmployees) {
-        int currentWeek = dateServer.getWeek();
-        int currentYear = dateServer.getYear();
-        int currentMonth = dateServer.getMonth();
-
-        if (employees == null) {
-            employees = new ArrayList<>();
-        }
-
-        for (Employee e : PotentialEmployees) {
-            if (e.getActiveActivityCount(currentYear, currentMonth, currentWeek) <= 20) {
-                employees.add(e);
-                e.addActivity(this);
-            }
-        }
+        employees.add(e);
+        e.addActivity(this);
     }
 
     public void updateEmployees() {
-        if (employees == null) {
-            return;
-        }
         List<Employee> projectEmployees = project.getEmployees();
         employees.removeIf(e -> !projectEmployees.contains(e));
     }
@@ -120,9 +88,6 @@ public class Activity extends AbstractActivity{
 
 
     public List<Employee> getEmployees() {
-        if (employees == null) {
-            return new ArrayList<>();
-        }
         return new ArrayList<>(employees);
     }
 
@@ -136,9 +101,4 @@ public class Activity extends AbstractActivity{
     public boolean getCompletedStatus() {
         return completed;
     }
-
-    public String toString() {
-        return "Activity: " + name + " budgetHours: " + budgetHours + " startWeek: " + startWeek + " endWeek: " + endWeek + "startYear: " + startYear + "endYear: " + endYear + "hoursSpent: " + hoursSpent + "completed: " + completed + "employees: " + employees;
-    }
-
 }

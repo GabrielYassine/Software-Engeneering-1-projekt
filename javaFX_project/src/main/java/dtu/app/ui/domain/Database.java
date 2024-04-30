@@ -1,5 +1,6 @@
 package dtu.app.ui.domain;
 
+import dtu.app.ui.ApplicationProjects;
 import dtu.app.ui.info.ActivityInfo;
 import dtu.app.ui.info.EmployeeInfo;
 import dtu.app.ui.info.ProjectInfo;
@@ -112,44 +113,44 @@ public class Database {
 //        }
 //    }
 
-    public void initializeTestRun() throws Exception {
-        Employee employee1 = new Employee(this, "Huba");
-        Employee employee2 = new Employee(this, "Abed");
-        Employee employee3 = new Employee(this, "Dora");
-        Employee employee4 = new Employee(this, "Jama");
-
-        Project project1 = new Project(this, "Project 1", List.of(employee1, employee2, employee3, employee4), employee1);
-
-        Activity activity1 = new Activity(project1, "Activity 1", 10.0, 1, 10, List.of(employee1, employee2), 2024, 2024);
-        Activity activity2 = new Activity(project1, "Activity 2", 20.0, 11, 20, List.of(employee2, employee3, employee4), 2024, 2024);
-
-//        // email
-//        employee1.sendEmailNotification("Work", "Ice cream");
-//        employee1.sendEmailNotification("Work", "Ilias er dum");
-//        employee2.sendEmailNotification("Work", "Hello Gabriel");
-
-        LocalDate date1 = LocalDate.now();
-        employee1.getActivityLog().registerHours(date1, activity1, 5);
-
-        LocalDate date2 = LocalDate.now().plusDays(1);
-        employee1.getActivityLog().registerHours(date2, activity2, 5);
-
-        LocalDate date3 = LocalDate.now().plusDays(2);
-        employee1.getActivityLog().registerHours(date3, activity2, 5);
-
-        LocalDate date4 = LocalDate.now().plusDays(3);
-        employee1.getActivityLog().registerHours(date4, activity2, 5);
-
-        LocalDate date5 = LocalDate.now().plusDays(4);
-        employee1.getActivityLog().registerHours(date5, activity2, 5);
-
-        LocalDate date6 = LocalDate.now().plusDays(5);
-        employee1.getActivityLog().registerHours(date6, activity2, 5);
-
-        LocalDate date7 = LocalDate.now().plusDays(6);
-        employee1.getActivityLog().registerHours(date7, activity2, 5);
-        employee1.getActivityLog().registerHours(date7, activity1, 5);
-        employee1.getActivityLog().registerHours(date7, activity1, 5);
-    }
+//    public void initializeTestRun() throws Exception {
+//        Employee employee1 = new Employee(this, "Huba");
+//        Employee employee2 = new Employee(this, "Abed");
+//        Employee employee3 = new Employee(this, "Dora");
+//        Employee employee4 = new Employee(this, "Jama");
+//
+//        Project project1 = new Project(this, "Project 1", List.of(employee1, employee2, employee3, employee4), employee1);
+//
+//        Activity activity1 = new Activity(project1, "Activity 1", 10.0, 1, 10, 2024, 2024);
+//        Activity activity2 = new Activity(project1, "Activity 2", 20.0, 11, 20, 2024, 2024);
+//
+////        // email
+////        employee1.sendEmailNotification("Work", "Ice cream");
+////        employee1.sendEmailNotification("Work", "Ilias er dum");
+////        employee2.sendEmailNotification("Work", "Hello Gabriel");
+//
+//        LocalDate date1 = LocalDate.now();
+//        employee1.getActivityLog().registerHours(date1, activity1, 5);
+//
+//        LocalDate date2 = LocalDate.now().plusDays(1);
+//        employee1.getActivityLog().registerHours(date2, activity2, 5);
+//
+//        LocalDate date3 = LocalDate.now().plusDays(2);
+//        employee1.getActivityLog().registerHours(date3, activity2, 5);
+//
+//        LocalDate date4 = LocalDate.now().plusDays(3);
+//        employee1.getActivityLog().registerHours(date4, activity2, 5);
+//
+//        LocalDate date5 = LocalDate.now().plusDays(4);
+//        employee1.getActivityLog().registerHours(date5, activity2, 5);
+//
+//        LocalDate date6 = LocalDate.now().plusDays(5);
+//        employee1.getActivityLog().registerHours(date6, activity2, 5);
+//
+//        LocalDate date7 = LocalDate.now().plusDays(6);
+//        employee1.getActivityLog().registerHours(date7, activity2, 5);
+//        employee1.getActivityLog().registerHours(date7, activity1, 5);
+//        employee1.getActivityLog().registerHours(date7, activity1, 5);
+//    }
 
 }

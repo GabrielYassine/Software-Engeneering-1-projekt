@@ -5,7 +5,6 @@ Feature: Register time on activity
   Background:
     Given there is a project with name "New Project"
     Given there are employees with the following initials in the project
-      | Initials |
       | Huba     |
       | Abed     |
       | Dora     |

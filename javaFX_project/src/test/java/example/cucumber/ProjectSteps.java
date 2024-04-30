@@ -42,7 +42,6 @@ public class ProjectSteps {
             String projectLeaderInitials = columns.get("ProjectLeader");
 
             List<EmployeeInfo> employees = new ArrayList<>();
-
             try {
                 if (initials != null && !initials.isEmpty()) {
                     for (String initial : initials.split(", ")) {
@@ -69,24 +68,27 @@ public class ProjectSteps {
             String initials = columns.get("Initials");
             String projectLeaderInitials = columns.get("ProjectLeader");
             List<Employee> employees = new ArrayList<>();
+            try {
+                ProjectInfo projectInfo = application.getProject(id);
 
-            ProjectInfo projectInfo = application.getProject(id);
+                assertEquals(id, String.valueOf(projectInfo.getID()));
+                assertEquals(name, projectInfo.getName());
 
-            assertEquals(id, String.valueOf(projectInfo.getID()));
-            assertEquals(name, projectInfo.getName());
+                if (projectLeaderInitials != null && !projectLeaderInitials.isEmpty()) {
+                    assertEquals(projectLeaderInitials, projectInfo.getProjectLeader().getInitials());
+                } else {
+                    assertNull(projectInfo.getProjectLeader());
+                }
 
-            if (projectLeaderInitials != null && !projectLeaderInitials.isEmpty()) {
-                assertEquals(projectLeaderInitials, projectInfo.getProjectLeader().getInitials());
-            } else {
-                assertNull(projectInfo.getProjectLeader());
+                List<String> employeeInitials = projectInfo.getEmployeeInitials();
+                List<String> expectedEmployeeInitialsList = new ArrayList<>();
+                if (initials != null && !initials.isEmpty()) {
+                    expectedEmployeeInitialsList = Arrays.asList(initials.split(", "));
+                }
+                assertEquals(expectedEmployeeInitialsList, employeeInitials);
+            } catch (Exception e) {
+                errorMessage.setErrorMessage(e.getMessage());
             }
-
-            List<String> employeeInitials = projectInfo.getEmployeeInitials();
-            List<String> expectedEmployeeInitialsList = new ArrayList<>();
-            if (initials != null && !initials.isEmpty()) {
-                expectedEmployeeInitialsList = Arrays.asList(initials.split(", "));
-            }
-            assertEquals(expectedEmployeeInitialsList, employeeInitials);
         }
     }
 
@@ -162,7 +164,6 @@ public class ProjectSteps {
     public void thereAreProjectWithFollowingDetails(DataTable table) throws Exception {
         List<Map<String, String>> rows = table.asMaps(String.class, String.class);
         for (Map<String, String> columns : rows) {
-            String id = columns.get("ID");
             String name = columns.get("Name");
             String initials = columns.get("Initials");
             String projectLeaderInitials = columns.get("ProjectLeader");
@@ -184,14 +185,14 @@ public class ProjectSteps {
 
     @When("the employee edits the project with ID {string}'s name to {string}, the project leader to {string}, and the project members to {string}")
     public void theEmployeeEditsTheProjectWithIDSNameToTheProjectLeaderToAndTheProjectMembersTo(String id, String newName, String newProjectLeaderInitials, String newEmployeeInitials) throws Exception {
-        ProjectInfo projectToEdit = application.getProject(id);
-        List<EmployeeInfo> employees = new ArrayList<>();
-        if (newEmployeeInitials != null && !newEmployeeInitials.isEmpty()) {
-            for (String initial : newEmployeeInitials.split(", ")) {
-                employees.add(application.getEmployee(initial));
-            }
-        }
         try {
+            ProjectInfo projectToEdit = application.getProject(id);
+            List<EmployeeInfo> employees = new ArrayList<>();
+            if (newEmployeeInitials != null && !newEmployeeInitials.isEmpty()) {
+                for (String initial : newEmployeeInitials.split(", ")) {
+                    employees.add(application.getEmployee(initial));
+                }
+            }
             application.editProject(projectToEdit, newName, newProjectLeaderInitials, employees);
         } catch (Exception e) {
             errorMessage.setErrorMessage(e.getMessage());

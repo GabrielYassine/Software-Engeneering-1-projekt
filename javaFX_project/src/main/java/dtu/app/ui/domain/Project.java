@@ -34,9 +34,6 @@ public class Project {
     }
 
     public void addActivity(Activity activity) {
-        if (activity == null) {
-            throw new IllegalArgumentException("No activity given");
-        }
         activities.add(activity);
     }
 
@@ -116,14 +113,5 @@ public class Project {
             }
         }
         return number + "/" + activities.size();
-    }
-
-    @Override
-    public String toString() {
-        return "Project ID: " + ID + "\n" +
-                "Project Name: " + name + "\n" +
-                "Project Leader: " + projectLeader + "\n" +
-                "Employees: " + employees + "\n" +
-                "Activities: " + activities;
     }
 }

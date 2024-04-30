@@ -14,9 +14,6 @@ public class Employee {
     private final List<Email> inbox = new ArrayList<>();
 
     public Employee(Database database, String initials) {
-        if (initials == null || initials.isEmpty()) {
-            throw new IllegalArgumentException("Initials cannot be null or empty");
-        }
         this.initials = initials;
         this.activityLog = new ActivityLog();
         database.appendEmployee(this);
@@ -50,7 +47,10 @@ public class Employee {
         if (year == startYear && selectedWeek < startWeek) { // 3
             return false; // 4
         }
-        return year != endYear || selectedWeek <= endWeek; // 5
+        if (year == endYear && selectedWeek > endWeek) { // 5
+            return false; // 6
+        }
+        return true; // 7
     }
 
     public int getActiveActivityCount(int year, int month, int weekOfMonth) {
@@ -87,11 +87,6 @@ public class Employee {
 
     public List<Email> getInbox() {
         return inbox;
-    }
-
-    @Override
-    public String toString() {
-        return initials;
     }
 
 }

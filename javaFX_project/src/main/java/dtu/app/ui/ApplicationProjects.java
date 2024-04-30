@@ -12,6 +12,8 @@ public class ApplicationProjects {
     private final Database database;
     private final ErrorMessageHolder errorMessage;
 
+    private final DateServer dateServer = new DateServer();
+
     public ApplicationProjects() {
         this.errorMessage = new ErrorMessageHolder();
         this.database = new Database();
@@ -175,11 +177,9 @@ public class ApplicationProjects {
      */
 
     public Activity createActivity(ProjectInfo projectInfo, String name, String budgetHours, String startWeek, String endWeek, List<EmployeeInfo> employeeInfos, String startYear, String endYear) throws Exception {
-        if (projectInfo == null) {
-            throw new IllegalArgumentException("Project cannot be null");
-        }
         Project project = findProject(projectInfo);
-        validateName(name, findProject(projectInfo));
+        validateName(name, project);
+
         double budgetHoursDouble = parseAndValidateHours(budgetHours);
         int startWeekInt = parseAndValidateWeek(startWeek);
         int endWeekInt = parseAndValidateWeek(endWeek);
@@ -191,7 +191,11 @@ public class ApplicationProjects {
             Employee employee = findEmployee(e);
             employees.add(employee);
         }
-        return new Activity(project, name, budgetHoursDouble, startWeekInt, endWeekInt, employees, startYearInt, endYearInt);
+        Activity a = new Activity(project, name, budgetHoursDouble, startWeekInt, endWeekInt, startYearInt, endYearInt);
+        for (Employee e : employees) {
+            a.addEmployee(e);
+        }
+        return a;
     }
 
     /**
@@ -228,7 +232,22 @@ public class ApplicationProjects {
             employees.add(employee);
         }
         activity.editActivity(activity, name, budgetHoursDouble, startWeekInt, endWeekInt, employees, startYearInt, endYearInt);
+        addEmployeesToActivity(activity, employeeInfos);
         setActivity(new ActivityInfo(activity));
+    }
+
+
+    public void addEmployeesToActivity(Activity activity, List<EmployeeInfo> employeeInfos) throws Exception {
+        int currentWeek = dateServer.getWeek();
+        int currentYear = dateServer.getYear();
+        int currentMonth = dateServer.getMonth();
+        for (EmployeeInfo e : employeeInfos) {
+            Employee employee = findEmployee(e);
+            if (employee.getActiveActivityCount(currentYear, currentMonth, currentWeek) >= 20) {
+                throw new Exception("Employee is already working on 20 activities this week"); // Make the code still run even if the exception is thrown
+            }
+            activity.addEmployee(findEmployee(e));
+        }
     }
 
     /**
@@ -260,19 +279,15 @@ public class ApplicationProjects {
      */
 
     public Map<Activity, Double> getEmployeesRegisteredHoursForADay(EmployeeInfo employeeInfo, String date) throws Exception {
-        try {
-            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date parsedDate = format.parse(date);
-            calendar.setTime(parsedDate);
-            LocalDate localDate = convertCalendarToLocalDate(calendar);
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date parsedDate = format.parse(date);
+        calendar.setTime(parsedDate);
+        LocalDate localDate = convertCalendarToLocalDate(calendar);
 
-            Employee employee = findEmployee(employeeInfo);
-            ActivityLogInfo activityLogInfo = new ActivityLogInfo(employee.getActivityLog());
-            return activityLogInfo.getDateActivities(localDate);
-        } catch (Exception e) {
-            throw new Exception("Error getting employees registered hours for a day");
-        }
+        Employee employee = findEmployee(employeeInfo);
+        ActivityLogInfo activityLogInfo = new ActivityLogInfo(employee.getActivityLog());
+        return activityLogInfo.getDateActivities(localDate);
     }
 
     /**
@@ -313,14 +328,6 @@ public class ApplicationProjects {
     }
 
     /**
-     * This method returns the completion status of an activity
-     */
-
-    public String getActivityCompletionStatus(ActivityInfo activityInfo) throws Exception {
-        return activityInfo.getCompletionStatus();
-    }
-
-    /**
      * This method gets the registered hours for an employee for a specific week
      */
 
@@ -333,21 +340,6 @@ public class ApplicationProjects {
         return new ActivityLogInfo(weekLog);
     }
 
-    /**
-     * This method returns the dates for a specific week in a specific year
-     */
-
-    public List<String> getWeekDates(String year, String week) {
-        int weekInt = parseAndValidateWeek(week);
-        int yearInt = parseAndValidateYear(year);
-        List<String> weekDates = new ArrayList<>();
-        LocalDate date = LocalDate.ofYearDay(yearInt, (weekInt * 7) - 6);
-        for (int i = 0; i < 7; i++) {
-            weekDates.add(date.toString());
-            date = date.plusDays(1);
-        }
-        return weekDates;
-    }
 
     /**
      * this method sets a specific log in the employees schedule as the selected log
@@ -410,6 +402,19 @@ public class ApplicationProjects {
             monthHours.add(employee.getActiveActivityCount(yearInt, monthInt, i));
         }
         return monthHours;
+    }
+
+    /**
+     * This method returns a list of all fixed activities for an employee
+     */
+
+    public List<FixedActivityInfo> getFixedActivitiesForEmployee(EmployeeInfo employee) throws Exception {
+        Employee e = findEmployee(employee);
+        List<FixedActivityInfo> fixedActivityInfos = new ArrayList<>();
+        for (FixedActivity fa : e.getFixedActivities()) {
+            fixedActivityInfos.add(new FixedActivityInfo(fa));
+        }
+        return fixedActivityInfos;
     }
 
     //////////////////////////// VALIDATION METHODS ////////////////////////////
@@ -511,93 +516,8 @@ public class ApplicationProjects {
         }
     }
 
-    //////////////////////////// CONTROLLER METHODS ////////////////////////////
+    //////////////////////////// FIND METHODS ////////////////////////////
 
-    /**
-     * This method initializes the test run
-     */
-
-    public void initializeTestRun() throws Exception {
-        database.initializeTestRun();
-    }
-
-    /**
-     * This method returns a list of all employees in the application
-     */
-
-    public List<EmployeeInfo> getEmployeesInApp() {
-        List<EmployeeInfo> employeeInfos = new ArrayList<>();
-        for (Employee employee : database.getEmployees()) {
-            employeeInfos.add(new EmployeeInfo(employee));
-        }
-        return employeeInfos;
-    }
-
-    /**
-     * This method returns a list of all projects in the application
-     */
-
-    public List<ProjectInfo> getProjectsInApp() {
-        List<ProjectInfo> projectInfos = new ArrayList<>();
-        for (Project project : database.getProjects()) {
-            projectInfos.add(new ProjectInfo(project));
-        }
-        return projectInfos;
-    }
-
-    /**
-     * This method returns a list of all activities in a project
-     */
-
-    public List<ActivityInfo> getActivitiesInProject(ProjectInfo project) throws Exception {
-        Project p = findProject(project);
-        List<ActivityInfo> activityInfos = new ArrayList<>();
-        for (Activity a : p.getActivities()) {
-            activityInfos.add(new ActivityInfo(a));
-        }
-        return activityInfos;
-    }
-
-    /**
-     * This method returns a list of all fixed activities for an employee
-     */
-
-    public List<FixedActivityInfo> getFixedActivitiesForEmployee(EmployeeInfo employee) throws Exception {
-        Employee e = findEmployee(employee);
-        List<FixedActivityInfo> fixedActivityInfos = new ArrayList<>();
-        for (FixedActivity fa : e.getFixedActivities()) {
-            fixedActivityInfos.add(new FixedActivityInfo(fa));
-        }
-        return fixedActivityInfos;
-    }
-
-    /**
-     * This method returns a list of employees in a project
-     */
-
-    public List<EmployeeInfo> getEmployeesInProject(ProjectInfo selectedProject) throws Exception {
-        Project p = findProject(selectedProject);
-        List<Employee> employees = p.getEmployees();
-        List<EmployeeInfo> employeeInfos = new ArrayList<>();
-        for (Employee e : employees) {
-            employeeInfos.add(new EmployeeInfo(e));
-        }
-        return employeeInfos;
-    }
-
-    /**
-     * This method returns a list of employees in an activity
-     */
-
-    public List<EmployeeInfo> getEmployeesInActivity(ProjectInfo project, ActivityInfo activity) throws Exception {
-        Activity a = findActivity(project, activity);
-        List<Employee> employees = a.getEmployees();
-        List<EmployeeInfo> employeeInfos = new ArrayList<>();
-        for (Employee e : employees) {
-            employeeInfos.add(new EmployeeInfo(e));
-        }
-        return employeeInfos;
-    }
 
     /**
      * This method return the Employee object from an EmployeeInfo object
@@ -613,11 +533,8 @@ public class ApplicationProjects {
      */
 
     public Project findProject(ProjectInfo project) throws Exception {
-        if (project != null) {
-            int id = project.getID();
-            return database.getProject(id);
-        }
-        return null;
+        int id = project.getID();
+        return database.getProject(id);
     }
 
 
@@ -627,6 +544,70 @@ public class ApplicationProjects {
         return project.getActivity(name);
     }
 
+    //////////////////////////// GETTERS FOR GUI ////////////////////////////
+
+//    public void initializeTestRun() throws Exception {
+//        database.initializeTestRun();
+//    }
+
+    public List<EmployeeInfo> getEmployeesInApp() {
+        List<EmployeeInfo> employeeInfos = new ArrayList<>();
+        for (Employee employee : database.getEmployees()) {
+            employeeInfos.add(new EmployeeInfo(employee));
+        }
+        return employeeInfos;
+    }
+
+
+    public List<ProjectInfo> getProjectsInApp() {
+        List<ProjectInfo> projectInfos = new ArrayList<>();
+        for (Project project : database.getProjects()) {
+            projectInfos.add(new ProjectInfo(project));
+        }
+        return projectInfos;
+    }
+
+
+    public List<ActivityInfo> getActivitiesInProject(ProjectInfo project) throws Exception {
+        Project p = findProject(project);
+        List<ActivityInfo> activityInfos = new ArrayList<>();
+        for (Activity a : p.getActivities()) {
+            activityInfos.add(new ActivityInfo(a));
+        }
+        return activityInfos;
+    }
+
+    public List<EmployeeInfo> getEmployeesInProject(ProjectInfo selectedProject) throws Exception {
+        Project p = findProject(selectedProject);
+        List<Employee> employees = p.getEmployees();
+        List<EmployeeInfo> employeeInfos = new ArrayList<>();
+        for (Employee e : employees) {
+            employeeInfos.add(new EmployeeInfo(e));
+        }
+        return employeeInfos;
+    }
+
+    public List<EmployeeInfo> getEmployeesInActivity(ProjectInfo project, ActivityInfo activity) throws Exception {
+        Activity a = findActivity(project, activity);
+        List<Employee> employees = a.getEmployees();
+        List<EmployeeInfo> employeeInfos = new ArrayList<>();
+        for (Employee e : employees) {
+            employeeInfos.add(new EmployeeInfo(e));
+        }
+        return employeeInfos;
+    }
+
+    public List<String> getWeekDates(String year, String week) {
+        int weekInt = parseAndValidateWeek(week);
+        int yearInt = parseAndValidateYear(year);
+        List<String> weekDates = new ArrayList<>();
+        LocalDate date = LocalDate.ofYearDay(yearInt, (weekInt * 7) - 6);
+        for (int i = 0; i < 7; i++) {
+            weekDates.add(date.toString());
+            date = date.plusDays(1);
+        }
+        return weekDates;
+    }
 
     public Map<Activity, Double> getEmployeeDayLog(EmployeeInfo e, ActivityLogInfo a, String day) {
         Map<Activity, Double> dayLog = new HashMap<>();
@@ -638,5 +619,9 @@ public class ApplicationProjects {
             }
         }
         return dayLog;
+    }
+
+    public String getActivityCompletionStatus(ActivityInfo activityInfo) throws Exception {
+        return activityInfo.getCompletionStatus();
     }
 }
