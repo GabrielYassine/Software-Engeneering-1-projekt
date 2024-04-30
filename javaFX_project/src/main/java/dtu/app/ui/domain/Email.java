@@ -1,12 +1,16 @@
 package dtu.app.ui.domain;
 
+import java.time.LocalDate;
+
 public class Email {
     private String subject;
     private String text;
+    private LocalDate localDate;
 
-    public Email(String subject, String text) {
+    public Email(String subject, String text, LocalDate localDate) {
         this.subject = subject;
         this.text = text;
+        this.localDate = localDate;
     }
 
     public String getSubject() {
@@ -15,5 +19,9 @@ public class Email {
 
     public String getText() {
         return text;
+    }
+
+    public LocalDate getLocalDate() {
+        return localDate;
     }
 }

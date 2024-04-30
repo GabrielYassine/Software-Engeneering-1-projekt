@@ -1,6 +1,6 @@
 package example.cucumber;
 
-import dtu.app.ui.ApplicationProjects;
+import dtu.app.ui.ProjectApp;
 import dtu.app.ui.domain.*;
 import dtu.app.ui.errorMessageHolders.ErrorMessageHolder;
 import dtu.app.ui.info.EmployeeInfo;
@@ -14,10 +14,10 @@ import static org.junit.Assert.*;
 
 public class ProjectSteps {
 
-    private final ApplicationProjects application;
+    private final ProjectApp application;
     private final ErrorMessageHolder errorMessage;
 
-    public ProjectSteps(ApplicationProjects application) {
+    public ProjectSteps(ProjectApp application) {
         this.application = application;
         this.errorMessage = application.getErrorMessage();
     }

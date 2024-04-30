@@ -1,15 +1,12 @@
 package dtu.app.ui.domain;
 
-import dtu.app.ui.ApplicationProjects;
 import dtu.app.ui.info.ActivityInfo;
 import dtu.app.ui.info.EmployeeInfo;
 import dtu.app.ui.info.ProjectInfo;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 /**
  * JavaFX App
@@ -90,15 +87,6 @@ public class Database {
             }
         }
         return null;
-    }
-
-    public boolean hasEmployeeRegistered(Employee employee) throws Exception {
-        if (!employeeRepository.contains(employee)) {
-            throw new Exception("Employee does not exist");
-        }
-
-        Calendar date = dateServer.getDate();
-        return employee.hasRegistered(date);
     }
 
     // Might be wrong now, look at paramters for getActiveActivityCount

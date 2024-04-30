@@ -1,7 +1,6 @@
 package dtu.app.ui.pages;
 
-import dtu.app.ui.ApplicationProjects;
-import dtu.app.ui.domain.Database;
+import dtu.app.ui.ProjectApp;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,12 +16,12 @@ import java.util.Stack;
 
 public class App extends Application {
 
-    public static ApplicationProjects application;
+    public static ProjectApp application;
     public static Scene scene;
     public static final Stack<String> navigationHistory = new Stack<>();
     @Override
     public void start(Stage stage) throws IOException {
-        App.application = new ApplicationProjects();
+        App.application = new ProjectApp();
         scene = new Scene(loadFXML("frontpage"), 640, 480);
         stage.setScene(scene);
         stage.setResizable(false);

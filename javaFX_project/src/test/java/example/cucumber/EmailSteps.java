@@ -1,95 +1,83 @@
-//package example.cucumber;
-//
-//import dtu.app.ui.domain.*;
-//import io.cucumber.java.en.Given;
-//import io.cucumber.java.en.Then;
-//import io.cucumber.java.en.When;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import static org.hamcrest.CoreMatchers.equalTo;
-//import static org.hamcrest.CoreMatchers.is;
-//import static org.hamcrest.MatcherAssert.assertThat;
-//import static org.junit.Assert.assertFalse;
-//import static org.junit.Assert.assertTrue;
-//
-//public class EmailSteps {
-//    private final Database database;
-//    private final ErrorMessageHolder errorMessageHolder;
-//    private final DateServer dateServer;
-//    private Employee employee;
-//    private Email email;
-//
-//    public EmailSteps(Database database, ErrorMessageHolder errorMessageHolder, DateServer dateServer) {
-//        this.database = database;
-//        this.errorMessageHolder = errorMessageHolder;
-//        this.dateServer = dateServer;
-//    }
-//
-//    @Given("that there is an employee {string}")
-//    public void thatThereIsAnEmployee(String initials) {
-//        employee = new Employee(database, initials);
-//        assertThat(employee.getInitials(), is(equalTo(initials)));
-//    }
-//
-//    @When("the employee has not registered his daily work for the current day")
-//    public void theEmployeeHasNotRegisteredHisDailyWorkForTheCurrentDay() throws Exception {
-//        assertFalse(database.hasEmployeeRegistered(employee));
-//    }
-//
-//    @Given("the employee has registered his daily work for the current day")
-//    public void theEmployeeHasRegisteredHisDailyWorkForTheCurrentDay() throws Exception {
-//        Project exampleProject = exampleProject();
-//        Activity a = new Activity(exampleProject, "Activity", "10", "1", "2", List.of(employee), "2024", "2024");
-//        employee.getActivityLog().registerHours(dateServer.getDate(), a, "5");
-//        assertTrue(database.hasEmployeeRegistered(employee));
-//    }
-//
-//
-//    @Given("the employee is working on {int} activities in a week")
-//    public void theEmployeeIsWorkingOnActivitiesInAWeek(Integer int1) {
-//        exampleActivities(int1);
-//        assertThat(employee.getActiveActivityCount(dateServer.getWeek()), is(equalTo(int1)));
-//    }
-//
-//    public Project exampleProject() {
-//        List<Employee> employees = new ArrayList<>();
-//        employees.add(employee);
-//
-//        return new Project(database, "ExampleProject", employees, employee);
-//    }
-//
-//    public void exampleActivities(int n) {
-//        Project exampleProject = exampleProject();
-//        int currentWeek = dateServer.getWeek();
-//        int currentYear = dateServer.getYear();
-//
-//        for (int i = 0; i < n; i++) {
-//            String startWeek = String.valueOf(currentWeek);
-//            String endWeek = String.valueOf(currentWeek + 4);
-//            String startYear = String.valueOf(currentYear);
-//            String endYear = (currentWeek + 4 > 52) ? String.valueOf(currentYear + 1) : startYear;
-//
-//            new Activity(exampleProject, "Activity" + i, "5", startWeek, endWeek, List.of(employee), startYear, endYear);
-//        }
-//    }
-//
-//
-//    @Then("the email with subject {string} and text {string} is in the employees inbox")
-//    public void theEmailWithSubjectAndTextIsInTheEmployeesInbox(String subject, String text) {
-//        email = new Email(subject,text);
-//        assertThat(email.getSubject(),is(equalTo(subject)));
-//        assertThat(email.getText(),is(equalTo(text)));
-//        assertTrue(employee.getInboxStream().anyMatch(e -> e.getText().equals(email.getText()) && e.getSubject().equals(email.getSubject())));
-//    }
-//
-//    @When("the system sends a reminder email")
-//    public void theSystemSendsAReminderEmail() {
-//        try {
-//            database.sendEmail();
-//        } catch (Exception e) {
-//            errorMessageHolder.setErrorMessage(e.getMessage());
-//        }
-//    }
-//}
+package example.cucumber;
+
+import dtu.app.ui.ProjectApp;
+import dtu.app.ui.errorMessageHolders.ErrorMessageHolder;
+import dtu.app.ui.info.EmployeeInfo;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class EmailSteps {
+    private final ProjectApp projectApp;
+    private final ErrorMessageHolder errorMessage;
+
+    public EmailSteps(ProjectApp projectApp, ErrorMessageHolder errorMessage) {
+        this.projectApp = projectApp;
+        this.errorMessage = errorMessage;
+    }
+
+    @Given("the employee {string} has not registered his daily work for the current day")
+    public void theEmployeeHasNotRegisteredHisDailyWorkForTheCurrentDay(String initials) {
+        try {
+            EmployeeInfo employee = projectApp.getEmployee(initials);
+            assertFalse(projectApp.hasEmployeeRegisteredDailyWork(employee));
+        } catch (Exception e) {
+            errorMessage.setErrorMessage(e.getMessage());
+        }
+    }
+
+    @When("the employee {string} is not doing a fixed activity")
+    public void theEmployeeIsNotDoingAFixedActivity(String initials) {
+        try {
+            EmployeeInfo employee = projectApp.getEmployee(initials);
+            assertFalse(projectApp.isEmployeeDoingFixedActivity(employee));
+        } catch (Exception e) {
+            errorMessage.setErrorMessage(e.getMessage());
+        }
+    }
+
+    @Then("the system sends a reminder email to employee {string}")
+    public void theSystemSendsAReminderEmailToEmployee(String initials) {
+        try {
+            EmployeeInfo employee = projectApp.getEmployee(initials);
+            projectApp.sendEmailToEmployee(employee);
+        } catch (Exception e) {
+            errorMessage.setErrorMessage(e.getMessage());
+        }
+    }
+
+
+    @And("the email with subject {string} and text {string} is in the employees {string} inbox")
+    public void theEmailWithSubjectAndTextIsInTheEmployeesInbox(String subject, String text, String initials) {
+        try {
+            EmployeeInfo employee = projectApp.getEmployee(initials);
+            boolean doesEmployeeHaveEmail  = employee.getInbox().stream()
+                    .anyMatch(email -> email.getSubject().equals(subject) && email.getText().equals(text));
+            assertTrue(doesEmployeeHaveEmail);
+        } catch (Exception e) {
+            errorMessage.setErrorMessage(e.getMessage());
+        }
+    }
+
+
+    @Then("the system does not send a reminder email to {string}")
+    public void theSystemDoesNotSendAReminderEmailTo(String initials) {
+        theSystemSendsAReminderEmailToEmployee(initials);
+    }
+
+    @Then("the email with subject {string} and text {string} is not in the employees {string} inbox")
+    public void theEmailWithSubjectAndTextIsNotInTheEmployeesInbox(String subject, String text, String initials) {
+        try {
+            EmployeeInfo employee = projectApp.getEmployee(initials);
+            boolean doesEmployeeHaveEmail  = employee.getInbox().stream()
+                    .anyMatch(email -> email.getSubject().equals(subject) && email.getText().equals(text));
+            assertFalse(doesEmployeeHaveEmail);
+        } catch (Exception e) {
+            errorMessage.setErrorMessage(e.getMessage());
+        }
+    }
+}

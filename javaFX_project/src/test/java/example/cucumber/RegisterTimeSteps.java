@@ -1,8 +1,7 @@
 package example.cucumber;
 
-import dtu.app.ui.ApplicationProjects;
+import dtu.app.ui.ProjectApp;
 import dtu.app.ui.domain.Activity;
-import dtu.app.ui.domain.Employee;
 import dtu.app.ui.errorMessageHolders.ErrorMessageHolder;
 import dtu.app.ui.info.ActivityInfo;
 import dtu.app.ui.info.EmployeeInfo;
@@ -14,10 +13,10 @@ import static org.junit.Assert.assertEquals;
 
 public class RegisterTimeSteps {
 
-    private final ApplicationProjects application;
+    private final ProjectApp application;
     private final ErrorMessageHolder errorMessage;
 
-    public RegisterTimeSteps(ApplicationProjects application) {
+    public RegisterTimeSteps(ProjectApp application) {
         this.application = application;
         this.errorMessage = application.getErrorMessage();
     }

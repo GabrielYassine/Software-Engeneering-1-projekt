@@ -7,14 +7,14 @@ import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
-public class ApplicationProjects {
+public class ProjectApp {
 
     private final Database database;
     private final ErrorMessageHolder errorMessage;
 
-    private final DateServer dateServer = new DateServer();
+    private DateServer dateServer = new DateServer();
 
-    public ApplicationProjects() {
+    public ProjectApp() {
         this.errorMessage = new ErrorMessageHolder();
         this.database = new Database();
     }
@@ -136,7 +136,7 @@ public class ApplicationProjects {
 
     public ActivityInfo getActivity(ProjectInfo projectInfo, String activityName) throws Exception {
         Project project = findProject(projectInfo);
-        Activity activity = project.getActivity(activityName);;
+        Activity activity = project.getActivity(activityName);
         return new ActivityInfo(activity);
     }
 
@@ -144,7 +144,7 @@ public class ApplicationProjects {
      * This method returns the selected activity
      */
 
-    public ActivityInfo getSelectedActivity() throws Exception {
+    public ActivityInfo getSelectedActivity() {
         return database.getSelectedActivity();
     }
 
@@ -160,7 +160,7 @@ public class ApplicationProjects {
      * This method returns the selected employee
      */
 
-    public EmployeeInfo getSelectedEmployee() throws Exception {
+    public EmployeeInfo getSelectedEmployee() {
         return database.getSelectedEmployee();
     }
 
@@ -265,6 +265,21 @@ public class ApplicationProjects {
             activity.registerHours(hoursDouble);
         } catch (Exception e) {
             throw new Exception("Error registering hours");
+        }
+    }
+
+    public boolean hasEmployeeRegisteredDailyWork(EmployeeInfo employeeInfo) throws Exception {
+        Calendar currentDate = dateServer.getDate();
+        LocalDate currentLocalDate = convertCalendarToLocalDate(currentDate);
+        return findEmployee(employeeInfo).hasRegisteredDailyWork(currentLocalDate);
+    }
+
+    public void sendEmailToEmployee(EmployeeInfo employeeInfo) throws Exception {
+        Calendar currentDate = dateServer.getDate();
+        LocalDate currentLocalDate = convertCalendarToLocalDate(currentDate);
+        Employee e = findEmployee(employeeInfo);
+        if (!isEmployeeDoingFixedActivity(employeeInfo) && !e.hasRegisteredDailyWork(currentLocalDate.minusDays(1))) {
+            e.sendEmailNotification("Work", "Register your daily work", currentLocalDate);
         }
     }
 
@@ -409,6 +424,15 @@ public class ApplicationProjects {
             fixedActivityInfos.add(new FixedActivityInfo(fa));
         }
         return fixedActivityInfos;
+    }
+
+    public boolean isEmployeeDoingFixedActivity(EmployeeInfo employeeInfo) throws Exception {
+        Employee e = findEmployee(employeeInfo);
+        DateServer dateServer1 = new DateServer();
+        int currentWeek = dateServer1.getWeek();
+        int currentYear = dateServer1.getYear();
+
+        return e.isDoingFixedActivity(currentWeek, currentYear);
     }
 
     //////////////////////////// VALIDATION METHODS ////////////////////////////
@@ -615,7 +639,11 @@ public class ApplicationProjects {
         return dayLog;
     }
 
-    public String getActivityCompletionStatus(ActivityInfo activityInfo) throws Exception {
+    public String getActivityCompletionStatus(ActivityInfo activityInfo) {
         return activityInfo.getCompletionStatus();
+    }
+
+    public void setDateServer(DateServer dateServer) {
+        this.dateServer = dateServer;
     }
 }

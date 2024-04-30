@@ -1,5 +1,6 @@
 package dtu.app.ui.domain;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.IsoFields;
 import java.util.*;
@@ -12,6 +13,7 @@ public class Employee {
     private final List<Activity> activities = new ArrayList<>();
     private final List<FixedActivity> fixedActivities = new ArrayList<>();
     private final List<Email> inbox = new ArrayList<>();
+    private DateServer dateServer = new DateServer();
 
     public Employee(Database database, String initials) {
         this.initials = initials;
@@ -19,12 +21,17 @@ public class Employee {
         database.appendEmployee(this);
     }
 
-    public void sendEmailNotification(String subject, String text) {
-        inbox.add(new Email(subject, text));
+    public void sendEmailNotification(String subject, String text, LocalDate date) {
+        inbox.add(new Email(subject, text, date));
     }
 
-    public boolean hasRegistered(Calendar date) {
-        return activityLog.getRegisteredDates().contains(date);
+    public boolean hasRegisteredDailyWork(LocalDate currentDate) {
+        List<LocalDate> registeredDates = activityLog.getRegisteredDates();
+        return registeredDates.contains(currentDate);
+    }
+
+    public boolean isDoingFixedActivity(int currentWeek, int currentYear) {
+        return getFixedActivities().stream().anyMatch(fa -> fa.getStartYear() <= currentYear && fa.getEndYear() >= currentYear && fa.getStartWeek() <= currentWeek && fa.getEndWeek() >= currentWeek);
     }
 
     public void addActivity(Activity a) {
@@ -47,10 +54,7 @@ public class Employee {
         if (year == startYear && selectedWeek < startWeek) {
             return false;
         }
-        if (year == endYear && selectedWeek > endWeek) {
-            return false;
-        }
-        return true;
+        return year != endYear || selectedWeek <= endWeek;
     }
 
     public int getActiveActivityCount(int year, int month, int weekOfMonth) {
@@ -88,6 +92,5 @@ public class Employee {
     public List<Email> getInbox() {
         return inbox;
     }
-
 }
 

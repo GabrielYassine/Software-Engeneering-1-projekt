@@ -1,17 +1,13 @@
 package example.cucumber;
 
-import dtu.app.ui.ApplicationProjects;
-import dtu.app.ui.domain.Employee;
+import dtu.app.ui.ProjectApp;
 import dtu.app.ui.errorMessageHolders.ErrorMessageHolder;
 import dtu.app.ui.info.ActivityLogInfo;
 import dtu.app.ui.info.EmployeeInfo;
-import dtu.app.ui.pages.App;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,11 +17,11 @@ import static org.junit.Assert.assertNull;
 
 public class EmployeeScheduleSteps {
 
-    private final ApplicationProjects application;
+    private final ProjectApp application;
     private final ErrorMessageHolder errorMessage;
     private ActivityLogInfo weekLogInfo;
 
-    public EmployeeScheduleSteps(ApplicationProjects application) {
+    public EmployeeScheduleSteps(ProjectApp application) {
         this.application = application;
         this.errorMessage = application.getErrorMessage();
     }

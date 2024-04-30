@@ -1,7 +1,6 @@
 package example.cucumber;
 
-import dtu.app.ui.ApplicationProjects;
-import dtu.app.ui.domain.Employee;
+import dtu.app.ui.ProjectApp;
 import dtu.app.ui.errorMessageHolders.ErrorMessageHolder;
 import dtu.app.ui.info.EmployeeInfo;
 import io.cucumber.datatable.DataTable;
@@ -16,11 +15,11 @@ import static org.junit.Assert.assertTrue;
 
 public class AvailabilityScheduleSteps {
 
-    private final ApplicationProjects application;
+    private final ProjectApp application;
     private final ErrorMessageHolder errorMessage;
     private List<Integer> availabilitySchedule;
 
-    public AvailabilityScheduleSteps(ApplicationProjects application) {
+    public AvailabilityScheduleSteps(ProjectApp application) {
         this.application = application;
         this.errorMessage = application.getErrorMessage();
     }
