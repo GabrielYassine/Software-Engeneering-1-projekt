@@ -62,6 +62,12 @@ public class ActivityInfo {
         return new ArrayList<>(employees);
     }
 
+    public String getCompletionStatus() {
+        return completed ? "Completed" : "Not completed";
+    }
+
+    //////////////////////////// GETTERS FOR GUI ////////////////////////////
+
     public int getEmployeesSize() {
         return employees.size();
     }
@@ -70,11 +76,4 @@ public class ActivityInfo {
         return hoursSpent + "/" + budgetHours;
     }
 
-    public String getCompletionStatus() {
-        return completed ? "Completed" : "Not completed";
-    }
-
-    public String toString() {
-        return "Activity: " + name + " budgetHours: " + budgetHours + " startWeek: " + startWeek + " endWeek: " + endWeek + "startYear: " + startYear + "endYear: " + endYear + "hoursSpent: " + hoursSpent + "completed: " + completed + "employees: " + employees;
-    }
 }

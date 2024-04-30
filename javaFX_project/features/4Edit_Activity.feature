@@ -19,7 +19,7 @@ Feature: Edit Activity
     When the user edits the activity with name "New Activity" with the following details
       | Name        | Budget Hours | Start Week | End Week | Start Year | End Year | Initials              |
       | New Activity| 100          | 5          | 8        | 2024       | 2024     |Huba, Abed, Dora, Jama |
-    And the activity with name "New Activity" should have the following details
+    Then the activity with name "New Activity" should have the following details
       | Budget Hours | Start Week | End Week | Start Year | End Year | Initials              |
       | 100          | 5          | 8        | 2024       | 2024     |Huba, Abed, Dora, Jama |
 

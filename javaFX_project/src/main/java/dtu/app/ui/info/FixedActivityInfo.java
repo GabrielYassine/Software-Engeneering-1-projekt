@@ -37,8 +37,4 @@ public class FixedActivityInfo {
         return endYear;
     }
 
-    @Override
-    public String toString() {
-        return "FixedActivity: " + name + " startWeek: " + startWeek + " endWeek: " + endWeek + " startYear: " + startYear + " endYear: " + endYear;
-    }
 }

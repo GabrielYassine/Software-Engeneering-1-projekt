@@ -21,6 +21,16 @@ public class EmployeeInfo {
         this.inbox = new ArrayList<>(employee.getInbox());
     }
 
+    public String getInitials() {
+        return initials;
+    }
+
+    public List<Email> getInbox() {
+        return new ArrayList<>(inbox);
+    }
+
+    //////////////////////////// GETTERS FOR GUI (And compare elements for GUI)  ////////////////////////////
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -28,24 +38,13 @@ public class EmployeeInfo {
         EmployeeInfo that = (EmployeeInfo) o;
         return Objects.equals(initials, that.initials);
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(initials);
     }
 
-    public String getInitials() {
-        return initials;
-    }
-
     public List<Activity> getActivities() {
         return new ArrayList<>(activities);
     }
-    public List<Email> getInbox() {
-        return new ArrayList<>(inbox);
-    }
 
-    public String toString() {
-        return initials;
-    }
 }

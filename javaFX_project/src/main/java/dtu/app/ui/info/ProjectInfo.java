@@ -30,14 +30,6 @@ public class ProjectInfo {
         return projectLeader;
     }
 
-    public List<Activity> getActivities() {
-        return new ArrayList<>(activities);
-    }
-
-    public List<Employee> getEmployees() {
-        return new ArrayList<>(employees);
-    }
-
     public List<String> getEmployeeInitials() {
         List<String> employeeInitials = new ArrayList<>();
         for (Employee employee : employees) {
@@ -50,6 +42,8 @@ public class ProjectInfo {
         return id;
     }
 
+    //////////////////////////// GETTERS FOR GUI ////////////////////////////
+
     public String getCompletionStatus() {
         int number = 0;
         for (Activity a : activities) {
@@ -59,8 +53,6 @@ public class ProjectInfo {
         }
         return number + "/" + activities.size();
     }
-
-    //////////////////// Controller methods ////////////////////
 
     public int getActivitiesSize() {
         return activities.size();
@@ -78,6 +70,14 @@ public class ProjectInfo {
             }
         }
         return number;
+    }
+
+    public List<Activity> getActivities() {
+        return new ArrayList<>(activities);
+    }
+
+    public List<Employee> getEmployees() {
+        return new ArrayList<>(employees);
     }
 
 }

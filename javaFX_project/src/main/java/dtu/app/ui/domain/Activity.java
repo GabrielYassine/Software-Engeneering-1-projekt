@@ -90,15 +90,8 @@ public class Activity extends AbstractActivity{
     public List<Employee> getEmployees() {
         return new ArrayList<>(employees);
     }
-
-    public int getEmployeesSize() {
-        return employees.size();
-    }
-
-    public String getStatus() {
-        return hoursSpent + "/" + budgetHours;
-    }
     public boolean getCompletedStatus() {
         return completed;
     }
+
 }

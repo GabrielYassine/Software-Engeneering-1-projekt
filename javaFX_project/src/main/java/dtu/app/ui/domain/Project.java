@@ -48,14 +48,14 @@ public class Project {
         }
         employees.clear();
         employees.addAll(newEmployees);
-        updateData();
+        updateEmployees();
     }
 
     public void addEmployee(Employee employee) {
         employees.add(employee);
     }
 
-    private void updateData() {
+    private void updateEmployees() {
         for (Activity a : activities) {
             a.updateEmployees();
         }
@@ -97,12 +97,7 @@ public class Project {
     }
 
     public Activity getActivity(String name) {
-        for (Activity a : activities) {
-            if (a.getName().equals(name)) {
-                return a;
-            }
-        }
-        return null;
+        return activities.stream().filter(a -> a.getName().equals(name)).findFirst().orElse(null);
     }
 
     public String getCompletionStatus() {

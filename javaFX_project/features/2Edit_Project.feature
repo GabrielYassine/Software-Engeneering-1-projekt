@@ -19,7 +19,7 @@ Feature: Edit Project
     Then an error message "Name missing" should be given
 
   Scenario: User edits a project with no leader
-    When the employee edits the project with ID "24001" name to "Edited Project", the project leader to "", and the project members to "Huba, Abed, Dora, Jama"
+    When the employee edits the project with ID "24001" name to "Edited Project", the project leader to "None", and the project members to "Huba, Abed, Dora, Jama"
     Then the project with ID "24001" name should be "Edited Project", the project leader should be "", and the project members should be "Huba, Abed, Dora, Jama"
 
   Scenario: User edits a project with no members
@@ -42,3 +42,17 @@ Feature: Edit Project
       | Project 1  | Huba     | Huba          |
     When the employee edits the project with ID "24004"'s name to "Edited Project", the project leader to "Huba", and the project members to "Huba, Abed, Dora"
     Then an error message "Project not found" should be given
+
+
+  Scenario: User edits a project, removing employees that are assigned activities
+    When the user creates an activity with the following details
+      | Name        | Budget Hours | Start Week | End Week | Start Year | End Year | Initials              |
+      | New Activity| 100          | 5          | 8        | 2024       | 2024     |Huba, Abed, Dora, Jama |
+    When the employee edits the project with ID "24001"'s name to "Edited Project", the project leader to "Huba", and the project members to "Huba, Abed"
+    Then the activity with name "New Activity" should have the following details
+      | Budget Hours | Start Week | End Week | Start Year | End Year | Initials  |
+      | 100          | 5          | 8        | 2024       | 2024     |Huba, Abed |
+
+  Scenario: User edits a project not changing the project leader, but removing them from employeeList
+    When the employee edits the project with ID "24001" name to "Edited Project", the project leader to "Huba", and the project members to "Abed, Dora"
+    Then the project with ID "24001" name should be "Edited Project", the project leader should be "", and the project members should be "Abed, Dora"

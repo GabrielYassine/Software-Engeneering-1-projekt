@@ -41,12 +41,4 @@ public class ActivityLog {
         return registeredDates;
     }
 
-    public int getSize() {
-        return dateLog.size();
-    }
-
-    public Map<Activity, Double> getDateActivities(LocalDate date) {
-        return dateLog.get(date);
-    }
-
 }

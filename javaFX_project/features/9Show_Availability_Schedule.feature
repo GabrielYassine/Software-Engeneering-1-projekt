@@ -29,7 +29,7 @@ Feature: show available employees
     Then an error message "Month value out of bounds" should be given
 
   Scenario: User writes month above 12
-    When the user searches for the availability schedule for year "2024" and month "13" for the employee with initials "Huba"
+    When the user searches for the availability schedule for year "2025" and month "13" for the employee with initials "Huba"
     Then an error message "Month value out of bounds" should be given
 
     Scenario: User checks for year 0
@@ -39,3 +39,10 @@ Feature: show available employees
     Scenario: User writes no year
       When the user searches for the availability schedule for year "" and month "february" for the employee with initials "Huba"
       Then an error message "No year given" should be given
+
+
+  Scenario: User successfully views availability calendar, but no activities active
+    When the user searches for the availability schedule for year "2025" and month "2" for the employee with initials "Huba"
+    Then the system shows the following availability calendar for the specified month
+      | First Week | Second Week | Third Week | Fourth Week | Fifth Week |
+      | 0          | 0           | 0          | 0           | 0          |
