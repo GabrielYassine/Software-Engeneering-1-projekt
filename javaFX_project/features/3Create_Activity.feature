@@ -85,10 +85,9 @@ Feature: Create Activity
     | Budget Hours | Start Week | End Week | Start Year | End Year | Initials |
     | 100          | 5          | 8        | 2024       | 2024     |          |
 
-
-#    Scenario: User creates an employee that is already in 20 active activities
-  #    When the user creates an activity with the following details
-  #    | Name        | Budget Hours | Start Week | End Week | Start Year | End Year |Initials   |
-  #    | New Activity| 100          | 5          | 8        | 2024       | 2024     |Rosa       |
-  #    Then the activity should be created
-  #    And an error message "Employee already in 20 activities" should be given
+    Scenario: User creates an employee that is already in 20 active activities
+      When the employee with initials "Rosa" is working on too many activities
+      When the user creates an activity with the following details
+      | Name        | Budget Hours | Start Week | End Week | Start Year | End Year |Initials   |
+      | New Activity| 100          | 5          | 8        | 2024       | 2024     |Rosa       |
+      And an error message "Employee is already working on 20 activities this week" should be given

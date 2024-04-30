@@ -195,4 +195,15 @@ public class ActivitySteps {
 			}
 		}
 	}
+
+	@When("the employee with initials {string} is working on too many activities")
+	public void theEmployeeWithInitialsIsWorkingOnTooManyActivities(String initials) {
+		try {
+			EmployeeInfo employee = application.getEmployee(initials);
+			EmployeeActivityHelper helper = new EmployeeActivityHelper(application);
+			helper.simulateActiveActivities(employee, 20);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
 }

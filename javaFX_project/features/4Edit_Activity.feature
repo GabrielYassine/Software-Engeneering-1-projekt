@@ -88,10 +88,9 @@ Feature: Edit Activity
       | New Act     | 200          | 5          | 8        | 2024       | 2024     |Huba, Abed, Dora, Jama |
     And an error message "Activity with this name already exists in the project" should be given
 
-#    Scenario: User edits an activity and adds an employee that already is in 20 active activities
-#    When the user edits the activity with name "New Activity" with the following details
-#      | Name        | Budget Hours | Start Week | End Week | Start Year | End Year | Initials  |
-#      | New Activity| 100          | 5          | 8        | 2024       | 2024     | Rosa      |
-#    And an error message "Employee already has 20 activities" should be given
-
-
+  Scenario: User edits an activity and adds an employee that already is in 20 active activities
+    When the employee with initials "Rosa" is working on too many activities
+    When the user edits the activity with name "New Activity" with the following details
+      | Name        | Budget Hours | Start Week | End Week | Start Year | End Year | Initials  |
+      | New Activity| 100          | 5          | 8        | 2024       | 2024     | Rosa      |
+    And an error message "Employee is already working on 20 activities this week" should be given

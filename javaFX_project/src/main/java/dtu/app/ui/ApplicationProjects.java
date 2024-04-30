@@ -186,15 +186,8 @@ public class ApplicationProjects {
         int startYearInt = parseAndValidateYear(startYear);
         int endYearInt = parseAndValidateYear(endYear);
 
-        List<Employee> employees = new ArrayList<>();
-        for (EmployeeInfo e : employeeInfos) {
-            Employee employee = findEmployee(e);
-            employees.add(employee);
-        }
         Activity a = new Activity(project, name, budgetHoursDouble, startWeekInt, endWeekInt, startYearInt, endYearInt);
-        for (Employee e : employees) {
-            a.addEmployee(e);
-        }
+        addEmployeesToActivity(a, employeeInfos);
         return a;
     }
 
@@ -241,9 +234,10 @@ public class ApplicationProjects {
         int currentWeek = dateServer.getWeek();
         int currentYear = dateServer.getYear();
         int currentMonth = dateServer.getMonth();
+
         for (EmployeeInfo e : employeeInfos) {
             Employee employee = findEmployee(e);
-            if (employee.getActiveActivityCount(currentYear, currentMonth, currentWeek) >= 20) {
+            if (employee.getActiveActivityCount(currentYear, currentMonth, currentWeek) >= 19) {
                 throw new Exception("Employee is already working on 20 activities this week"); // Make the code still run even if the exception is thrown
             }
             activity.addEmployee(findEmployee(e));
