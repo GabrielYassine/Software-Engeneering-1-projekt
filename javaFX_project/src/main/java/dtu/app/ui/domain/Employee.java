@@ -3,8 +3,8 @@ package dtu.app.ui.domain;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.IsoFields;
-import java.util.*;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Employee {
 
@@ -13,7 +13,6 @@ public class Employee {
     private final List<Activity> activities = new ArrayList<>();
     private final List<FixedActivity> fixedActivities = new ArrayList<>();
     private final List<Email> inbox = new ArrayList<>();
-    private DateServer dateServer = new DateServer();
 
     public Employee(Database database, String initials) {
         this.initials = initials;
