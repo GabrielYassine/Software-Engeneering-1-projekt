@@ -88,5 +88,6 @@ public class Employee {
     public List<Email> getInbox() {
         return inbox;
     }
+
 }
 

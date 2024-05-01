@@ -1,8 +1,10 @@
 package dtu.app.ui.domain;
 
+import dtu.app.ui.ProjectApp;
 import dtu.app.ui.info.ActivityInfo;
 import dtu.app.ui.info.EmployeeInfo;
 import dtu.app.ui.info.ProjectInfo;
+import javafx.application.Application;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,12 +18,18 @@ public class Database {
     private final List<Employee> employeeRepository = new ArrayList<>();
     private final List<Project> projectRepository = new ArrayList<>();
     private final DateServer dateServer = new DateServer();
-    public ProjectInfo selectedProject = null;
-    public ActivityInfo selectedActivity = null;
+    private final ProjectApp projectApp;
+    private ProjectInfo selectedProject = null;
+    private ActivityInfo selectedActivity = null;
 
-    public List<String> selectedEmployeeLog = new ArrayList<>();
+    private List<String> selectedEmployeeLog = new ArrayList<>();
 
-    public EmployeeInfo selectedEmployee = null;
+    private EmployeeInfo selectedEmployee = null;
+
+    public Database(ProjectApp projectApp) {
+        this.projectApp = projectApp;
+    }
+
     public void appendEmployee(Employee employee) {
         employeeRepository.add(employee);
     }
@@ -87,6 +95,21 @@ public class Database {
             }
         }
         return null;
+    }
+
+    public void initializeTestData() throws Exception {
+        Employee employee1 = projectApp.createEmployee("Huba");
+        Employee employee2 = projectApp.createEmployee("Abed");
+        Employee employee3 = projectApp.createEmployee("Nico");
+
+        EmployeeInfo employeeInfo1 = new EmployeeInfo(employee1);
+        EmployeeInfo employeeInfo2 = new EmployeeInfo(employee2);
+        EmployeeInfo employeeInfo3 = new EmployeeInfo(employee3);
+
+        Project project1 = projectApp.createProject("NyProject", List.of(employeeInfo1, employeeInfo2, employeeInfo3), employeeInfo1);
+        ProjectInfo projectInfo1 = new ProjectInfo(project1);
+
+        Activity activity1 = projectApp.createActivity(projectInfo1, "NyActivity", "10", "5","8", List.of(employeeInfo1), "2024", "2024");
     }
 
 }

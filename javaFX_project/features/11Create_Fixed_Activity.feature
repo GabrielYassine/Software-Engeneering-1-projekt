@@ -69,5 +69,15 @@ Feature: Create Fixed Activity
     Then an error message "No year given" should be given
 
 
-  Scenario:
+  Scenario: User creates a fixed activity with end year before start year
+    When the employee with initials "Huba" creates a fixed activity with the following details
+      | Name         | Start Week | End Week | Start Year | End Year |
+      | Holiday      | 5          | 8        | 2025       | 2024     |
+    Then an error message "Start year is after end year" should be given
+
+  Scenario: User creates a fixed activity with end week before start week
+    When the employee with initials "Huba" creates a fixed activity with the following details
+    | Name         | Start Week | End Week | Start Year | End Year |
+    | Holiday      | 8          | 5        | 2024       | 2024     |
+    Then an error message "Start week is after end week" should be given
 

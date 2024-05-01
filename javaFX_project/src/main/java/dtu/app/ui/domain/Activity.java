@@ -24,8 +24,6 @@ public class Activity extends AbstractActivity{
         project.addActivity(this);
     }
 
-
-
     public void editActivity(Activity activity, String newName, double newBudgetHours, int newStartWeek, int newEndWeek, List<Employee> newEmployees, int newStartYear, int newEndYear) {
         this.name = newName;
         this.budgetHours = newBudgetHours;

@@ -16,7 +16,15 @@ public class ProjectApp {
 
     public ProjectApp() {
         this.errorMessage = new ErrorMessageHolder();
-        this.database = new Database();
+        this.database = new Database(this);
+    }
+
+    /**
+     * This method initializes the test data
+     */
+
+    public void initializeTestData() throws Exception {
+        database.initializeTestData();
     }
 
     /**
@@ -69,11 +77,13 @@ public class ProjectApp {
         validateName(name, project);
 
         double budgetHoursDouble = parseAndValidateHours(budgetHours);
+
         int startWeekInt = parseAndValidateWeek(startWeek);
         int endWeekInt = parseAndValidateWeek(endWeek);
         int startYearInt = parseAndValidateYear(startYear);
         int endYearInt = parseAndValidateYear(endYear);
 
+        validateInterval(startWeekInt, endWeekInt, startYearInt, endYearInt);
         Activity a = new Activity(project, name, budgetHoursDouble, startWeekInt, endWeekInt, startYearInt, endYearInt);
         addEmployeesToActivity(a, employeeInfos);
         return a;
@@ -90,9 +100,10 @@ public class ProjectApp {
         int endWeekInt = parseAndValidateWeek(endWeek);
         int startYearInt = parseAndValidateYear(startYear);
         int endYearInt = parseAndValidateYear(endYear);
+
+        validateInterval(startWeekInt, endWeekInt, startYearInt, endYearInt);
         new FixedActivity(employee, name, startWeekInt, endWeekInt, startYearInt, endYearInt);
     }
-
 
     //////////////////////////// EDIT METHODS ////////////////////////////
 
@@ -133,6 +144,8 @@ public class ProjectApp {
             Employee employee = findEmployee(e);
             employees.add(employee);
         }
+
+        validateInterval(startWeekInt, endWeekInt, startYearInt, endYearInt);
         activity.editActivity(activity, name, budgetHoursDouble, startWeekInt, endWeekInt, employees, startYearInt, endYearInt);
         addEmployeesToActivity(activity, employeeInfos);
         setActivity(new ActivityInfo(activity));
@@ -557,6 +570,19 @@ public class ProjectApp {
     private void validateName(String name, Employee employee) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name missing");
+        }
+    }
+
+    /**
+     * This method validates the interval of the start and end week
+     */
+
+    private void validateInterval(int startWeekInt, int endWeekInt, int startYearInt, int endYearInt) {
+        if (startYearInt > endYearInt) {
+            throw new IllegalArgumentException("Start year is after end year");
+        }
+        if (startYearInt == endYearInt && startWeekInt > endWeekInt) {
+            throw new IllegalArgumentException("Start week is after end week");
         }
     }
 

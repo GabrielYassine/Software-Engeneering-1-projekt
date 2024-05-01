@@ -43,7 +43,7 @@ public class ProjectsController extends CommonElementsController {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
         employeeSizeColumn.setCellValueFactory(new PropertyValueFactory<>("EmployeesSize"));
         activitySizeColumn.setCellValueFactory(new PropertyValueFactory<>("ActivitiesSize"));
-        projectCompletedColumn.setCellValueFactory(new PropertyValueFactory<>("ActivitiesCompleted"));
+        projectCompletedColumn.setCellValueFactory(new PropertyValueFactory<>("CompletionStatus"));
 
         projectsTableView.getItems().addAll(App.application.getProjectsInApp());
         employeesListView.getItems().addAll(App.application.getEmployeesInApp());

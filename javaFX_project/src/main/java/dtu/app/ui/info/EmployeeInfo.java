@@ -36,4 +36,8 @@ public class EmployeeInfo {
         EmployeeInfo that = (EmployeeInfo) o;
         return Objects.equals(initials, that.initials);
     }
+
+    public String toString() {
+        return initials;
+    }
 }
