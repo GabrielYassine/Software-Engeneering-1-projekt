@@ -27,36 +27,20 @@ public class ProjectApp {
         return LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    /**
-     * This method returns the ErrorMessageHolder object
-     */
-    public ErrorMessageHolder getErrorMessage() {
-        return errorMessage;
-    }
+
+    //////////////////////////// CREATE METHODS ////////////////////////////
 
     /**
      * This method creates an Employee object
      */
+
     public Employee createEmployee(String initial) {
         return new Employee(database, initial);
     }
 
-    /**
-     * This method returns an EmployeeInfo object
-     */
-
-    public EmployeeInfo getEmployee(String initial) throws Exception {
-        if (initial == null || initial.isEmpty()) {
-            throw new Exception("Name missing");
-        }
-        if (database.getEmployee(initial) == null) {
-            throw new Exception("Employee with those initials not found");
-        }
-        return new EmployeeInfo(database.getEmployee(initial));
-    }
 
     /**
-     * This method returns a Project object
+     * This method creates a Project object
      */
 
     public Project createProject(String name, List<EmployeeInfo> employeeInfos, EmployeeInfo projectLeaderInfo) throws Exception {
@@ -74,102 +58,6 @@ public class ProjectApp {
         }
 
         return new Project(database, name, employees, projectLeader);
-    }
-
-    /**
-     * This method adds an Employee object to a Project object
-     */
-
-    public void addEmployeeToProject(ProjectInfo projectInfo, Employee employee) throws Exception {
-        Project project = findProject(projectInfo);
-        project.addEmployee(employee);
-    }
-
-    /**
-     * This method edits a projects details
-     */
-
-    public void editProject(ProjectInfo projectInfo, String name, String projectLeaderInitials, List<EmployeeInfo> employeeInfos) throws Exception {
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Name missing");
-        }
-        List<Employee> employees = new ArrayList<>();
-        for (EmployeeInfo e : employeeInfos) {
-            Employee employee = findEmployee(e);
-            employees.add(employee);
-        }
-        Project project = findProject(projectInfo);
-        project.editProject(name, projectLeaderInitials, employees);
-        setProject(new ProjectInfo(project));
-    }
-
-    /**
-     * This method returns a ProjectInfo object
-     */
-
-    public ProjectInfo getProject(String id) throws Exception {
-        if (database.getProject(Integer.parseInt(id)) == null) {
-            throw new Exception("Project not found");
-        }
-        return new ProjectInfo(database.getProject(Integer.parseInt(id)));
-    }
-
-    /**
-     * This method returns the selected project
-     */
-
-    public ProjectInfo getSelectedProject() throws Exception {
-        return database.getSelectedProject();
-    }
-
-    /**
-     * This method sets the selected project
-     */
-
-    public void setProject(ProjectInfo project) {
-        database.setSelectedProject(project);
-    }
-
-    /**
-     * This method returns the selected project leader
-     */
-
-    public ActivityInfo getActivity(ProjectInfo projectInfo, String activityName) throws Exception {
-        Project project = findProject(projectInfo);
-        Activity activity = project.getActivity(activityName);
-        return new ActivityInfo(activity);
-    }
-
-    /**
-     * This method returns the selected activity
-     */
-
-    public ActivityInfo getSelectedActivity() {
-        return database.getSelectedActivity();
-    }
-
-    /**
-     * This method sets the selected activity
-     */
-
-    public void setActivity(ActivityInfo activity) {
-        database.setSelectedActivity(activity);
-    }
-
-    /**
-     * This method returns the selected employee
-     */
-
-    public EmployeeInfo getSelectedEmployee() {
-        return database.getSelectedEmployee();
-    }
-
-    /**
-     * This method sets the selected employee
-     */
-
-    public void setEmployee(EmployeeInfo employee) {
-        database.setSelectedEmployee(employee);
     }
 
     /**
@@ -205,6 +93,27 @@ public class ProjectApp {
         new FixedActivity(employee, name, startWeekInt, endWeekInt, startYearInt, endYearInt);
     }
 
+
+    //////////////////////////// EDIT METHODS ////////////////////////////
+
+    /**
+     * This method edits a projects details
+     */
+
+    public void editProject(ProjectInfo projectInfo, String name, String projectLeaderInitials, List<EmployeeInfo> employeeInfos) throws Exception {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name missing");
+        }
+        List<Employee> employees = new ArrayList<>();
+        for (EmployeeInfo e : employeeInfos) {
+            Employee employee = findEmployee(e);
+            employees.add(employee);
+        }
+        Project project = findProject(projectInfo);
+        project.editProject(name, projectLeaderInitials, employees);
+        setProject(new ProjectInfo(project));
+    }
+
     /**
      * This method edits an Activity object
      */
@@ -229,18 +138,64 @@ public class ProjectApp {
         setActivity(new ActivityInfo(activity));
     }
 
+    /**
+     * This method edits the hours spent on a specific activity on a specific date
+     */
+
+    public void editEmployeeLogHours(String projectID, String activityName, String date, String employeeInitials, String oldHours, String newHours) throws Exception {
+        ProjectInfo projectInfo = getProject(projectID);
+        ActivityInfo activityInfo = getActivity(projectInfo, activityName);
+        EmployeeInfo employeeInfo = getEmployee(employeeInitials);
+
+        double oldHoursDouble = parseAndValidateHours(oldHours);
+        double newHoursDouble = parseAndValidateHours(newHours);
+        String hoursDifference = String.valueOf(newHoursDouble - oldHoursDouble);
+        registerHours(employeeInfo, date, activityInfo, hoursDifference, projectInfo);
+    }
+
+    /**
+     * This method completes / uncompletes an activity
+     */
+
+    public void switchActivityCompletion(ProjectInfo projectInfo, ActivityInfo activityInfo) throws Exception {
+        Project project = findProject(projectInfo);
+        project.switchActivityCompletionStatus(activityInfo.getName());
+        Activity activity = findActivity(projectInfo, activityInfo);
+        setActivity(new ActivityInfo(activity));
+    }
+
+    //////////////////////////// ADDER METHODS /////////////////////////////
+
+    /**
+     * This method adds an Employee object to a Project object
+     */
+
+    public void addEmployeeToProject(ProjectInfo projectInfo, Employee employee) throws Exception {
+        Project project = findProject(projectInfo);
+        project.addEmployee(employee);
+    }
+
+    /**
+     * This method adds Employee objects to an Activity object
+     */
 
     public void addEmployeesToActivity(Activity activity, List<EmployeeInfo> employeeInfos) throws Exception {
-        int currentWeek = dateServer.getWeek();
-        int currentYear = dateServer.getYear();
-        int currentMonth = dateServer.getMonth();
+        Map<Integer,List<Integer>> weeks = activity.getWeeksInInterval();
 
         for (EmployeeInfo e : employeeInfos) {
             Employee employee = findEmployee(e);
-            if (employee.getActiveActivityCount(currentYear, currentMonth, currentWeek) >= 19) {
-                throw new Exception("Employee is already working on 20 activities this week"); // Make the code still run even if the exception is thrown
+            for (Map.Entry<Integer, List<Integer>> entry : weeks.entrySet()) {
+                int year = entry.getKey();
+                for (int week : entry.getValue()) {
+                    int month = LocalDate.ofYearDay(year, week * 7).getMonthValue();
+                    int weekOfMonth = (LocalDate.ofYearDay(year, week * 7).getDayOfMonth() + 6) / 7;
+                    if (employee.getActiveActivityCount(year, month, weekOfMonth) >= 20) {
+                        throw new Exception("Employee is already working on 20 activities this week");
+                    }
+                }
             }
-            activity.addEmployee(findEmployee(e));
+            activity.addEmployee(employee);
+            employee.addActivity(activity);
         }
     }
 
@@ -268,10 +223,129 @@ public class ProjectApp {
         }
     }
 
+    //////////////////////////// CHECKER METHODS ////////////////////////////
+
+    public boolean isEmployeeDoingFixedActivity(EmployeeInfo employeeInfo) throws Exception {
+        Employee e = findEmployee(employeeInfo);
+        DateServer dateServer1 = new DateServer();
+        int currentWeek = dateServer1.getWeek();
+        int currentYear = dateServer1.getYear();
+
+        return e.isDoingFixedActivity(currentWeek, currentYear);
+    }
+
     public boolean hasEmployeeRegisteredDailyWork(EmployeeInfo employeeInfo) throws Exception {
         Calendar currentDate = dateServer.getDate();
         LocalDate currentLocalDate = convertCalendarToLocalDate(currentDate);
         return findEmployee(employeeInfo).hasRegisteredDailyWork(currentLocalDate);
+    }
+
+    //////////////////////////// SETTER METHODS ////////////////////////////
+
+    /**
+     * This method sets the selected project
+     */
+
+    public void setProject(ProjectInfo project) {
+        database.setSelectedProject(project);
+    }
+
+    /**
+     * This method returns the selected activity
+     */
+
+    public ActivityInfo getSelectedActivity() {
+        return database.getSelectedActivity();
+    }
+
+    /**
+     * This method sets the selected activity
+     */
+
+    public void setActivity(ActivityInfo activity) {
+        database.setSelectedActivity(activity);
+    }
+
+    /**
+     * This method sets the selected employee
+     */
+
+    public void setEmployee(EmployeeInfo employee) {
+        database.setSelectedEmployee(employee);
+    }
+
+    /**
+     * this method sets a specific log in the employees schedule as the selected log
+     */
+
+    public void setSelectedEmployeeLog(List<String> logDetails) {
+        database.setSelectedEmployeeLog(logDetails);
+    }
+
+    public void setDateServer(DateServer dateServer) {
+        this.dateServer = dateServer;
+    }
+
+    //////////////////////////// GETTER METHODS ////////////////////////////
+
+    /**
+     * This method returns the ErrorMessageHolder object
+     */
+    public ErrorMessageHolder getErrorMessage() {
+        return errorMessage;
+    }
+
+    /**
+     * This method returns an EmployeeInfo object
+     */
+
+    public EmployeeInfo getEmployee(String initial) throws Exception {
+        if (initial == null || initial.isEmpty()) {
+            throw new Exception("Name missing");
+        }
+        if (database.getEmployee(initial) == null) {
+            throw new Exception("Employee with those initials not found");
+        }
+        return new EmployeeInfo(database.getEmployee(initial));
+    }
+
+
+    /**
+     * This method returns a ProjectInfo object
+     */
+
+    public ProjectInfo getProject(String id) throws Exception {
+        if (database.getProject(Integer.parseInt(id)) == null) {
+            throw new Exception("Project not found");
+        }
+        return new ProjectInfo(database.getProject(Integer.parseInt(id)));
+    }
+
+    /**
+     * This method returns the selected project
+     */
+
+    public ProjectInfo getSelectedProject() throws Exception {
+        return database.getSelectedProject();
+    }
+
+
+    /**
+     * This method returns the selected project leader
+     */
+
+    public ActivityInfo getActivity(ProjectInfo projectInfo, String activityName) throws Exception {
+        Project project = findProject(projectInfo);
+        Activity activity = project.getActivity(activityName);
+        return new ActivityInfo(activity);
+    }
+
+    /**
+     * This method returns the selected employee
+     */
+
+    public EmployeeInfo getSelectedEmployee() {
+        return database.getSelectedEmployee();
     }
 
     public void sendEmailToEmployee(EmployeeInfo employeeInfo) throws Exception {
@@ -317,17 +391,6 @@ public class ProjectApp {
     }
 
     /**
-     * This method completes or uncompletes an activity
-     */
-
-    public void switchActivityCompletion(ProjectInfo projectInfo, ActivityInfo activityInfo) throws Exception {
-        Project project = findProject(projectInfo);
-        project.switchActivityCompletionStatus(activityInfo.getName());
-        Activity activity = findActivity(projectInfo, activityInfo);
-        setActivity(new ActivityInfo(activity));
-    }
-
-    /**
      * This method returns the completion status of a project
      */
 
@@ -349,14 +412,6 @@ public class ProjectApp {
         return new ActivityLogInfo(weekLog);
     }
 
-
-    /**
-     * this method sets a specific log in the employees schedule as the selected log
-     */
-
-    public void setSelectedEmployeeLog(List<String> logDetails) {
-        database.setSelectedEmployeeLog(logDetails);
-    }
 
     /**
      * This method returns the selected log in the employees schedule
@@ -381,21 +436,6 @@ public class ProjectApp {
             hours = hoursLog.get(activity);
         }
         return String.valueOf(hours);
-    }
-
-    /**
-     * This method edits the hours spent on a specific activity on a specific date
-     */
-
-    public void editEmployeeLogHours(String projectID, String activityName, String date, String employeeInitials, String oldHours, String newHours) throws Exception {
-        ProjectInfo projectInfo = getProject(projectID);
-        ActivityInfo activityInfo = getActivity(projectInfo, activityName);
-        EmployeeInfo employeeInfo = getEmployee(employeeInitials);
-
-        double oldHoursDouble = parseAndValidateHours(oldHours);
-        double newHoursDouble = parseAndValidateHours(newHours);
-        String hoursDifference = String.valueOf(newHoursDouble - oldHoursDouble);
-        registerHours(employeeInfo, date, activityInfo, hoursDifference, projectInfo);
     }
 
     /**
@@ -424,15 +464,6 @@ public class ProjectApp {
             fixedActivityInfos.add(new FixedActivityInfo(fa));
         }
         return fixedActivityInfos;
-    }
-
-    public boolean isEmployeeDoingFixedActivity(EmployeeInfo employeeInfo) throws Exception {
-        Employee e = findEmployee(employeeInfo);
-        DateServer dateServer1 = new DateServer();
-        int currentWeek = dateServer1.getWeek();
-        int currentYear = dateServer1.getYear();
-
-        return e.isDoingFixedActivity(currentWeek, currentYear);
     }
 
     //////////////////////////// VALIDATION METHODS ////////////////////////////
@@ -550,6 +581,9 @@ public class ProjectApp {
         return database.getProject(id);
     }
 
+    /**
+     * This method returns the Activity object from a ProjectInfo object and an ActivityInfo object
+     */
 
     public Activity findActivity(ProjectInfo p, ActivityInfo activity) throws Exception {
         Project project = findProject(p);
@@ -559,9 +593,10 @@ public class ProjectApp {
 
     //////////////////////////// GETTERS FOR GUI ////////////////////////////
 
-//    public void initializeTestRun() throws Exception {
-//        database.initializeTestRun();
-//    }
+    /**
+     * This method returns a list of all employees in the application
+     */
+
 
     public List<EmployeeInfo> getEmployeesInApp() {
         List<EmployeeInfo> employeeInfos = new ArrayList<>();
@@ -571,6 +606,10 @@ public class ProjectApp {
         return employeeInfos;
     }
 
+    /**
+     * This method returns a list of all projects in the application
+     */
+
     public List<ProjectInfo> getProjectsInApp() {
         List<ProjectInfo> projectInfos = new ArrayList<>();
         for (Project project : database.getProjects()) {
@@ -579,6 +618,9 @@ public class ProjectApp {
         return projectInfos;
     }
 
+    /**
+     * This method returns a list of all activities in a project
+     */
 
     public List<ActivityInfo> getActivitiesInProject(ProjectInfo project) throws Exception {
         Project p = findProject(project);
@@ -588,6 +630,10 @@ public class ProjectApp {
         }
         return activityInfos;
     }
+
+    /**
+     * This method returns a list of all employees in a project
+     */
 
     public List<EmployeeInfo> getEmployeesInProject(ProjectInfo selectedProject) throws Exception {
         Project p = findProject(selectedProject);
@@ -599,6 +645,10 @@ public class ProjectApp {
         return employeeInfos;
     }
 
+    /**
+     * This method returns a list of all employees in an activity
+     */
+
     public List<EmployeeInfo> getEmployeesInActivity(ProjectInfo project, ActivityInfo activity) throws Exception {
         Activity a = findActivity(project, activity);
         List<Employee> employees = a.getEmployees();
@@ -608,6 +658,10 @@ public class ProjectApp {
         }
         return employeeInfos;
     }
+
+    /**
+     * This method returns a list of dates for a specific year and week
+     */
 
     public List<String> getWeekDates(String year, String week) {
         int weekInt = parseAndValidateWeek(week);
@@ -621,6 +675,10 @@ public class ProjectApp {
         return weekDates;
     }
 
+    /**
+     * This method returns a Map of all activities and their hours of an ActivityLog for a specific day
+     */
+
     public Map<Activity, Double> getEmployeeDayLog(EmployeeInfo e, ActivityLogInfo a, String day) {
         Map<Activity, Double> dayLog = new HashMap<>();
         DayOfWeek specifiedDay = DayOfWeek.valueOf(day.toUpperCase());
@@ -633,11 +691,12 @@ public class ProjectApp {
         return dayLog;
     }
 
+    /**
+     * This method returns the completion status of an activity
+     */
+
     public String getActivityCompletionStatus(ActivityInfo activityInfo) {
         return activityInfo.getCompletionStatus();
     }
 
-    public void setDateServer(DateServer dateServer) {
-        this.dateServer = dateServer;
-    }
 }

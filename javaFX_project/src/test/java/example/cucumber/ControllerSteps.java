@@ -181,7 +181,7 @@ public class ControllerSteps {
         assertEquals(activityNames, actualActivityNames);
     }
 
-    @Then("the employee should see this\\/these employees in the project")
+    @Then("the employee should see this employee\\(s) in the project")
     public void theEmployeeShouldSeeThisTheseEmployeesInTheProject(List<String> initials) throws Exception {
         List<EmployeeInfo> e1 = new ArrayList<>();
 

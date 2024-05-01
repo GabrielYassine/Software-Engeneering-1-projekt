@@ -198,7 +198,7 @@ Feature: Includes steps for GUI methods
     And there are employees with the following initials in the project
       | Huba     |
       | Abed     |
-    Then the employee should see this/these employees in the project
+    Then the employee should see this employee(s) in the project
       | Huba     |
       | Abed     |
 

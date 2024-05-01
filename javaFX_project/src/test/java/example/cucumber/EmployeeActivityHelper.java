@@ -20,7 +20,7 @@ public class EmployeeActivityHelper {
         List<EmployeeInfo> e = new ArrayList<>();
         e.add(employee);
         for (int i = 0; i < numberOfActivities; i++) {
-            Activity a = application.createActivity(project, "Activity" + i, "10", "1", "52", e,"2021", "2099");
+            Activity a = application.createActivity(project, "Activity" + i, "10", "5", "8", e,"2024", "2024");
         }
     }
 }

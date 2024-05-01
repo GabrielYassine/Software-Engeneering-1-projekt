@@ -1,7 +1,9 @@
 package dtu.app.ui.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Activity extends AbstractActivity{
     private final List<Employee> employees = new ArrayList<>();
@@ -22,6 +24,8 @@ public class Activity extends AbstractActivity{
         project.addActivity(this);
     }
 
+
+
     public void editActivity(Activity activity, String newName, double newBudgetHours, int newStartWeek, int newEndWeek, List<Employee> newEmployees, int newStartYear, int newEndYear) {
         this.name = newName;
         this.budgetHours = newBudgetHours;
@@ -34,7 +38,6 @@ public class Activity extends AbstractActivity{
 
     public void addEmployee(Employee e) {
         employees.add(e);
-        e.addActivity(this);
     }
 
     public void updateEmployees() {
@@ -48,6 +51,20 @@ public class Activity extends AbstractActivity{
 
     public void switchCompletionStatus() {
         completed = !completed;
+    }
+
+    public Map<Integer, List<Integer>> getWeeksInInterval() {
+        Map<Integer, List<Integer>> weeks = new HashMap<>();
+        for (int year = startYear; year <= endYear; year++) {
+
+            int start = year == startYear ? startWeek : 1;
+            int end = year == endYear ? endWeek : 52;
+
+            for (int week = start; week <= end; week++) {
+                weeks.computeIfAbsent(year, k -> new ArrayList<>()).add(week);
+            }
+        }
+        return weeks;
     }
 
     @Override
