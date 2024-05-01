@@ -25,7 +25,7 @@ Feature: Register time on activity
 
   Scenario: User registers time on activity with no initials
     When the employee with initials "" registers "10" hours on the activity "New Activity" on the date "2021-06-01"
-    Then an error message "Name missing" should be given
+    Then an error message "Employee missing" should be given
 
   Scenario: User registers time on activity with no hours
     When the employee with initials "Huba" registers "" hours on the activity "New Activity" on the date "2021-06-01"

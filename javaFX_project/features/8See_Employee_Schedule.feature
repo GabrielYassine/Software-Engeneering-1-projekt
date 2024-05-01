@@ -28,7 +28,7 @@ Feature: See Employee Schedule
 
     Scenario: User searches for schedule of an employee with no initials
       When the user searches for the schedule of the employee with initials "" for the year "2024" and week "17"
-      Then an error message "Name missing" should be given
+      Then an error message "Employee missing" should be given
 
     Scenario: User searches for schedule of an employee with wrong initials
       When the user searches for the schedule of the employee with initials "ABCD" for the year "2024" and week "17"

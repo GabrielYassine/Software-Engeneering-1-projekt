@@ -209,7 +209,9 @@ public class ProjectApp {
      */
 
     public void registerHours(EmployeeInfo employeeInfo, String date, ActivityInfo activityInfo, String hours, ProjectInfo projectInfo) throws Exception {
-
+        if (employeeInfo == null) {
+            throw new Exception("Employee missing");
+        }
         if (date == null || date.isEmpty()) {
             throw new Exception("Date missing");
         }
@@ -302,7 +304,7 @@ public class ProjectApp {
 
     public EmployeeInfo getEmployee(String initial) throws Exception {
         if (initial == null || initial.isEmpty()) {
-            throw new Exception("Name missing");
+            throw new Exception("Employee missing");
         }
         if (database.getEmployee(initial) == null) {
             throw new Exception("Employee with those initials not found");
