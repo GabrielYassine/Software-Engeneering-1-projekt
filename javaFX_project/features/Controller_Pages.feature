@@ -203,4 +203,12 @@ Feature: Includes steps for GUI methods
       | Abed     |
 
 
+  Scenario: employee views the initials of an employee
+    Given there are employees with the following initials
+      | Huba     |
+      | Abed     |
+    Then the employee should see the following initials
+      | Huba     |
+      | Abed     |
+
 

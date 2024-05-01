@@ -200,4 +200,12 @@ public class ControllerSteps {
         }
         assertEquals(e1, e3);
     }
+
+    @Then("the employee should see the following initials")
+    public void theEmployeeShouldSeeTheFollowingInitials(List<String> initials) throws Exception {
+        for (String initial : initials) {
+            EmployeeInfo e = application.getEmployee(initial);
+            assertEquals(initial, e.toString());
+        }
+    }
 }

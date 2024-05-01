@@ -89,12 +89,13 @@ public class Database {
     }
 
     public Project getProject(int id) throws Exception {
+        Project p = null;
         for (Project project : projectRepository) {
             if (project.getID() == id) {
-                return project;
+                p = project;
             }
         }
-        return null;
+        return p;
     }
 
     public void initializeTestData() throws Exception {
@@ -111,5 +112,4 @@ public class Database {
 
         Activity activity1 = projectApp.createActivity(projectInfo1, "NyActivity", "10", "5","8", List.of(employeeInfo1), "2024", "2024");
     }
-
 }

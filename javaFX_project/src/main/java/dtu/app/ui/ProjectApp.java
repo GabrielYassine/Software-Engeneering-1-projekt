@@ -325,9 +325,6 @@ public class ProjectApp {
      */
 
     public ProjectInfo getProject(String id) throws Exception {
-        if (database.getProject(Integer.parseInt(id)) == null) {
-            throw new Exception("Project not found");
-        }
         return new ProjectInfo(database.getProject(Integer.parseInt(id)));
     }
 
