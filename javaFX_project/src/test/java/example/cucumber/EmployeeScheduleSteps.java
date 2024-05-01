@@ -1,7 +1,6 @@
 package example.cucumber;
 
 import dtu.app.ui.ProjectApp;
-import dtu.app.ui.errorMessageHolders.ErrorMessageHolder;
 import dtu.app.ui.info.ActivityLogInfo;
 import dtu.app.ui.info.EmployeeInfo;
 import io.cucumber.datatable.DataTable;
@@ -21,9 +20,9 @@ public class EmployeeScheduleSteps {
     private final ErrorMessageHolder errorMessage;
     private ActivityLogInfo weekLogInfo;
 
-    public EmployeeScheduleSteps(ProjectApp application) {
+    public EmployeeScheduleSteps(ProjectApp application, ErrorMessageHolder errorMessage) {
         this.application = application;
-        this.errorMessage = application.getErrorMessage();
+        this.errorMessage = errorMessage;
     }
 
     @When("the user searches for the schedule of the employee with initials {string} for the year {string} and week {string}")

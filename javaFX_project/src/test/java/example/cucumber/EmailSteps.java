@@ -1,7 +1,6 @@
 package example.cucumber;
 
 import dtu.app.ui.ProjectApp;
-import dtu.app.ui.errorMessageHolders.ErrorMessageHolder;
 import dtu.app.ui.info.EmployeeInfo;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;

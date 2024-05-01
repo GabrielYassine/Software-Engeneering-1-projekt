@@ -2,7 +2,6 @@ package example.cucumber;
 
 import dtu.app.ui.ProjectApp;
 import dtu.app.ui.domain.*;
-import dtu.app.ui.errorMessageHolders.ErrorMessageHolder;
 import dtu.app.ui.info.EmployeeInfo;
 import dtu.app.ui.info.ProjectInfo;
 import io.cucumber.datatable.DataTable;
@@ -17,9 +16,9 @@ public class ProjectSteps {
     private final ProjectApp application;
     private final ErrorMessageHolder errorMessage;
 
-    public ProjectSteps(ProjectApp application) {
+    public ProjectSteps(ProjectApp application, ErrorMessageHolder errorMessage) {
         this.application = application;
-        this.errorMessage = application.getErrorMessage();
+        this.errorMessage = errorMessage;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////

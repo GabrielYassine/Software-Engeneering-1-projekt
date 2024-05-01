@@ -1,4 +1,4 @@
-package dtu.app.ui.errorMessageHolders;
+package example.cucumber;
 
 public class ErrorMessageHolder {
     private String errorMessage = "";

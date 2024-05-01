@@ -4,13 +4,11 @@ import dtu.app.ui.ProjectApp;
 import dtu.app.ui.domain.Activity;
 import dtu.app.ui.domain.Employee;
 import dtu.app.ui.domain.Project;
-import dtu.app.ui.errorMessageHolders.ErrorMessageHolder;
 import dtu.app.ui.info.ActivityInfo;
 import dtu.app.ui.info.ActivityLogInfo;
 import dtu.app.ui.info.EmployeeInfo;
 import dtu.app.ui.info.ProjectInfo;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
@@ -29,9 +27,9 @@ public class ControllerSteps {
     private final ProjectApp application;
     private final ErrorMessageHolder errorMessage;
 
-    public ControllerSteps(ProjectApp application) {
+    public ControllerSteps(ProjectApp application, ErrorMessageHolder errorMessage) {
         this.application = application;
-        this.errorMessage = application.getErrorMessage();
+        this.errorMessage = errorMessage;
     }
 
 
@@ -104,7 +102,7 @@ public class ControllerSteps {
     public void theEmployeeShouldSeeTheDetailsForTheWeekdayInWeekOfYearForTheEmployee(String weekDay, String week, String year, String initials, DataTable table) throws Exception {
         EmployeeInfo e = application.getEmployee(initials);
         ActivityLogInfo a = application.getEmployeeWeekLog(e, year, week);
-        Map<Activity, Double> actualDayLog = application.getEmployeeDayLog(e, a, weekDay);
+        Map<Activity, Double> actualDayLog = application.getEmployeeDayLog(a, weekDay);
 
         // Convert DataTable to Map
         Map<String, Double> dataTableMap = table.asMaps(String.class, String.class).stream()

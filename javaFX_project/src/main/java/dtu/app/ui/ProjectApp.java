@@ -1,9 +1,7 @@
 package dtu.app.ui;
 
 import dtu.app.ui.domain.*;
-import dtu.app.ui.errorMessageHolders.ErrorMessageHolder;
 import dtu.app.ui.info.*;
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -11,12 +9,9 @@ import java.util.*;
 public class ProjectApp {
 
     private final Database database;
-    private final ErrorMessageHolder errorMessage;
-
     private DateServer dateServer = new DateServer();
 
     public ProjectApp() {
-        this.errorMessage = new ErrorMessageHolder();
         this.database = new Database(this);
     }
 
@@ -34,8 +29,8 @@ public class ProjectApp {
      * This method creates an Employee object
      */
 
-    public Employee createEmployee(String initial) {
-        return new Employee(database, initial);
+    public Employee createEmployee(String initials) {
+        return new Employee(database, initials);
     }
 
 
@@ -43,12 +38,12 @@ public class ProjectApp {
      * This method creates a Project object
      */
 
-    public Project createProject(String name, List<EmployeeInfo> employeeInfos, EmployeeInfo projectLeaderInfo) throws Exception {
-        if (name == null || name.isEmpty()) {
+    public Project createProject(String projectName, List<EmployeeInfo> employeeInfoList, EmployeeInfo projectLeaderInfo) throws Exception {
+        if (projectName == null || projectName.isEmpty()) {
             throw new IllegalArgumentException("Name missing");
         }
         List<Employee> employees = new ArrayList<>();
-        for (EmployeeInfo e : employeeInfos) {
+        for (EmployeeInfo e : employeeInfoList) {
             Employee employee = findEmployee(e);
             employees.add(employee);
         }
@@ -57,16 +52,16 @@ public class ProjectApp {
             projectLeader = findEmployee(projectLeaderInfo);
         }
 
-        return new Project(database, name, employees, projectLeader);
+        return new Project(database, projectName, employees, projectLeader);
     }
 
     /**
      * This method creates an Activity object
      */
 
-    public Activity createActivity(ProjectInfo projectInfo, String name, String budgetHours, String startWeek, String endWeek, List<EmployeeInfo> employeeInfos, String startYear, String endYear) throws Exception {
+    public Activity createActivity(ProjectInfo projectInfo, String activityName, String budgetHours, String startWeek, String endWeek, List<EmployeeInfo> employeeInfoList, String startYear, String endYear) throws Exception {
         Project project = findProject(projectInfo);
-        validateName(name, project);
+        validateName(activityName, project);
 
         double budgetHoursDouble = parseAndValidateHours(budgetHours);
 
@@ -76,8 +71,8 @@ public class ProjectApp {
         int endYearInt = parseAndValidateYear(endYear);
 
         validateInterval(startWeekInt, endWeekInt, startYearInt, endYearInt);
-        Activity a = new Activity(project, name, budgetHoursDouble, startWeekInt, endWeekInt, startYearInt, endYearInt);
-        addEmployeesToActivity(a, employeeInfos);
+        Activity a = new Activity(project, activityName, budgetHoursDouble, startWeekInt, endWeekInt, startYearInt, endYearInt);
+        addEmployeesToActivity(a, employeeInfoList);
         return a;
     }
 
@@ -85,16 +80,16 @@ public class ProjectApp {
      * This method creates a FixedActivity object
      */
 
-    public void createFixedActivity(EmployeeInfo employeeInfo, String name, String startWeek, String endWeek, String startYear, String endYear) throws Exception {
+    public void createFixedActivity(EmployeeInfo employeeInfo, String activityName, String startWeek, String endWeek, String startYear, String endYear) throws Exception {
         Employee employee = findEmployee(employeeInfo);
-        validateName(name, employee);
+        validateName(activityName);
         int startWeekInt = parseAndValidateWeek(startWeek);
         int endWeekInt = parseAndValidateWeek(endWeek);
         int startYearInt = parseAndValidateYear(startYear);
         int endYearInt = parseAndValidateYear(endYear);
 
         validateInterval(startWeekInt, endWeekInt, startYearInt, endYearInt);
-        new FixedActivity(employee, name, startWeekInt, endWeekInt, startYearInt, endYearInt);
+        new FixedActivity(employee, activityName, startWeekInt, endWeekInt, startYearInt, endYearInt);
     }
 
     //////////////////////////// EDIT METHODS ////////////////////////////
@@ -103,17 +98,17 @@ public class ProjectApp {
      * This method edits a projects details
      */
 
-    public void editProject(ProjectInfo projectInfo, String name, String projectLeaderInitials, List<EmployeeInfo> employeeInfos) throws Exception {
-        if (name == null || name.isEmpty()) {
+    public void editProject(ProjectInfo projectInfo, String projectName, String projectLeaderInitials, List<EmployeeInfo> employeeInfoList) throws Exception {
+        if (projectName == null || projectName.isEmpty()) {
             throw new IllegalArgumentException("Name missing");
         }
         List<Employee> employees = new ArrayList<>();
-        for (EmployeeInfo e : employeeInfos) {
+        for (EmployeeInfo e : employeeInfoList) {
             Employee employee = findEmployee(e);
             employees.add(employee);
         }
         Project project = findProject(projectInfo);
-        project.editProject(name, projectLeaderInitials, employees);
+        project.editProject(projectName, projectLeaderInitials, employees);
         setProject(new ProjectInfo(project));
     }
 
@@ -121,9 +116,9 @@ public class ProjectApp {
      * This method edits an Activity object
      */
 
-    public void editActivity(ActivityInfo activityInfo, String name, String budgetHours, String startWeek, String endWeek, List<EmployeeInfo> employeeInfos, String startYear, String endYear) throws Exception {
+    public void editActivity(ActivityInfo activityInfo, String activityName, String budgetHours, String startWeek, String endWeek, List<EmployeeInfo> employeeInfoList, String startYear, String endYear) throws Exception {
         Activity activity = findActivity(getSelectedProject(), activityInfo);
-        validateName(name, activity.getProject());
+        validateName(activityName, activity.getProject());
 
         double budgetHoursDouble = parseAndValidateHours(budgetHours);
         int startWeekInt = parseAndValidateWeek(startWeek);
@@ -132,14 +127,14 @@ public class ProjectApp {
         int endYearInt = parseAndValidateYear(endYear);
 
         List<Employee> employees = new ArrayList<>();
-        for (EmployeeInfo e : employeeInfos) {
+        for (EmployeeInfo e : employeeInfoList) {
             Employee employee = findEmployee(e);
             employees.add(employee);
         }
 
         validateInterval(startWeekInt, endWeekInt, startYearInt, endYearInt);
-        activity.editActivity(activity, name, budgetHoursDouble, startWeekInt, endWeekInt, employees, startYearInt, endYearInt);
-        addEmployeesToActivity(activity, employeeInfos);
+        activity.editActivity(activity, activityName, budgetHoursDouble, startWeekInt, endWeekInt, employees, startYearInt, endYearInt);
+        addEmployeesToActivity(activity, employeeInfoList);
         setActivity(new ActivityInfo(activity));
     }
 
@@ -184,10 +179,10 @@ public class ProjectApp {
      * This method adds Employee objects to an Activity object
      */
 
-    public void addEmployeesToActivity(Activity activity, List<EmployeeInfo> employeeInfos) throws Exception {
+    public void addEmployeesToActivity(Activity activity, List<EmployeeInfo> employeeInfoList) throws Exception {
         Map<Integer,List<Integer>> weeks = activity.getWeeksInInterval();
 
-        for (EmployeeInfo e : employeeInfos) {
+        for (EmployeeInfo e : employeeInfoList) {
             Employee employee = findEmployee(e);
             for (Map.Entry<Integer, List<Integer>> entry : weeks.entrySet()) {
                 int year = entry.getKey();
@@ -292,24 +287,17 @@ public class ProjectApp {
     //////////////////////////// GETTER METHODS ////////////////////////////
 
     /**
-     * This method returns the ErrorMessageHolder object
-     */
-    public ErrorMessageHolder getErrorMessage() {
-        return errorMessage;
-    }
-
-    /**
      * This method returns an EmployeeInfo object
      */
 
-    public EmployeeInfo getEmployee(String initial) throws Exception {
-        if (initial == null || initial.isEmpty()) {
+    public EmployeeInfo getEmployee(String initials) throws Exception {
+        if (initials == null || initials.isEmpty()) {
             throw new Exception("Employee missing");
         }
-        if (database.getEmployee(initial) == null) {
+        if (database.getEmployee(initials) == null) {
             throw new Exception("Employee with those initials not found");
         }
-        return new EmployeeInfo(database.getEmployee(initial));
+        return new EmployeeInfo(database.getEmployee(initials));
     }
 
 
@@ -317,8 +305,8 @@ public class ProjectApp {
      * This method returns a ProjectInfo object
      */
 
-    public ProjectInfo getProject(String id) throws Exception {
-        return new ProjectInfo(database.getProject(Integer.parseInt(id)));
+    public ProjectInfo getProject(String ID) {
+        return new ProjectInfo(database.getProject(Integer.parseInt(ID)));
     }
 
     /**
@@ -464,11 +452,11 @@ public class ProjectApp {
 
     public List<FixedActivityInfo> getFixedActivitiesForEmployee(EmployeeInfo employee) throws Exception {
         Employee e = findEmployee(employee);
-        List<FixedActivityInfo> fixedActivityInfos = new ArrayList<>();
+        List<FixedActivityInfo> fixedActivityInfoList = new ArrayList<>();
         for (FixedActivity fa : e.getFixedActivities()) {
-            fixedActivityInfos.add(new FixedActivityInfo(fa));
+            fixedActivityInfoList.add(new FixedActivityInfo(fa));
         }
-        return fixedActivityInfos;
+        return fixedActivityInfoList;
     }
 
     //////////////////////////// VALIDATION METHODS ////////////////////////////
@@ -559,7 +547,7 @@ public class ProjectApp {
      * This method validates the name of a fixed activity
      */
 
-    private void validateName(String name, Employee employee) {
+    private void validateName(String name) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name missing");
         }
@@ -594,7 +582,7 @@ public class ProjectApp {
      * This method returns the Project object from a ProjectInfo object
      */
 
-    public Project findProject(ProjectInfo project) throws Exception {
+    public Project findProject(ProjectInfo project) {
         int id = project.getID();
         return database.getProject(id);
     }
@@ -603,8 +591,8 @@ public class ProjectApp {
      * This method returns the Activity object from a ProjectInfo object and an ActivityInfo object
      */
 
-    public Activity findActivity(ProjectInfo p, ActivityInfo activity) throws Exception {
-        Project project = findProject(p);
+    public Activity findActivity(ProjectInfo projectInfo, ActivityInfo activity) {
+        Project project = findProject(projectInfo);
         String name = activity.getName();
         return project.getActivity(name);
     }
@@ -617,11 +605,11 @@ public class ProjectApp {
 
 
     public List<EmployeeInfo> getEmployeesInApp() {
-        List<EmployeeInfo> employeeInfos = new ArrayList<>();
+        List<EmployeeInfo> employeeInfoList = new ArrayList<>();
         for (Employee employee : database.getEmployees()) {
-            employeeInfos.add(new EmployeeInfo(employee));
+            employeeInfoList.add(new EmployeeInfo(employee));
         }
-        return employeeInfos;
+        return employeeInfoList;
     }
 
     /**
@@ -629,52 +617,52 @@ public class ProjectApp {
      */
 
     public List<ProjectInfo> getProjectsInApp() {
-        List<ProjectInfo> projectInfos = new ArrayList<>();
+        List<ProjectInfo> projectInfoList = new ArrayList<>();
         for (Project project : database.getProjects()) {
-            projectInfos.add(new ProjectInfo(project));
+            projectInfoList.add(new ProjectInfo(project));
         }
-        return projectInfos;
+        return projectInfoList;
     }
 
     /**
      * This method returns a list of all activities in a project
      */
 
-    public List<ActivityInfo> getActivitiesInProject(ProjectInfo project) throws Exception {
+    public List<ActivityInfo> getActivitiesInProject(ProjectInfo project) {
         Project p = findProject(project);
-        List<ActivityInfo> activityInfos = new ArrayList<>();
+        List<ActivityInfo> activityInfoList = new ArrayList<>();
         for (Activity a : p.getActivities()) {
-            activityInfos.add(new ActivityInfo(a));
+            activityInfoList.add(new ActivityInfo(a));
         }
-        return activityInfos;
+        return activityInfoList;
     }
 
     /**
      * This method returns a list of all employees in a project
      */
 
-    public List<EmployeeInfo> getEmployeesInProject(ProjectInfo selectedProject) throws Exception {
+    public List<EmployeeInfo> getEmployeesInProject(ProjectInfo selectedProject) {
         Project p = findProject(selectedProject);
         List<Employee> employees = p.getEmployees();
-        List<EmployeeInfo> employeeInfos = new ArrayList<>();
+        List<EmployeeInfo> employeeInfoList = new ArrayList<>();
         for (Employee e : employees) {
-            employeeInfos.add(new EmployeeInfo(e));
+            employeeInfoList.add(new EmployeeInfo(e));
         }
-        return employeeInfos;
+        return employeeInfoList;
     }
 
     /**
      * This method returns a list of all employees in an activity
      */
 
-    public List<EmployeeInfo> getEmployeesInActivity(ProjectInfo project, ActivityInfo activity) throws Exception {
+    public List<EmployeeInfo> getEmployeesInActivity(ProjectInfo project, ActivityInfo activity) {
         Activity a = findActivity(project, activity);
         List<Employee> employees = a.getEmployees();
-        List<EmployeeInfo> employeeInfos = new ArrayList<>();
+        List<EmployeeInfo> employeeInfoList = new ArrayList<>();
         for (Employee e : employees) {
-            employeeInfos.add(new EmployeeInfo(e));
+            employeeInfoList.add(new EmployeeInfo(e));
         }
-        return employeeInfos;
+        return employeeInfoList;
     }
 
     /**
@@ -697,7 +685,7 @@ public class ProjectApp {
      * This method returns a Map of all activities and their hours of an ActivityLog for a specific day
      */
 
-    public Map<Activity, Double> getEmployeeDayLog(EmployeeInfo e, ActivityLogInfo a, String day) {
+    public Map<Activity, Double> getEmployeeDayLog(ActivityLogInfo a, String day) {
         Map<Activity, Double> dayLog = new HashMap<>();
         DayOfWeek specifiedDay = DayOfWeek.valueOf(day.toUpperCase());
 

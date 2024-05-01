@@ -2,7 +2,6 @@ package example.cucumber;
 
 import dtu.app.ui.ProjectApp;
 import dtu.app.ui.domain.Activity;
-import dtu.app.ui.errorMessageHolders.ErrorMessageHolder;
 import dtu.app.ui.info.ActivityInfo;
 import dtu.app.ui.info.EmployeeInfo;
 import io.cucumber.java.en.Then;
@@ -16,9 +15,9 @@ public class RegisterTimeSteps {
     private final ProjectApp application;
     private final ErrorMessageHolder errorMessage;
 
-    public RegisterTimeSteps(ProjectApp application) {
+    public RegisterTimeSteps(ProjectApp application, ErrorMessageHolder errorMessage) {
         this.application = application;
-        this.errorMessage = application.getErrorMessage();
+        this.errorMessage = errorMessage;
     }
 
 	@When("the employee with initials {string} registers {string} hours on the activity {string} on the date {string}")

@@ -17,7 +17,6 @@ import java.util.List;
 public class Database {
     private final List<Employee> employeeRepository = new ArrayList<>();
     private final List<Project> projectRepository = new ArrayList<>();
-    private final DateServer dateServer = new DateServer();
     private final ProjectApp projectApp;
     private ProjectInfo selectedProject = null;
     private ActivityInfo selectedActivity = null;
@@ -88,7 +87,7 @@ public class Database {
         return null;
     }
 
-    public Project getProject(int id) throws Exception {
+    public Project getProject(int id) {
         Project p = null;
         for (Project project : projectRepository) {
             if (project.getID() == id) {

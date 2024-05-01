@@ -2,11 +2,12 @@ package example.cucumber;
 
 import dtu.app.ui.ProjectApp;
 import dtu.app.ui.domain.*;
-import dtu.app.ui.errorMessageHolders.ErrorMessageHolder;
 import dtu.app.ui.info.ActivityInfo;
 import dtu.app.ui.info.EmployeeInfo;
 import dtu.app.ui.info.FixedActivityInfo;
 import dtu.app.ui.info.ProjectInfo;
+import example.cucumber.EmployeeActivityHelper;
+import example.cucumber.ErrorMessageHolder;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -17,9 +18,9 @@ public class ActivitySteps {
 	private final ProjectApp application;
     private final ErrorMessageHolder errorMessage;
 
-    public ActivitySteps(ProjectApp application) {
+    public ActivitySteps(ProjectApp application, ErrorMessageHolder errorMessage) {
 		this.application = application;
-		this.errorMessage = application.getErrorMessage();
+		this.errorMessage = errorMessage;
 	}
 
 	@When("the user creates an activity with the following details")

@@ -105,13 +105,13 @@ public class EmployeeLogController extends CommonElementsController{
     }
 
     public void setupLists(EmployeeInfo e, ActivityLogInfo a, String year, String week) {
-        addActivitiesToView(mondayListView,App.application.getEmployeeDayLog(e, a, "Monday"));
-        addActivitiesToView(tuesdayListView, App.application.getEmployeeDayLog(e, a, "Tuesday"));
-        addActivitiesToView(wednesdayListView, App.application.getEmployeeDayLog(e, a, "Wednesday"));
-        addActivitiesToView(thursdayListView, App.application.getEmployeeDayLog(e, a, "Thursday"));
-        addActivitiesToView(fridayListView, App.application.getEmployeeDayLog(e, a, "Friday"));
-        addActivitiesToView(saturdayListView, App.application.getEmployeeDayLog(e, a, "Saturday"));
-        addActivitiesToView(sundayListView, App.application.getEmployeeDayLog(e, a, "Sunday"));
+        addActivitiesToView(mondayListView,App.application.getEmployeeDayLog(a, "Monday"));
+        addActivitiesToView(tuesdayListView, App.application.getEmployeeDayLog(a, "Tuesday"));
+        addActivitiesToView(wednesdayListView, App.application.getEmployeeDayLog(a, "Wednesday"));
+        addActivitiesToView(thursdayListView, App.application.getEmployeeDayLog(a, "Thursday"));
+        addActivitiesToView(fridayListView, App.application.getEmployeeDayLog(a, "Friday"));
+        addActivitiesToView(saturdayListView, App.application.getEmployeeDayLog(a, "Saturday"));
+        addActivitiesToView(sundayListView, App.application.getEmployeeDayLog(a, "Sunday"));
 
         mondayDateValue.setText(App.application.getWeekDates(year, week).get(0));
         tuesdayDateValue.setText(App.application.getWeekDates(year, week).get(1));
