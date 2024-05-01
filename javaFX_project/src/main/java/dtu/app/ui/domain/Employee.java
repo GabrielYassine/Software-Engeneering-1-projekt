@@ -81,10 +81,6 @@ public class Employee {
         return initials;
     }
 
-    public Stream<Email> getInboxStream() {
-        return inbox.stream();
-    }
-
     public List<Email> getInbox() {
         return inbox;
     }

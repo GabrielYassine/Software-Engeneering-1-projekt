@@ -6,6 +6,7 @@ import dtu.app.ui.info.*;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 public class ProjectApp {
 
@@ -217,23 +218,19 @@ public class ProjectApp {
      */
 
     public void registerHours(EmployeeInfo employeeInfo, String date, ActivityInfo activityInfo, String hours, ProjectInfo projectInfo) throws Exception {
-        try {
-            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date parsedDate = format.parse(date);
-            calendar.setTime(parsedDate);
-            LocalDate localDate = convertCalendarToLocalDate(calendar);
 
-            double hoursDouble = parseAndValidateHours(hours);
-            Employee employee = findEmployee(employeeInfo);
-            ProjectInfo projectToUse = projectInfo != null ? projectInfo : getSelectedProject();
-            Activity activity = findActivity(projectToUse, activityInfo);
-
-            employee.getActivityLog().registerHours(localDate, activity, hoursDouble);
-            activity.registerHours(hoursDouble);
-        } catch (Exception e) {
-            throw new Exception("Error registering hours");
+        if (date == null || date.isEmpty()) {
+            throw new Exception("Date missing");
         }
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        double hoursDouble = parseAndValidateHours(hours);
+        Employee employee = findEmployee(employeeInfo);
+        ProjectInfo projectToUse = projectInfo != null ? projectInfo : getSelectedProject();
+        Activity activity = findActivity(projectToUse, activityInfo);
+
+        employee.getActivityLog().registerHours(localDate, activity, hoursDouble);
+        activity.registerHours(hoursDouble);
     }
 
     //////////////////////////// CHECKER METHODS ////////////////////////////
