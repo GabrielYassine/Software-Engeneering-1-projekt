@@ -72,10 +72,6 @@ public class Employee {
         return activityLog;
     }
 
-    public List<Activity> getActivities() {
-        return activities;
-    }
-
     public List<FixedActivity> getFixedActivities() {
         return fixedActivities;
     }

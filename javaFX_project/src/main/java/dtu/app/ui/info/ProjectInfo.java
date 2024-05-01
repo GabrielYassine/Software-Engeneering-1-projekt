@@ -62,16 +62,6 @@ public class ProjectInfo {
         return employees.size();
     }
 
-    public int getActivitiesCompleted() {
-        int number = 0;
-        for (Activity a : activities) {
-            if (a.getCompletedStatus()) {
-                number++;
-            }
-        }
-        return number;
-    }
-
     public List<Activity> getActivities() {
         return new ArrayList<>(activities);
     }

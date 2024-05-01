@@ -12,12 +12,10 @@ import java.util.Objects;
 
 public class EmployeeInfo {
     private final String initials;
-    private final List<Activity> activities;
     private final List<Email> inbox;
 
     public EmployeeInfo(Employee employee) {
         this.initials = employee.getInitials();
-        this.activities = new ArrayList<>(employee.getActivities());
         this.inbox = new ArrayList<>(employee.getInbox());
     }
 
@@ -38,13 +36,4 @@ public class EmployeeInfo {
         EmployeeInfo that = (EmployeeInfo) o;
         return Objects.equals(initials, that.initials);
     }
-    @Override
-    public int hashCode() {
-        return Objects.hash(initials);
-    }
-
-    public List<Activity> getActivities() {
-        return new ArrayList<>(activities);
-    }
-
 }

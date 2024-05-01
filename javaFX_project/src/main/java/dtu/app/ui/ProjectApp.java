@@ -527,11 +527,6 @@ public class ProjectApp {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name missing");
         }
-        for (FixedActivity fa : employee.getFixedActivities()) {
-            if (fa.getName().equals(name)) {
-                throw new IllegalArgumentException("Fixed activity with this name already exists for the employee");
-            }
-        }
     }
 
     //////////////////////////// FIND METHODS ////////////////////////////
@@ -575,7 +570,6 @@ public class ProjectApp {
         }
         return employeeInfos;
     }
-
 
     public List<ProjectInfo> getProjectsInApp() {
         List<ProjectInfo> projectInfos = new ArrayList<>();

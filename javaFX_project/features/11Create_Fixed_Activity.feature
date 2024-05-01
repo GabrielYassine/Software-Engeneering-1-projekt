@@ -68,3 +68,6 @@ Feature: Create Fixed Activity
       | Holiday      | 5          | 8        | 2024       |          |
     Then an error message "No year given" should be given
 
+
+  Scenario:
+

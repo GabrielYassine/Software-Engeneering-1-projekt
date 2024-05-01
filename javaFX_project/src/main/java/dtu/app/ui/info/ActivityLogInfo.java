@@ -9,11 +9,9 @@ import java.util.*;
 
 public class ActivityLogInfo {
     private final Map<LocalDate, Map<Activity, Double>> dateLog;
-    private final List<LocalDate> registeredDates;
 
     public ActivityLogInfo(ActivityLog activityLog) {
         this.dateLog = activityLog.getDateLog();
-        this.registeredDates = activityLog.getRegisteredDates();
     }
 
     public Map<LocalDate, Map<Activity, Double>> getDateLog() {
@@ -38,20 +36,6 @@ public class ActivityLogInfo {
 
     public Map<Activity, Double> getDateActivities(LocalDate date) {
         return dateLog.get(date);
-    }
-
-    public Map<Activity, Double> getActivtyAndHours(Map<Activity, Double> allActivities, Activity activity) {
-        Map<Activity, Double> activityHours = new HashMap<>();
-        for (Map.Entry<Activity, Double> entry : allActivities.entrySet()) {
-            if (entry.getKey().getName().equals(activity.getName())) {
-                activityHours.put(entry.getKey(), entry.getValue());
-            }
-        }
-        return activityHours;
-    }
-
-    public List<LocalDate> getRegisteredDates() {
-        return registeredDates;
     }
 
     public boolean isEmpty() {

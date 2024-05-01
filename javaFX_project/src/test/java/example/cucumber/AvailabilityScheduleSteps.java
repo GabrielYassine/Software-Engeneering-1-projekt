@@ -52,4 +52,5 @@ public class AvailabilityScheduleSteps {
             assertEquals(expectedAvailability, actualAvailability.toString());
         }
     }
+
 }
