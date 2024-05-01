@@ -183,10 +183,10 @@ public class ProjectSteps {
         }
     }
 
-    @When("the employee edits the project with ID {string}'s name to {string}, the project leader to {string}, and the project members to {string}")
-    public void theEmployeeEditsTheProjectWithIDSNameToTheProjectLeaderToAndTheProjectMembersTo(String id, String newName, String newProjectLeaderInitials, String newEmployeeInitials) throws Exception {
+    @When("the employee edits the projects name to {string}, the project leader to {string}, and the project members to {string}")
+    public void theEmployeeEditsTheProjectWithIDSNameToTheProjectLeaderToAndTheProjectMembersTo(String newName, String newProjectLeaderInitials, String newEmployeeInitials) throws Exception {
         try {
-            ProjectInfo projectToEdit = application.getProject(id);
+            ProjectInfo projectToEdit = application.getSelectedProject();
             List<EmployeeInfo> employees = new ArrayList<>();
             if (newEmployeeInitials != null && !newEmployeeInitials.isEmpty()) {
                 for (String initial : newEmployeeInitials.split(", ")) {

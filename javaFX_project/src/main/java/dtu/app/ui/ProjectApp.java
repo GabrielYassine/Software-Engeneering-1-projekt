@@ -358,6 +358,9 @@ public class ProjectApp {
      */
 
     public EmployeeInfo getSelectedEmployee() {
+        if (database.getSelectedEmployee() == null) {
+            throw new IllegalArgumentException("No employee selected");
+        }
         return database.getSelectedEmployee();
     }
 
@@ -419,6 +422,7 @@ public class ProjectApp {
     public ActivityLogInfo getEmployeeWeekLog(EmployeeInfo employeeInfo, String year, String week) throws Exception {
         int weekInt = parseAndValidateWeek(week);
         int yearInt = parseAndValidateYear(year);
+
         Employee employee = findEmployee(employeeInfo);
         ActivityLogInfo activityLogInfo = new ActivityLogInfo(employee.getActivityLog());
         ActivityLog weekLog = activityLogInfo.getWeekActivities(yearInt, weekInt);
@@ -486,13 +490,13 @@ public class ProjectApp {
      * This method parses and validates the hours worked or budget hours
      */
 
-    private double parseAndValidateHours(String registeredHours) {
+    private double parseAndValidateHours(String registeredHours) throws Exception {
         try {
             double hours = Double.parseDouble(registeredHours);
             hours = Math.round(hours * 2) / 2.0;
             return hours;
-        } catch (NullPointerException e) {
-            throw new IllegalArgumentException("Hours missing");
+        } catch (Exception e) {
+            throw new Exception("Hours missing");
         }
     }
 

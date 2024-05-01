@@ -92,15 +92,14 @@ Feature: Create Activity
     | New Activity| 100          | 5          | 8        | 2024       | 2024     |Rosa       |
     And an error message "Employee is already working on 20 activities this week" should be given
 
-
-  Scenario: Employee creates an activity with startweek after endweek
+  Scenario: Employee creates an activity with startWeek after endWeek
     When the user creates an activity with the following details
     | Name        | Budget Hours | Start Week | End Week | Start Year | End Year |Initials               |
     | New Activity| 100          | 8          | 5        | 2024       | 2024     |Huba, Abed, Dora, Jama |
     Then the activity should not be created
     Then an error message "Start week is after end week" should be given
 
-  Scenario: Employee creates an activity with startyear after endyear
+  Scenario: Employee creates an activity with startYear after endYear
     When the user creates an activity with the following details
       | Name        | Budget Hours | Start Week | End Week | Start Year | End Year |Initials               |
       | New Activity| 100          | 5          | 8        | 2024       | 2023     |Huba, Abed, Dora, Jama |

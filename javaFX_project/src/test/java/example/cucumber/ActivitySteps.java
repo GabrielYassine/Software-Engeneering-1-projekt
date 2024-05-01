@@ -150,8 +150,18 @@ public class ActivitySteps {
 
 	// Feature: Create fixed activity
 
-    @When("the employee with initials {string} creates a fixed activity with the following details")
-    public void theEmployeeWithInitialsCreatesAFixedActivityWithTheFollowingDetails(String initials, DataTable table) throws Exception {
+	@When("the employee selects the employee with initials {string} to view their fixed activities")
+	public void theEmployeeSelectsTheEmployeeWithInitialsToViewTheirFixedActivities(String initials) {
+		try {
+			EmployeeInfo employee = application.getEmployee(initials);
+			application.setEmployee(employee);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+
+    @When("the employee creates a fixed activity with the following details")
+    public void theEmployeeWithInitialsCreatesAFixedActivityWithTheFollowingDetails(DataTable table) throws Exception {
 		List<Map<String, String>> rows = table.asMaps(String.class, String.class);
 		for (Map<String, String> columns : rows) {
 			String name = columns.get("Name");
@@ -161,8 +171,7 @@ public class ActivitySteps {
 			String endYear = columns.get("End Year");
 
 			try {
-				EmployeeInfo employee = application.getEmployee(initials);
-				application.setEmployee(employee);
+				EmployeeInfo employee = application.getSelectedEmployee();
 				application.createFixedActivity(employee, name, startWeek, endWeek, startYear, endYear);
 			} catch (Exception e) {
 				errorMessage.setErrorMessage(e.getMessage());
@@ -180,17 +189,21 @@ public class ActivitySteps {
 			String expectedStartYear = columns.get("Start Year");
 			String expectedEndYear = columns.get("End Year");
 
-			EmployeeInfo employee = application.getSelectedEmployee();
-			List<FixedActivityInfo> activities = application.getFixedActivitiesForEmployee(employee);
-			for (FixedActivityInfo activity : activities) {
-				if (activity.getName().equals(expectedName)) {
-					assertEquals(expectedName, activity.getName());
-					assertEquals(Integer.parseInt(expectedStartWeek), activity.getStartWeek());
-					assertEquals(Integer.parseInt(expectedEndWeek), activity.getEndWeek());
-					assertEquals(Integer.parseInt(expectedStartYear), activity.getStartYear());
-					assertEquals(Integer.parseInt(expectedEndYear), activity.getEndYear());
-					break;
+			try {
+				EmployeeInfo employee = application.getSelectedEmployee();
+				List<FixedActivityInfo> activities = application.getFixedActivitiesForEmployee(employee);
+				for (FixedActivityInfo activity : activities) {
+					if (activity.getName().equals(expectedName)) {
+						assertEquals(expectedName, activity.getName());
+						assertEquals(Integer.parseInt(expectedStartWeek), activity.getStartWeek());
+						assertEquals(Integer.parseInt(expectedEndWeek), activity.getEndWeek());
+						assertEquals(Integer.parseInt(expectedStartYear), activity.getStartYear());
+						assertEquals(Integer.parseInt(expectedEndYear), activity.getEndYear());
+						break;
+					}
 				}
+			} catch (Exception e) {
+				errorMessage.setErrorMessage(e.getMessage());
 			}
 		}
 	}

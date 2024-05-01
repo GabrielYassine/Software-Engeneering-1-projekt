@@ -40,13 +40,16 @@ public class FixedActivityInfoController extends CommonElementsController {
         super.setupNumericTextFieldListeners(4, startYearField, endYearField);
         setupLetterTextFieldListeners(activityNameField);
 
-
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        startWeekColumn.setCellValueFactory(new PropertyValueFactory<>("startWeek"));
-        endWeekColumn.setCellValueFactory(new PropertyValueFactory<>("endWeek"));
-        startYearColumn.setCellValueFactory(new PropertyValueFactory<>("startYear"));
-        endYearColumn.setCellValueFactory(new PropertyValueFactory<>("endYear"));
-        fixedActivityTableView.getItems().addAll(App.application.getFixedActivitiesForEmployee(App.application.getSelectedEmployee()));
+        try {
+            nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+            startWeekColumn.setCellValueFactory(new PropertyValueFactory<>("startWeek"));
+            endWeekColumn.setCellValueFactory(new PropertyValueFactory<>("endWeek"));
+            startYearColumn.setCellValueFactory(new PropertyValueFactory<>("startYear"));
+            endYearColumn.setCellValueFactory(new PropertyValueFactory<>("endYear"));
+            fixedActivityTableView.getItems().addAll(App.application.getFixedActivitiesForEmployee(App.application.getSelectedEmployee()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @FXML

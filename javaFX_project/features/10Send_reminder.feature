@@ -16,7 +16,8 @@ Feature: send reminder
       | Huba |
     And the employee "Huba" has not registered his daily work for the current day
     And 1 day has passed
-    When the employee with initials "Huba" creates a fixed activity with the following details
+    When the employee selects the employee with initials "Huba" to view their fixed activities
+    When the employee creates a fixed activity with the following details
       | Name    | Start Week | End Week | Start Year | End Year |
       | Holiday | 3          | 32       | 2024       | 2024     |
     Then the system does not send a reminder email to "Huba"

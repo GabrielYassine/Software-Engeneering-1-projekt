@@ -100,14 +100,14 @@ public class EmployeeLogController extends CommonElementsController{
         weekNumber.setText(week);
 
         ActivityLogInfo employeeLog = App.application.getEmployeeWeekLog(employeeInfo, year, week);
-        setupLists(employeeInfo, employeeLog, year, week);
         refreshPage();
+        setupLists(employeeInfo, employeeLog, year, week);
     }
 
     public void setupLists(EmployeeInfo e, ActivityLogInfo a, String year, String week) {
         addActivitiesToView(mondayListView,App.application.getEmployeeDayLog(e, a, "Monday"));
         addActivitiesToView(tuesdayListView, App.application.getEmployeeDayLog(e, a, "Tuesday"));
-        addActivitiesToView(wednesdayListView, App.application.getEmployeeDayLog(e, a, "Thursday"));
+        addActivitiesToView(wednesdayListView, App.application.getEmployeeDayLog(e, a, "Wednesday"));
         addActivitiesToView(thursdayListView, App.application.getEmployeeDayLog(e, a, "Thursday"));
         addActivitiesToView(fridayListView, App.application.getEmployeeDayLog(e, a, "Friday"));
         addActivitiesToView(saturdayListView, App.application.getEmployeeDayLog(e, a, "Saturday"));
@@ -141,7 +141,7 @@ public class EmployeeLogController extends CommonElementsController{
     public void refreshPage() throws Exception {
         TextField[] textFields = new TextField[]{yearField, weekField};
         DatePicker[] datePickers = new DatePicker[]{};
-        ListView<?>[] listViews = new ListView<?>[]{};
+        ListView<?>[] listViews = new ListView<?>[]{mondayListView, tuesdayListView, wednesdayListView, thursdayListView, fridayListView, saturdayListView, sundayListView};
         TableView<?>[] tableViews = new TableView<?>[]{};
         clearFields(textFields,datePickers, listViews, tableViews);
         initialize();

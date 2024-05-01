@@ -30,11 +30,11 @@ public class AvailabilityScheduleController extends CommonElementsController{
         yearNumber.setText(year);
         monthNumber.setText(month);
         displayMonth(year, month);
-        refreshPage();
     }
 
     public void displayMonth(String year, String month) throws Exception {
         List<EmployeeInfo> employees = App.application.getEmployeesInApp();
+        refreshPage();
         for (EmployeeInfo employee : employees) {
             List<Integer> availability = App.application.getAvailability(employee, year, month);
             String availabilityString = employee.getInitials() + "          First Week: " + availability.get(0) + "          Second Week: " + availability.get(1) + "          Third Week: " + availability.get(2) + "          Fourth Week: " + availability.get(3) + "          Fifth Week: " + availability.get(4);
@@ -45,7 +45,7 @@ public class AvailabilityScheduleController extends CommonElementsController{
     public void refreshPage() throws Exception {
         TextField[] textFields = new TextField[]{yearField, monthField};
         DatePicker[] datePickers = new DatePicker[]{};
-        ListView<?>[] listViews = new ListView<?>[]{};
+        ListView<?>[] listViews = new ListView<?>[]{AvailabilitySchedule};
         TableView<?>[] tableViews = new TableView<?>[]{};
         clearFields(textFields,datePickers, listViews, tableViews);
         initialize();

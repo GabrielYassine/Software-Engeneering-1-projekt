@@ -41,4 +41,6 @@ public class ActivityLog {
         return registeredDates;
     }
 
+
+
 }
