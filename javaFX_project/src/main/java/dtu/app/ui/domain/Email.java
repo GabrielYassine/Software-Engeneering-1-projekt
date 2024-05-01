@@ -21,7 +21,7 @@ public class Email {
         return text;
     }
 
-    public LocalDate getLocalDate() {
+    public LocalDate getEmailDate() {
         return localDate;
     }
 }
