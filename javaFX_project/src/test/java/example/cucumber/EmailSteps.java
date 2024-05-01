@@ -58,9 +58,7 @@ public class EmailSteps {
         try {
             EmployeeInfo employee = projectApp.getEmployee(initials);
             LocalDate date = LocalDate.now().plusDays(1);
-            boolean doesEmployeeHaveEmail  = employee.getInbox().stream()
-                    .anyMatch(email -> email.getSubject().equals(subject) && email.getText().equals(text) && email.getEmailDate().equals(date));
-            assertTrue(doesEmployeeHaveEmail);
+            assertTrue(projectApp.doesEmailExist(employee, subject, text, date));
         } catch (Exception e) {
             errorMessage.setErrorMessage(e.getMessage());
         }
@@ -76,10 +74,8 @@ public class EmailSteps {
     public void theEmailWithSubjectAndTextIsNotInTheEmployeesInbox(String subject, String text, String initials) {
         try {
             EmployeeInfo employee = projectApp.getEmployee(initials);
-            LocalDate date = LocalDate.now();
-            boolean doesEmployeeHaveEmail  = employee.getInbox().stream()
-                    .anyMatch(email -> email.getSubject().equals(subject) && email.getText().equals(text) && email.getEmailDate().equals(date));
-            assertFalse(doesEmployeeHaveEmail);
+            LocalDate date = LocalDate.now().plusDays(1);
+            assertFalse(projectApp.doesEmailExist(employee, subject, text, date));
         } catch (Exception e) {
             errorMessage.setErrorMessage(e.getMessage());
         }

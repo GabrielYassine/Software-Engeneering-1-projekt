@@ -359,6 +359,11 @@ public class ProjectApp {
         }
     }
 
+    public boolean doesEmailExist(EmployeeInfo employeeInfo, String subject, String text, LocalDate date) throws Exception {
+        return(findEmployee(employeeInfo).getInbox().stream()
+                .anyMatch(email -> email.getSubject().equals(subject) && email.getText().equals(text) && email.getEmailDate().equals(date)));
+    }
+
     /**
      * This method returns the registered hours for an employee on a specific day
      */
