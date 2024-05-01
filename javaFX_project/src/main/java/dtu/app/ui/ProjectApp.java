@@ -28,15 +28,6 @@ public class ProjectApp {
         database.initializeTestData();
     }
 
-    /**
-     * This method converts a Calendar object to a LocalDate object
-     */
-
-    private LocalDate convertCalendarToLocalDate(Calendar calendar) {
-        return LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
-    }
-
-
     //////////////////////////// CREATE METHODS ////////////////////////////
 
     /**
@@ -222,6 +213,7 @@ public class ProjectApp {
         if (date == null || date.isEmpty()) {
             throw new Exception("Date missing");
         }
+
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         double hoursDouble = parseAndValidateHours(hours);
@@ -245,9 +237,8 @@ public class ProjectApp {
     }
 
     public boolean hasEmployeeRegisteredDailyWork(EmployeeInfo employeeInfo) throws Exception {
-        Calendar currentDate = dateServer.getDate();
-        LocalDate currentLocalDate = convertCalendarToLocalDate(currentDate);
-        return findEmployee(employeeInfo).hasRegisteredDailyWork(currentLocalDate);
+        LocalDate currentDate = dateServer.getDate();
+        return findEmployee(employeeInfo).hasRegisteredDailyWork(currentDate);
     }
 
     //////////////////////////// SETTER METHODS ////////////////////////////
@@ -359,11 +350,10 @@ public class ProjectApp {
     }
 
     public void sendEmailToEmployee(EmployeeInfo employeeInfo) throws Exception {
-        Calendar currentDate = dateServer.getDate();
-        LocalDate currentLocalDate = convertCalendarToLocalDate(currentDate);
+        LocalDate currentDate = dateServer.getDate();
         Employee e = findEmployee(employeeInfo);
-        if (!isEmployeeDoingFixedActivity(employeeInfo) && !e.hasRegisteredDailyWork(currentLocalDate.minusDays(1))) {
-            e.sendEmailNotification("Work", "Register your daily work", currentLocalDate);
+        if (!isEmployeeDoingFixedActivity(employeeInfo) && !e.hasRegisteredDailyWork(currentDate.minusDays(1))) {
+            e.sendEmailNotification("Work", "Register your daily work", currentDate);
         }
     }
 
@@ -372,11 +362,8 @@ public class ProjectApp {
      */
 
     public Map<Activity, Double> getEmployeesRegisteredHoursForADay(EmployeeInfo employeeInfo, String date) throws Exception {
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date parsedDate = format.parse(date);
-        calendar.setTime(parsedDate);
-        LocalDate localDate = convertCalendarToLocalDate(calendar);
+
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         Employee employee = findEmployee(employeeInfo);
         ActivityLogInfo activityLogInfo = new ActivityLogInfo(employee.getActivityLog());

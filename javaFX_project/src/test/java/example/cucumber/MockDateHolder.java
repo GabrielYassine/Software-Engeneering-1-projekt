@@ -3,6 +3,7 @@ package example.cucumber;
 import dtu.app.ui.ProjectApp;
 import dtu.app.ui.domain.DateServer;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -13,21 +14,19 @@ public class MockDateHolder {
     DateServer dateServer = mock(DateServer.class);
 
     public MockDateHolder(ProjectApp projectApp) {
-        GregorianCalendar calendar = new GregorianCalendar();
+        LocalDate calendar = LocalDate.now();
         setDate(calendar);
         projectApp.setDateServer(dateServer);
     }
 
-    public void setDate(Calendar calendar) {
-        Calendar c = new GregorianCalendar(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
+    public void setDate(LocalDate calendar) {
+        LocalDate c = LocalDate.of(calendar.getYear(),calendar.getMonth(),calendar.getDayOfMonth());
         when(this.dateServer.getDate()).thenReturn(c);
     }
 
     public void advanceDateByDays(int days) {
-        Calendar currentDate = dateServer.getDate();
-        Calendar nextDate = new GregorianCalendar();
-        nextDate.setTime(currentDate.getTime());
-        nextDate.add(Calendar.DAY_OF_YEAR, days);
+        LocalDate currentDate = dateServer.getDate();
+        LocalDate nextDate = currentDate.plusDays(days);
         setDate(nextDate);
     }
 }
