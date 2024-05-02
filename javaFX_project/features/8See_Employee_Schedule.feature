@@ -11,7 +11,7 @@ Feature: See Employee Schedule
     When the user creates an activity with the following details
       | Name          | Budget Hours | Start Week | End Week | Start Year | End Year | Initials   |
       | New Activity  | 100          | 5          | 8        | 2024       | 2024     | Huba, Abed |
-    When the employee with initials "Huba" registers "10" hours on the activity "New Activity" on the date "2024-04-24"
+    When the employee with initials "Huba" registers "10" hours on the date "2024-04-24"
 
   Scenario: Employee searches for schedule of a specific employee for a week with registered hours
     When the user searches for the schedule of the employee with initials "Huba" for the year "2024" and week "17"

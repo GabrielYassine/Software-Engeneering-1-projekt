@@ -90,7 +90,7 @@ Feature: Includes steps for GUI methods
     When the user creates an activity with the following details
       | Name        | Budget Hours | Start Week | End Week | Start Year | End Year | Initials  |
       | New Activity| 100          | 5          | 8        | 2024       | 2024     |Huba, Abed |
-    When the employee with initials "Huba" registers "10" hours on the activity "New Activity" on the date "2021-06-01"
+    When the employee with initials "Huba" registers "10" hours on the date "2021-06-01"
     Then the employee should see the details for the weekday "tuesday" in week "22" of year "2021" for the employee "Huba"
       | ActivityName  | Hours  | Date       |
       | New Activity  | 10     | 2021-06-01 |
@@ -106,7 +106,7 @@ Feature: Includes steps for GUI methods
     When the user creates an activity with the following details
       | Name        | Budget Hours | Start Week | End Week | Start Year | End Year | Initials  |
       | New Activity| 100          | 5          | 8        | 2024       | 2024     |Huba, Abed |
-    When the employee with initials "Huba" registers "10" hours on the activity "New Activity" on the date "2021-06-01"
+    When the employee with initials "Huba" registers "10" hours on the date "2021-06-01"
     Then the activity completion status should be "Not completed"
 
 

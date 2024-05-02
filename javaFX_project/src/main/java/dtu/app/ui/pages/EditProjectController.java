@@ -55,6 +55,7 @@ public class EditProjectController extends CommonElementsController{
         String projectLeaderInitials = projectLeaderComboBox.getValue();
         List<EmployeeInfo> newEmployees = new ArrayList<>(selectedEmployeesListView.getItems());
         App.application.editProject(project, newProjectName, projectLeaderInitials, newEmployees);
+        System.out.println(projectLeaderInitials);
         goBack();
     }
 

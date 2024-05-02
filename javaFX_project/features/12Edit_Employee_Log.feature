@@ -9,7 +9,7 @@ Feature: Edit Employee Schedule
     When the user creates an activity with the following details
       | Name        | Budget Hours | Start Week | End Week | Start Year | End Year | Initials  |
       | New Activity| 100          | 5          | 8        | 2024       | 2024     | Huba      |
-    When the employee with initials "Huba" registers "10" hours on the activity "New Activity" on the date "2021-06-01"
+    When the employee with initials "Huba" registers "10" hours on the date "2021-06-01"
 
   Scenario: Employee edits hours registered on an activity on a specific day
     When the employee with initials "Huba" selects log of the activity "New Activity" on the date "2021-06-01" in the project with ID "24001"

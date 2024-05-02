@@ -215,8 +215,7 @@ public class ProjectApp {
         if (date == null || date.isEmpty()) {
             throw new Exception("Date missing");
         }
-
-        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate localDate = dateServer.parseDate(date);
 
         double hoursDouble = parseAndValidateHours(hours);
         Employee employee = findEmployee(employeeInfo);
@@ -297,7 +296,7 @@ public class ProjectApp {
 
     public EmployeeInfo getEmployee(String initials) throws Exception {
         if (initials == null || initials.isEmpty()) {
-            throw new Exception("Employee missing");
+            return null;
         }
         return new EmployeeInfo(database.getEmployee(initials));
     }
@@ -395,6 +394,9 @@ public class ProjectApp {
      */
 
     public ActivityLogInfo getEmployeeWeekLog(EmployeeInfo employeeInfo, String year, String week) throws Exception {
+        if (employeeInfo == null) {
+            throw new Exception("Employee missing");
+        }
         int weekInt = parseAndValidateWeek(week);
         int yearInt = parseAndValidateYear(year);
         Employee employee = findEmployee(employeeInfo);

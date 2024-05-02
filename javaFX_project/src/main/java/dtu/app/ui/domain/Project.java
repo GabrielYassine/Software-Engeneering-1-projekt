@@ -39,13 +39,7 @@ public class Project {
 
     public void editProject(String newName, String projectLeaderInitials, List<Employee> newEmployees) throws Exception {
         this.name = newName;
-        if (projectLeaderInitials != null) {
-            if (projectLeaderInitials.equals("None")) {
-                projectLeader = null;
-            } else {
-                this.projectLeader = database.getEmployee(projectLeaderInitials);
-            }
-        }
+        this.projectLeader = (projectLeaderInitials == null || projectLeaderInitials.equals("None")) ? null : database.getEmployee(projectLeaderInitials);
         employees.clear();
         employees.addAll(newEmployees);
         updateEmployees();

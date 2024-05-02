@@ -32,5 +32,5 @@ Feature: Edit Project
       | 100          | 5          | 8        | 2024       | 2024     |Huba, Abed |
 
   Scenario: User edits a project by removing all employees but not putting project leader to None.
-    When the employee edits the projects name to "Edited Project", the project leader to "Huba", and the project members to ""
-    Then the projects name should be "Edited Project", the project leader should be "", and the project members should be ""
+    When the employee edits the projects name to "Edited Project", the project leader to "Huba", and the project members to "Dora"
+    Then the projects name should be "Edited Project", the project leader should be "", and the project members should be "Dora"

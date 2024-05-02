@@ -20,8 +20,8 @@ public class RegisterTimeSteps {
         this.errorMessage = errorMessage;
     }
 
-	@When("the employee with initials {string} registers {string} hours on the activity {string} on the date {string}")
-	public void theEmployeeWithInitialsRegistersHoursOnTheActivityOnTheDate(String initials, String hours, String activityName, String date) throws Exception {
+	@When("the employee with initials {string} registers {string} hours on the date {string}")
+	public void theEmployeeWithInitialsRegistersHoursOnTheActivityOnTheDate(String initials, String hours, String date) throws Exception {
 		try {
 			EmployeeInfo employee = application.getEmployee(initials);
 			ActivityInfo activity = application.getSelectedActivity();
