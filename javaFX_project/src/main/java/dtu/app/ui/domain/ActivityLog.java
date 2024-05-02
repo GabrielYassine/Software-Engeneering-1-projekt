@@ -29,7 +29,7 @@ public class ActivityLog {
         hasRegistered(date);
     }
 
-    public void hasRegistered(LocalDate date) {
+    private void hasRegistered(LocalDate date) {
         registeredDates.add(date);
     }
 

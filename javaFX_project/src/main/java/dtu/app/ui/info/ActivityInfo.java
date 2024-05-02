@@ -11,7 +11,6 @@ public class ActivityInfo {
     private final double budgetHours;
     private final int startWeek;
     private final int endWeek;
-
     private final int startYear;
     private final int endYear;
     private final double hoursSpent;

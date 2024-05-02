@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Employee {
-
     private final String initials;
     private final ActivityLog activityLog;
     private final List<Activity> activities = new ArrayList<>();
@@ -18,10 +17,6 @@ public class Employee {
         this.initials = initials;
         this.activityLog = new ActivityLog();
         database.appendEmployee(this);
-    }
-
-    public void sendEmailNotification(String subject, String text, LocalDate date) {
-        inbox.add(new Email(subject, text, date));
     }
 
     public boolean hasRegisteredDailyWork(LocalDate currentDate) {
@@ -41,7 +36,7 @@ public class Employee {
         fixedActivities.add(a);
     }
 
-    public boolean isActivityActive(Activity activity, int selectedWeek, int year) {
+    private boolean isActivityActive(Activity activity, int selectedWeek, int year) {
         int startYear = activity.getStartYear();
         int endYear = activity.getEndYear();
         int startWeek = activity.getStartWeek();
@@ -54,6 +49,10 @@ public class Employee {
             return false;
         }
         return year != endYear || selectedWeek <= endWeek;
+    }
+
+    public void addEmail(Email email) {
+        inbox.add(email);
     }
 
     public int getActiveActivityCount(int year, int month, int weekOfMonth) {
@@ -74,7 +73,6 @@ public class Employee {
     public List<FixedActivity> getFixedActivities() {
         return fixedActivities;
     }
-
 
     public String getInitials() {
         return initials;

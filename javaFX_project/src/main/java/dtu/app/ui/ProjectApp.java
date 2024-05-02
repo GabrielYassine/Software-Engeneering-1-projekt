@@ -2,7 +2,6 @@ package dtu.app.ui;
 
 import dtu.app.ui.domain.*;
 import dtu.app.ui.info.*;
-import dtu.app.ui.pages.App;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -138,7 +137,7 @@ public class ProjectApp {
         }
 
         validateInterval(startWeekInt, endWeekInt, startYearInt, endYearInt);
-        activity.editActivity(activity, activityName, budgetHoursDouble, startWeekInt, endWeekInt, employees, startYearInt, endYearInt);
+        activity.editActivity(activityName, budgetHoursDouble, startWeekInt, endWeekInt, startYearInt, endYearInt);
         addEmployeesToActivity(activity, employeeInfoList);
         setActivity(new ActivityInfo(activity));
     }
@@ -184,7 +183,7 @@ public class ProjectApp {
      * This method adds Employee objects to an Activity object
      */
 
-    public void addEmployeesToActivity(Activity activity, List<EmployeeInfo> employeeInfoList) throws Exception {
+    private void addEmployeesToActivity(Activity activity, List<EmployeeInfo> employeeInfoList) throws Exception {
         Map<Integer,List<Integer>> weeks = activity.getWeeksInInterval();
 
         for (EmployeeInfo e : employeeInfoList) {
@@ -301,7 +300,6 @@ public class ProjectApp {
         return new EmployeeInfo(database.getEmployee(initials));
     }
 
-
     /**
      * This method returns a ProjectInfo object
      */
@@ -317,7 +315,6 @@ public class ProjectApp {
     public ProjectInfo getSelectedProject() throws Exception {
         return database.getSelectedProject();
     }
-
 
     /**
      * This method returns the selected project leader
@@ -341,7 +338,7 @@ public class ProjectApp {
         LocalDate currentDate = dateServer.getDate();
         Employee e = findEmployee(employeeInfo);
         if (!isEmployeeDoingFixedActivity(employeeInfo) && !e.hasRegisteredDailyWork(currentDate.minusDays(1))) {
-            e.sendEmailNotification("Work", "Register your daily work", currentDate);
+            e.addEmail(new Email("Work", "Register your daily work", currentDate));
         }
     }
 
@@ -487,7 +484,7 @@ public class ProjectApp {
      * This method parses and validates the year
      */
 
-    public int parseAndValidateYear(String year) {
+    private int parseAndValidateYear(String year) {
         try {
             int yearInt = Integer.parseInt(year);
             if (yearInt < 1) {
@@ -503,7 +500,7 @@ public class ProjectApp {
      * This method parses and validates the week
      */
 
-    public int parseAndValidateWeek(String week) {
+    private int parseAndValidateWeek(String week) {
         try {
             int weekInt = Integer.parseInt(week);
             if (weekInt == 0 || weekInt > 52) {
@@ -519,7 +516,7 @@ public class ProjectApp {
      * This method parses and validates the month
      */
 
-    public int parseAndValidateMonth(String month) {
+    private int parseAndValidateMonth(String month) {
         try {
             int monthInt = Integer.parseInt(month);
             if (monthInt == 0 || monthInt > 12) {
@@ -535,7 +532,7 @@ public class ProjectApp {
      * This method validates the name of an activity or employee or project
      */
 
-    public void validateName(String name, Project project) {
+    private void validateName(String name, Project project) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name missing");
         }
@@ -573,7 +570,7 @@ public class ProjectApp {
      * This method return the Employee object from an EmployeeInfo object
      */
 
-    public Employee findEmployee(EmployeeInfo employee) throws Exception {
+    private Employee findEmployee(EmployeeInfo employee) throws Exception {
         String initials = employee.getInitials();
         return database.getEmployee(initials);
     }
@@ -591,7 +588,7 @@ public class ProjectApp {
      * This method returns the Activity object from a ProjectInfo object and an ActivityInfo object
      */
 
-    public Activity findActivity(ProjectInfo projectInfo, ActivityInfo activity) {
+    private Activity findActivity(ProjectInfo projectInfo, ActivityInfo activity) {
         Project project = findProject(projectInfo);
         String name = activity.getName();
         return project.getActivity(name);

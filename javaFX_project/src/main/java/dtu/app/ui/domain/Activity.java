@@ -24,7 +24,7 @@ public class Activity extends AbstractActivity{
         project.addActivity(this);
     }
 
-    public void editActivity(Activity activity, String newName, double newBudgetHours, int newStartWeek, int newEndWeek, List<Employee> newEmployees, int newStartYear, int newEndYear) {
+    public void editActivity(String newName, double newBudgetHours, int newStartWeek, int newEndWeek, int newStartYear, int newEndYear) {
         this.name = newName;
         this.budgetHours = newBudgetHours;
         this.startWeek = newStartWeek;
@@ -84,6 +84,7 @@ public class Activity extends AbstractActivity{
     public int getStartYear() {
         return startYear;
     }
+
     @Override
     public int getEndYear() {
         return endYear;
@@ -101,10 +102,10 @@ public class Activity extends AbstractActivity{
         return project;
     }
 
-
     public List<Employee> getEmployees() {
         return new ArrayList<>(employees);
     }
+
     public boolean getCompletedStatus() {
         return completed;
     }

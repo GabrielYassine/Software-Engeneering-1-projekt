@@ -20,9 +20,7 @@ public class Database {
     private final ProjectApp projectApp;
     private ProjectInfo selectedProject = null;
     private ActivityInfo selectedActivity = null;
-
     private List<String> selectedEmployeeLog = new ArrayList<>();
-
     private EmployeeInfo selectedEmployee = null;
 
     public Database(ProjectApp projectApp) {

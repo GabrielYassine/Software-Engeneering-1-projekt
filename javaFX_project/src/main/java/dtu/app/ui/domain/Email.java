@@ -3,9 +3,9 @@ package dtu.app.ui.domain;
 import java.time.LocalDate;
 
 public class Email {
-    private String subject;
-    private String text;
-    private LocalDate localDate;
+    private final String subject;
+    private final String text;
+    private final LocalDate localDate;
 
     public Email(String subject, String text, LocalDate localDate) {
         this.subject = subject;

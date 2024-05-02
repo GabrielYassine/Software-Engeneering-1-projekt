@@ -21,7 +21,8 @@ public class Project {
         this.projectLeader = projectLeader;
         database.appendProject(this);
     }
-    public int generateID() {
+
+    private int generateID() {
         int currentYear = Year.now().getValue() % 100;
         int serialNumber = 1;
 
@@ -70,6 +71,7 @@ public class Project {
     public void switchActivityCompletionStatus(String activityName) {
         getActivity(activityName).switchCompletionStatus();
     }
+
     public int getID() {
         return ID;
     }

@@ -1,23 +1,19 @@
 package dtu.app.ui.pages;
 
 import dtu.app.ui.domain.Activity;
-import dtu.app.ui.domain.Employee;
 import dtu.app.ui.info.ActivityLogInfo;
 import dtu.app.ui.info.EmployeeInfo;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import dtu.app.ui.domain.ActivityLog;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class EmployeeLogController extends CommonElementsController{
+public class EmployeeLogController extends CommonElementsController {
     @FXML
     public ListView<String> mondayListView;
     @FXML
@@ -105,7 +101,7 @@ public class EmployeeLogController extends CommonElementsController{
     }
 
     public void setupLists(EmployeeInfo e, ActivityLogInfo a, String year, String week) {
-        addActivitiesToView(mondayListView,App.application.getEmployeeDayLog(a, "Monday"));
+        addActivitiesToView(mondayListView, App.application.getEmployeeDayLog(a, "Monday"));
         addActivitiesToView(tuesdayListView, App.application.getEmployeeDayLog(a, "Tuesday"));
         addActivitiesToView(wednesdayListView, App.application.getEmployeeDayLog(a, "Wednesday"));
         addActivitiesToView(thursdayListView, App.application.getEmployeeDayLog(a, "Thursday"));
@@ -143,7 +139,7 @@ public class EmployeeLogController extends CommonElementsController{
         DatePicker[] datePickers = new DatePicker[]{};
         ListView<?>[] listViews = new ListView<?>[]{mondayListView, tuesdayListView, wednesdayListView, thursdayListView, fridayListView, saturdayListView, sundayListView};
         TableView<?>[] tableViews = new TableView<?>[]{};
-        clearFields(textFields,datePickers, listViews, tableViews);
+        clearFields(textFields, datePickers, listViews, tableViews);
         initialize();
     }
 }
