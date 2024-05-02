@@ -87,7 +87,7 @@ public class ProjectApp {
             throw new Exception("Employee not selected");
         }
         Employee employee = findEmployee(employeeInfo);
-        validateName(activityName);
+        validateName(activityName, null);
         int startWeekInt = parseAndValidateWeek(startWeek);
         int endWeekInt = parseAndValidateWeek(endWeek);
         int startYearInt = parseAndValidateYear(startYear);
@@ -537,6 +537,9 @@ public class ProjectApp {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name missing");
         }
+        if (project == null) {
+            return;
+        }
         ActivityInfo oldActivity = database.getSelectedActivity();
         if (oldActivity != null && oldActivity.getName().equals(name)) {
             return;
@@ -545,16 +548,6 @@ public class ProjectApp {
             if (a.getName().equals(name)) {
                 throw new IllegalArgumentException("Activity with this name already exists in the project");
             }
-        }
-    }
-
-    /**
-     * This method validates the name of a fixed activity
-     */
-
-    private void validateName(String name) {
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Name missing");
         }
     }
 
