@@ -96,7 +96,7 @@ Feature: Create Fixed Activity
     When the employee creates a fixed activity with the following details
       | Name         | Start Week | End Week | Start Year | End Year |
       | Holiday      | 5          | 8        | 2025       | 2024     |
-    Then an error message "No employee selected" should be given
+    Then an error message "Employee not selected" should be given
 
 
 

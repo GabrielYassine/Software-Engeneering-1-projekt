@@ -81,6 +81,9 @@ public class ProjectApp {
      */
 
     public void createFixedActivity(EmployeeInfo employeeInfo, String activityName, String startWeek, String endWeek, String startYear, String endYear) throws Exception {
+        if(employeeInfo == null) {
+            throw new Exception("Employee not selected");
+        }
         Employee employee = findEmployee(employeeInfo);
         validateName(activityName);
         int startWeekInt = parseAndValidateWeek(startWeek);
@@ -333,9 +336,6 @@ public class ProjectApp {
      */
 
     public EmployeeInfo getSelectedEmployee() {
-        if (database.getSelectedEmployee() == null) {
-            throw new IllegalArgumentException("No employee selected");
-        }
         return database.getSelectedEmployee();
     }
 
