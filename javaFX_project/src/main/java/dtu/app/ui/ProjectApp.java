@@ -350,7 +350,7 @@ public class ProjectApp {
     }
 
     public boolean doesEmailExist(EmployeeInfo employeeInfo, String subject, String text, LocalDate date) throws Exception {
-        return(findEmployee(employeeInfo).getInbox().stream()
+        return(employeeInfo.getInbox().stream()
                 .anyMatch(email -> email.getSubject().equals(subject) && email.getText().equals(text) && email.getEmailDate().equals(date)));
     }
 
