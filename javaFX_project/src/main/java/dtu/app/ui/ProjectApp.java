@@ -2,6 +2,8 @@ package dtu.app.ui;
 
 import dtu.app.ui.domain.*;
 import dtu.app.ui.info.*;
+import dtu.app.ui.pages.App;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -435,15 +437,22 @@ public class ProjectApp {
      * This method returns a list of the active activities for an employee in a specific year and month
      */
 
-    public List<Integer> getAvailability(EmployeeInfo e, String year, String month) throws Exception {
+    public Map<EmployeeInfo, List<Integer>> getAvailability(String year, String month) throws Exception {
         int yearInt = parseAndValidateYear(year);
         int monthInt = parseAndValidateMonth(month);
-        List<Integer> monthHours = new ArrayList<>();
-        Employee employee = findEmployee(e);
-        for (int i = 1; i <= 5; i++) {
-            monthHours.add(employee.getActiveActivityCount(yearInt, monthInt, i));
+
+        Map<EmployeeInfo, List<Integer>> availability = new HashMap<>();
+        List<EmployeeInfo> employees = getEmployeesInApp();
+
+        for (EmployeeInfo employee : employees) {
+            Employee realEmployee = findEmployee(employee);
+            List<Integer> monthHours = new ArrayList<>();
+            for (int i = 1; i <= 5; i++) {
+                monthHours.add(realEmployee.getActiveActivityCount(yearInt, monthInt, i));
+            }
+            availability.put(employee, monthHours);
         }
-        return monthHours;
+        return availability;
     }
 
     /**

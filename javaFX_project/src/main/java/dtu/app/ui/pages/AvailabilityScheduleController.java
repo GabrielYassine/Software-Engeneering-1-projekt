@@ -33,12 +33,16 @@ public class AvailabilityScheduleController extends CommonElementsController{
     }
 
     public void displayMonth(String year, String month) throws Exception {
-        List<EmployeeInfo> employees = App.application.getEmployeesInApp();
         refreshPage();
-        for (EmployeeInfo employee : employees) {
-            List<Integer> availability = App.application.getAvailability(employee, year, month);
-            String availabilityString = employee.getInitials() + "          First Week: " + availability.get(0) + "          Second Week: " + availability.get(1) + "          Third Week: " + availability.get(2) + "          Fourth Week: " + availability.get(3) + "          Fifth Week: " + availability.get(4);
-            AvailabilitySchedule.getItems().add(availabilityString);
+        Map<EmployeeInfo, List<Integer>> availability1 = App.application.getAvailability(year, month);
+        for (Map.Entry<EmployeeInfo, List<Integer>> entry : availability1.entrySet()) {
+            EmployeeInfo employee = entry.getKey();
+            List<Integer> availability = entry.getValue();
+            StringBuilder availabilityString = new StringBuilder(employee.getInitials() + " - ");
+            for (Integer integer : availability) {
+                availabilityString.append(integer).append(" ");
+            }
+            AvailabilitySchedule.getItems().add(availabilityString.toString());
         }
     }
 

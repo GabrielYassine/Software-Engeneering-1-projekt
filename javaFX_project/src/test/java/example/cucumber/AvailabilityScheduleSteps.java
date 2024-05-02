@@ -16,18 +16,17 @@ public class AvailabilityScheduleSteps {
 
     private final ProjectApp application;
     private final ErrorMessageHolder errorMessage;
-    private List<Integer> availabilitySchedule;
+    private Map<EmployeeInfo, List<Integer>> availabilitySchedule;
 
     public AvailabilityScheduleSteps(ProjectApp application, ErrorMessageHolder errorMessage) {
         this.application = application;
         this.errorMessage = errorMessage;
     }
 
-    @When("the user searches for the availability schedule for year {string} and month {string} for the employee with initials {string}")
-    public void theUserSearchesForTheAvailabilityScheduleForYearAndMonthForTheEmployeeWithInitials(String year, String month, String initials) {
+    @When("the user searches for the availability schedule for year {string} and month {string}")
+    public void theUserSearchesForTheAvailabilityScheduleForYearAndMonthForTheEmployeeWithInitials(String year, String month) {
         try {
-            EmployeeInfo e = application.getEmployee(initials);
-            this.availabilitySchedule = application.getAvailability(e, year, month);
+            this.availabilitySchedule = application.getAvailability(year, month);
         } catch (Exception e) {
             errorMessage.setErrorMessage(e.getMessage());
         }
@@ -37,6 +36,7 @@ public class AvailabilityScheduleSteps {
     public void theSystemShowsTheFollowingAvailabilityCalendarForTheSpecifiedMonth(DataTable table) throws Exception {
         List<Map<String, String>> rows = table.asMaps(String.class, String.class);
         for (Map<String, String> columns : rows) {
+            String initials = columns.get("Initials");
             String firstWeek = columns.get("First Week");
             String secondWeek = columns.get("Second Week");
             String thirdWeek = columns.get("Third Week");
@@ -44,11 +44,17 @@ public class AvailabilityScheduleSteps {
             String fifthWeek = columns.get("Fifth Week");
 
             String expectedAvailability = firstWeek + secondWeek + thirdWeek + fourthWeek + fifthWeek;
-            StringBuilder actualAvailability = new StringBuilder();
-            for (Integer integer : availabilitySchedule) {
-                actualAvailability.append(integer);
+            for (Map.Entry<EmployeeInfo, List<Integer>> entry : availabilitySchedule.entrySet()) {
+                EmployeeInfo employee = entry.getKey();
+                if (employee.getInitials().equals(initials)) {
+                    List<Integer> availability = entry.getValue();
+                    StringBuilder availabilityString = new StringBuilder();
+                    for (Integer integer : availability) {
+                        availabilityString.append(integer);
+                    }
+                    assertEquals(expectedAvailability, availabilityString.toString());
+                }
             }
-            assertEquals(expectedAvailability, actualAvailability.toString());
         }
     }
 
