@@ -29,7 +29,7 @@ public class EmailController {
     }
 
 //    @FXML
-//    public void viewEmail(String initials) {
+//    private void viewEmail(String initials) {
 //        try {
 //            emailTableView.getItems().clear();
 //            Employee employee = App.database.getEmployee(initials);
