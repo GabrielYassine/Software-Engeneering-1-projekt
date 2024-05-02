@@ -5,7 +5,6 @@ Feature: Edit Activity
   Background:
     Given there is a project with name "New Project"
     And there are employees with the following initials in the project
-      | Initials |
       | Huba     |
       | Abed     |
       | Dora     |

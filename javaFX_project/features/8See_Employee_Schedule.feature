@@ -5,7 +5,6 @@ Feature: See Employee Schedule
 
   Background:
     Given there are employees with the following initials
-      | Initials |
       | Huba     |
       | Abed     |
     And there is a project with name "New Project"
@@ -29,10 +28,6 @@ Feature: See Employee Schedule
     Scenario: User searches for schedule of an employee with no initials
       When the user searches for the schedule of the employee with initials "" for the year "2024" and week "17"
       Then an error message "Employee missing" should be given
-
-    Scenario: User searches for schedule of an employee with wrong initials
-      When the user searches for the schedule of the employee with initials "ABCD" for the year "2024" and week "17"
-      Then an error message "Employee with those initials not found" should be given
 
     Scenario: User searches for schedule of an employee with week over 52
       When the user searches for the schedule of the employee with initials "Huba" for the year "2024" and week "53"

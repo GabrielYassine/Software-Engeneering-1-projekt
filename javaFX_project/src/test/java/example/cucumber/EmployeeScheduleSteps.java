@@ -59,8 +59,8 @@ public class EmployeeScheduleSteps {
 
     // Feature: Edit employee schedule
 
-    @When("the employee with initials {string} selects the log with {string} hours on the activity {string} on the date {string} in the project with ID {string}")
-    public void theEmployeeWithInitialsSelectsTheLogWithHoursOnTheActivityOnTheDate(String initials, String hours, String activityName, String date, String projectID) {
+    @When("the employee with initials {string} selects log of the activity {string} on the date {string} in the project with ID {string}")
+    public void theEmployeeWithInitialsSelectsTheLogWithHoursOnTheActivityOnTheDate(String initials, String activityName, String date, String projectID) {
         List<String> items = new ArrayList<>();
         items.add(projectID);
         items.add(activityName);

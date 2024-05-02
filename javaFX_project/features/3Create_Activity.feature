@@ -20,6 +20,15 @@ Feature: Create Activity
     | Budget Hours | Start Week | End Week | Start Year | End Year | Initials               |
     | 100          | 5          | 8        | 2024       | 2024     | Huba, Abed, Dora, Jama |
 
+    Scenario: User creates an activity with no employees
+    When the user creates an activity with the following details
+    | Name        | Budget Hours | Start Week | End Week | Start Year | End Year | Initials |
+    | New Activity| 100          | 5          | 8        | 2024       | 2024     |          |
+    Then the activity should be created
+    And the activity with name "New Activity" should have the following details
+    | Budget Hours | Start Week | End Week | Start Year | End Year | Initials |
+    | 100          | 5          | 8        | 2024       | 2024     |          |
+
   Scenario: User creates an activity with no name
     When the user creates an activity with the following details
     | Name        | Budget Hours | Start Week | End Week | Start Year | End Year |Initials               |

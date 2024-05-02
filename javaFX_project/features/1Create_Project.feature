@@ -15,8 +15,8 @@ Feature: Create Project
       | Project 1  | Huba     | Huba          |
     Then the project should be created
     And the project should have the following details
-      | ID  | Name       | Initials | ProjectLeader |
-      | 24001 | Project 1  | Huba   | Huba          |
+      | ID    | Name        | Initials | ProjectLeader |
+      | 24001 | Project 1   | Huba     | Huba          |
 
   Scenario: User creates a project with no project leader
     When the user creates a project with the following details
@@ -24,8 +24,8 @@ Feature: Create Project
       | Project 1  | Huba     |               |
     Then the project should be created
     And the project should have the following details
-      | ID  | Name       | Initials | ProjectLeader |
-      | 24001 | Project 1  | Huba   |               |
+      | ID    | Name       | Initials | ProjectLeader |
+      | 24001 | Project 1  | Huba     |               |
 
   Scenario: User creates a project with no employees
     When the user creates a project with the following details

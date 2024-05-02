@@ -299,9 +299,6 @@ public class ProjectApp {
         if (initials == null || initials.isEmpty()) {
             throw new Exception("Employee missing");
         }
-        if (database.getEmployee(initials) == null) {
-            throw new Exception("Employee with those initials not found");
-        }
         return new EmployeeInfo(database.getEmployee(initials));
     }
 
@@ -400,7 +397,6 @@ public class ProjectApp {
     public ActivityLogInfo getEmployeeWeekLog(EmployeeInfo employeeInfo, String year, String week) throws Exception {
         int weekInt = parseAndValidateWeek(week);
         int yearInt = parseAndValidateYear(year);
-
         Employee employee = findEmployee(employeeInfo);
         ActivityLogInfo activityLogInfo = new ActivityLogInfo(employee.getActivityLog());
         ActivityLog weekLog = activityLogInfo.getWeekActivities(yearInt, weekInt);

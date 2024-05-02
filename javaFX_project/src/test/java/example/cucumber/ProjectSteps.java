@@ -122,11 +122,11 @@ public class ProjectSteps {
             application.addEmployeeToProject(application.getSelectedProject(), employee);
 		}
 	}
-    @When("the employee edits the project with ID {string} name to {string}, the project leader to {string}, and the project members to {string}")
-    public void theEmployeeEditsTheProjectWithIDNameToTheProjectLeaderToAndTheProjectMembersTo(String id, String newName, String newProjectLeaderInitials, String newEmployeeInitials) throws Exception {
-        ProjectInfo projectToEdit = application.getProject(id);
-        List<EmployeeInfo> employees = new ArrayList<>();
+    @When("the employee edits the project with name to {string}, the project leader to {string}, and the project members to {string}")
+    public void theEmployeeEditsTheProjectWithIDNameToTheProjectLeaderToAndTheProjectMembersTo(String newName, String newProjectLeaderInitials, String newEmployeeInitials) throws Exception {
+        ProjectInfo projectToEdit = application.getSelectedProject();
 
+        List<EmployeeInfo> employees = new ArrayList<>();
         if (newEmployeeInitials != null && !newEmployeeInitials.isEmpty()) {
             for (String initial : newEmployeeInitials.split(", ")) {
                 employees.add(application.getEmployee(initial));
@@ -139,9 +139,9 @@ public class ProjectSteps {
         }
     }
 
-    @Then("the project with ID {string} name should be {string}, the project leader should be {string}, and the project members should be {string}")
-    public void theProjectWithIDNameShouldBeTheProjectLeaderShouldBeAndTheProjectMembersShouldBe(String id, String expectedProjectName, String expectedProjectLeaderInitials, String expectedEmployeeInitials) throws Exception {
-        ProjectInfo projectInfo = application.getProject(id);
+    @Then("the projects name should be {string}, the project leader should be {string}, and the project members should be {string}")
+    public void theProjectWithIDNameShouldBeTheProjectLeaderShouldBeAndTheProjectMembersShouldBe(String expectedProjectName, String expectedProjectLeaderInitials, String expectedEmployeeInitials) throws Exception {
+        ProjectInfo projectInfo = application.getSelectedProject();
 
         assertEquals(expectedProjectName, projectInfo.getName());
 
