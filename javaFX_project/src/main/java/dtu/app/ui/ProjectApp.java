@@ -22,6 +22,7 @@ public class ProjectApp {
 
     public void initializeTestData() throws Exception {
         database.initializeTestData();
+        sendEmailToEmployee(getEmployee("Huba"));
     }
 
     //////////////////////////// CREATE METHODS ////////////////////////////
@@ -335,16 +336,26 @@ public class ProjectApp {
     }
 
     public void sendEmailToEmployee(EmployeeInfo employeeInfo) throws Exception {
-        LocalDate currentDate = dateServer.getDate();
+        DateServer dateServer1 = new DateServer();
+        String currentDate = dateServer1.dateToString(dateServer.getDate());
+        LocalDate beforeDate = dateServer1.parseDate(currentDate).minusDays(1);
+
         Employee e = findEmployee(employeeInfo);
-        if (!isEmployeeDoingFixedActivity(employeeInfo) && !e.hasRegisteredDailyWork(currentDate.minusDays(1))) {
+        if (!isEmployeeDoingFixedActivity(employeeInfo) && !e.hasRegisteredDailyWork(beforeDate)) {
             e.addEmail(new Email("Work", "Register your daily work", currentDate));
         }
     }
 
     public boolean doesEmailExist(EmployeeInfo employeeInfo, String subject, String text, LocalDate date) throws Exception {
-        return(employeeInfo.getInbox().stream()
-                .anyMatch(email -> email.getSubject().equals(subject) && email.getText().equals(text) && email.getEmailDate().equals(date)));
+        DateServer dateServer1 = new DateServer();
+        String dateStr = dateServer1.dateToString(date);
+
+        return(getEmployeeInbox(employeeInfo).stream()
+                .anyMatch(email -> email.getSubject().equals(subject) && email.getText().equals(text) && email.getEmailDate().equals(dateStr)));
+    }
+
+    public List<Email> getEmployeeInbox(EmployeeInfo employee) {
+        return employee.getInbox();
     }
 
     /**

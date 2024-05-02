@@ -5,12 +5,12 @@ import java.time.LocalDate;
 public class Email {
     private final String subject;
     private final String text;
-    private final LocalDate localDate;
+    private final String date;
 
-    public Email(String subject, String text, LocalDate localDate) {
+    public Email(String subject, String text, String date) {
         this.subject = subject;
         this.text = text;
-        this.localDate = localDate;
+        this.date = date;
     }
 
     public String getSubject() {
@@ -21,7 +21,7 @@ public class Email {
         return text;
     }
 
-    public LocalDate getEmailDate() {
-        return localDate;
+    public String getEmailDate() {
+        return date;
     }
 }

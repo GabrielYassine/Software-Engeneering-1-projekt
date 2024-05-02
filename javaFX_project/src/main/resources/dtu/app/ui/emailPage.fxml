@@ -16,8 +16,11 @@
                 <TableColumn fx:id="subjectColumn" text="Subject">
                     <cellValueFactory><PropertyValueFactory property="Subject"/></cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="textColumn" text="text">
-                    <cellValueFactory><PropertyValueFactory property="text"/></cellValueFactory>
+                <TableColumn fx:id="textColumn" text="Text">
+                    <cellValueFactory><PropertyValueFactory property="Text"/></cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="dateColumn" text="Date">
+                    <cellValueFactory><PropertyValueFactory property="Date"/></cellValueFactory>
                 </TableColumn>
             </columns>
         </TableView>
