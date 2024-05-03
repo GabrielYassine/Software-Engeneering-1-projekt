@@ -36,7 +36,7 @@ public class Employee {
         fixedActivities.add(a);
     }
 
-    private boolean isActivityActive(Activity activity, int selectedWeek, int year) {
+    public boolean isActivityActive(Activity activity, int selectedWeek, int year) {
         int startYear = activity.getStartYear();
         int endYear = activity.getEndYear();
         int startWeek = activity.getStartWeek();
@@ -48,7 +48,10 @@ public class Employee {
         if (year == startYear && selectedWeek < startWeek) {
             return false;
         }
-        return year != endYear || selectedWeek <= endWeek;
+        if (year == endYear && selectedWeek > endWeek) {
+            return false;
+        }
+        return true;
     }
 
     public void addEmail(Email email) {
