@@ -37,6 +37,11 @@ public class Employee {
     }
 
     public boolean isActivityActive(Activity activity, int selectedWeek, int year) {
+        // Preconditions
+        assert activity != null;
+        assert selectedWeek >= 1 && selectedWeek <= 52;
+        assert year > 0;
+
         int startYear = activity.getStartYear();
         int endYear = activity.getEndYear();
         int startWeek = activity.getStartWeek();
@@ -51,6 +56,11 @@ public class Employee {
         if (year == endYear && selectedWeek > endWeek) {
             return false;
         }
+
+        // Postconditions
+        assert startYear <= year && year <= endYear;
+        assert year != startYear || selectedWeek >= startWeek;
+        assert year != endYear || selectedWeek <= endWeek;
         return true;
     }
 
