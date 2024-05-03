@@ -41,6 +41,9 @@ public class ProjectApp {
      */
 
     public Project createProject(String projectName, List<EmployeeInfo> employeeInfoList, EmployeeInfo projectLeaderInfo) throws Exception {
+        // preconditions
+        assert employeeInfoList != null;
+
         if (projectName == null || projectName.isEmpty()) {
             throw new IllegalArgumentException("Name missing");
         }
@@ -54,7 +57,11 @@ public class ProjectApp {
             projectLeader = findEmployee(projectLeaderInfo);
         }
 
-        return new Project(database, projectName, employees, projectLeader);
+        Project result = new Project(database, projectName, employees, projectLeader);
+
+        // postconditions
+        assert result != null;
+        return result;
     }
 
     /**
