@@ -15,7 +15,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
-public class TestIsActivityActiveFunction {
+public class TestIsActivityActiveMethod {
 
 	/**
 	 * Test the isActivityActive function in the Employee class, the method has been made public for testing purposes
