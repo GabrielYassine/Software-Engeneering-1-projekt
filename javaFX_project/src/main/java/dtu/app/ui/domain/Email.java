@@ -21,7 +21,7 @@ public class Email {
         return text;
     }
 
-    public String getEmailDate() {
+    public String getDate() {
         return date;
     }
 }

@@ -351,7 +351,7 @@ public class ProjectApp {
         String dateStr = dateServer1.dateToString(date);
 
         return(getEmployeeInbox(employeeInfo).stream()
-                .anyMatch(email -> email.getSubject().equals(subject) && email.getText().equals(text) && email.getEmailDate().equals(dateStr)));
+                .anyMatch(email -> email.getSubject().equals(subject) && email.getText().equals(text) && email.getDate().equals(dateStr)));
     }
 
     public List<Email> getEmployeeInbox(EmployeeInfo employee) {
