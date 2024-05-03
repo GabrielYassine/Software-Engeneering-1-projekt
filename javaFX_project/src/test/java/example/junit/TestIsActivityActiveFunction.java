@@ -19,7 +19,9 @@ public class TestIsActivityActiveFunction {
 
 	/**
 	 * Test the isActivityActive function in the Employee class, the method has been made public for testing purposes
+	 * @Author: Gabriel
 	 */
+
 	private Employee employee;
 	private Activity activity;
 
