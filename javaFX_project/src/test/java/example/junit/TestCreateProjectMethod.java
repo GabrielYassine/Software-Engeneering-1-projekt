@@ -19,14 +19,14 @@ public class TestCreateProjectMethod {
      * @Author: Taemur
      */
 
-    private ProjectApp projectApp = new ProjectApp();
-    private List<EmployeeInfo> employeeList = new ArrayList<>();
-    private List<EmployeeInfo> emptyEmployeeList = new ArrayList<>();
+    private final ProjectApp projectApp = new ProjectApp();
+    private final List<EmployeeInfo> employeeList = new ArrayList<>();
+    private final List<EmployeeInfo> emptyEmployeeList = new ArrayList<>();
     private String projectName;
     private EmployeeInfo projectLeaderInfo;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         Employee employee1 = projectApp.createEmployee("Huba");
         Employee employee2 = projectApp.createEmployee("Abed");
         Employee employee3 = projectApp.createEmployee("Lisa");
