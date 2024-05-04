@@ -2,8 +2,6 @@ package dtu.app.ui.domain;
 
 
 public class FixedActivity extends AbstractActivity {
-    private final String name;
-
     public FixedActivity(Employee employee, String name, int startWeek, int endWeek, int startYear, int endYear) {
         this.name = name;
         this.startWeek = startWeek;
@@ -13,6 +11,7 @@ public class FixedActivity extends AbstractActivity {
         employee.addFixedActivity(this);
     }
 
+    @Override
     public String getName() {
         return name;
     }

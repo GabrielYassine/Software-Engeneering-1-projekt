@@ -8,7 +8,6 @@ import java.util.Map;
 public class Activity extends AbstractActivity{
     private final List<Employee> employees = new ArrayList<>();
     private final Project project;
-    private final DateServer dateServer = new DateServer();
     private double budgetHours;
     private double hoursSpent = 0;
     private boolean completed = false;
