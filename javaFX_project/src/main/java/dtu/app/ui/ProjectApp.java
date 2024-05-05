@@ -521,9 +521,14 @@ public class ProjectApp {
     public int parseAndValidateWeek(String week) {
         try {
             int weekInt = Integer.parseInt(week);
+            
             if (weekInt == 0 || weekInt > 52) {
                 throw new IllegalArgumentException("Week value out of bounds");
             }
+
+            // Postconditions
+            assert weekInt > 0 && weekInt <= 52;
+
             return weekInt;
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("No week given");
