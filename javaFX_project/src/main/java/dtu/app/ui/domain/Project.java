@@ -52,7 +52,7 @@ public class Project {
 
     public void updateEmployees() {
         // Preconditions
-        assert employees != null : "Employees list cannot be null";
+        assert employees != null;
 
         if (activities == null) {
             activities = new ArrayList<>();

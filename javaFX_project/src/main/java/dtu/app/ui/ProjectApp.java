@@ -519,6 +519,8 @@ public class ProjectApp {
      */
 
     public int parseAndValidateWeek(String week) {
+        assert true;
+
         try {
             int weekInt = Integer.parseInt(week);
             
@@ -563,6 +565,7 @@ public class ProjectApp {
         if (project == null) {
             return;
         }
+
         ActivityInfo oldActivity = database.getSelectedActivity();
         if (oldActivity != null && oldActivity.getName().equals(name)) {
             return;
