@@ -518,7 +518,7 @@ public class ProjectApp {
      * This method parses and validates the week
      */
 
-    private int parseAndValidateWeek(String week) {
+    public int parseAndValidateWeek(String week) {
         try {
             int weekInt = Integer.parseInt(week);
             if (weekInt == 0 || weekInt > 52) {

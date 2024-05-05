@@ -50,7 +50,7 @@ public class Project {
         employees.add(employee);
     }
 
-    private void updateEmployees() {
+    public void updateEmployees() {
         for (Activity a : activities) {
             a.updateEmployees();
         }
