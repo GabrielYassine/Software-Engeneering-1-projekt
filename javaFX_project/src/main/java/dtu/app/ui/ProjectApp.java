@@ -551,6 +551,7 @@ public class ProjectApp {
      */
 
     public void validateName(String name, Project project) {
+        //preconditions
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name missing");
         }
@@ -566,6 +567,11 @@ public class ProjectApp {
                 throw new IllegalArgumentException("Activity with this name already exists in the project");
             }
         }
+        // postConditions
+        assert name != null;
+        assert name.isEmpty() == false;
+        assert project != null;
+        assert !oldActivity.getName().equals(name);
     }
 
     /**
