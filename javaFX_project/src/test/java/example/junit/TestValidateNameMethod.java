@@ -62,8 +62,6 @@ public class TestValidateNameMethod {
     //Name is the selected activities name and no errors occur
     @Test
     public void testInputDatasetD() throws Exception {
-        Activity activity = projectApp.createActivity(projectInfo,"Activity", "3", "3", "5", employeeInfoList, "2024", "2024");
-        ActivityInfo activityInfo = new ActivityInfo(activity);
         projectApp.validateName("Activity", project);
     }
     //No activities exist in the project and no errors occur
