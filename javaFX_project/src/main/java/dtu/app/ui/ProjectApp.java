@@ -550,7 +550,7 @@ public class ProjectApp {
      * This method validates the name of an activity or employee or project
      */
 
-    private void validateName(String name, Project project) {
+    public void validateName(String name, Project project) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name missing");
         }
