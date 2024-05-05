@@ -571,7 +571,7 @@ public class ProjectApp {
         assert name != null;
         assert name.isEmpty() == false;
         assert project != null;
-        assert !oldActivity.getName().equals(name);
+        assert oldActivity == null || !oldActivity.getName().equals(name);
     }
 
     /**
