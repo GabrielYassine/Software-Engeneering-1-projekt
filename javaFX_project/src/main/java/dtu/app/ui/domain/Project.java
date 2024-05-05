@@ -8,7 +8,7 @@ public class Project {
     private final Database database;
     private final int ID;
     private String name;
-    private final List<Activity> activities;
+    private List<Activity> activities;
     private final List<Employee> employees;
     private Employee projectLeader;
 
@@ -51,6 +51,12 @@ public class Project {
     }
 
     public void updateEmployees() {
+        // Preconditions
+        assert employees != null : "Employees list cannot be null";
+
+        if (activities == null) {
+            activities = new ArrayList<>();
+        }
         for (Activity a : activities) {
             a.updateEmployees();
         }
@@ -66,6 +72,8 @@ public class Project {
                 projectLeader = null;
             }
         }
+        // Postconditions
+        assert projectLeader == null || employees.contains(projectLeader);
     }
 
     public void switchActivityCompletionStatus(String activityName) {
