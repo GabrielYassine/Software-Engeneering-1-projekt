@@ -129,8 +129,8 @@ public class EmployeeLogController extends CommonElementsController {
         try {
             App.application.setEmployee(EmployeesComboBox.getSelectionModel().getSelectedItem());
             App.setRoot("fixedActivities");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 

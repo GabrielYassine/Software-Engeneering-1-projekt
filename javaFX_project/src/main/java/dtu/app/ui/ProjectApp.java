@@ -279,7 +279,10 @@ public class ProjectApp {
      * This method sets the selected employee
      */
 
-    public void setEmployee(EmployeeInfo employee) {
+    public void setEmployee(EmployeeInfo employee) throws Exception {
+        if (employee == null) {
+            throw new Exception("Employee missing");
+        }
         database.setSelectedEmployee(employee);
     }
 
