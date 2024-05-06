@@ -7,6 +7,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
 public class ProjectApp {
 
     private final Database database;
@@ -90,7 +91,7 @@ public class ProjectApp {
      */
 
     public void createFixedActivity(EmployeeInfo employeeInfo, String activityName, String startWeek, String endWeek, String startYear, String endYear) throws Exception {
-        if(employeeInfo == null) {
+        if (employeeInfo == null) {
             throw new Exception("Employee not selected");
         }
         Employee employee = findEmployee(employeeInfo);
@@ -192,7 +193,7 @@ public class ProjectApp {
      */
 
     private void addEmployeesToActivity(Activity activity, List<EmployeeInfo> employeeInfoList) throws Exception {
-        Map<Integer,List<Integer>> weeks = activity.getWeeksInInterval();
+        Map<Integer, List<Integer>> weeks = activity.getWeeksInInterval();
 
         for (EmployeeInfo e : employeeInfoList) {
             Employee employee = findEmployee(e);
@@ -360,7 +361,7 @@ public class ProjectApp {
         DateServer dateServer1 = new DateServer();
         String dateStr = dateServer1.dateToString(date);
 
-        return(getEmployeeInbox(employeeInfo).stream()
+        return (getEmployeeInbox(employeeInfo).stream()
                 .anyMatch(email -> email.getSubject().equals(subject) && email.getText().equals(text) && email.getDate().equals(dateStr)));
     }
 
@@ -505,39 +506,41 @@ public class ProjectApp {
      * This method parses and validates the year
      */
 
-    private int parseAndValidateYear(String year) {
+    private int parseAndValidateYear(String year) throws Exception {
+        int yearInt;
         try {
-            int yearInt = Integer.parseInt(year);
-            if (yearInt < 1) {
-                throw new IllegalArgumentException("Year value out of bounds");
-            }
-            return yearInt;
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("No year given");
+            yearInt = Integer.parseInt(year);
+        } catch (Exception e) {
+            throw new Exception("No year given");
         }
+        if (yearInt < 1) {
+            throw new Exception("Year value out of bounds");
+        }
+        return yearInt;
     }
 
     /**
      * This method parses and validates the week
      */
 
-    public int parseAndValidateWeek(String week) {
+    public int parseAndValidateWeek(String week) throws Exception {
         assert true;
 
+        int weekInt;
         try {
-            int weekInt = Integer.parseInt(week);
-            
-            if (weekInt == 0 || weekInt > 52) {
-                throw new IllegalArgumentException("Week value out of bounds");
-            }
-
-            // Postconditions
-            assert weekInt > 0 && weekInt <= 52;
-
-            return weekInt;
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("No week given");
+            weekInt = Integer.parseInt(week);
+        } catch (Exception e) {
+            throw new Exception("No week given");
         }
+
+        if (weekInt == 0 || weekInt > 52) {
+            throw new Exception("Week value out of bounds");
+        }
+
+        // Postconditions
+        assert weekInt > 0 && weekInt <= 52;
+
+        return weekInt;
     }
 
     /**
@@ -701,7 +704,7 @@ public class ProjectApp {
      * This method returns a list of dates for a specific year and week
      */
 
-    public List<String> getWeekDates(String year, String week) {
+    public List<String> getWeekDates(String year, String week) throws Exception {
         int weekInt = parseAndValidateWeek(week);
         int yearInt = parseAndValidateYear(year);
         List<String> weekDates = new ArrayList<>();

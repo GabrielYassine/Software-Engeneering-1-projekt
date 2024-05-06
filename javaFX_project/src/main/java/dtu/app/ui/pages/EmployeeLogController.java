@@ -100,7 +100,7 @@ public class EmployeeLogController extends CommonElementsController {
         setupLists(employeeInfo, employeeLog, year, week);
     }
 
-    public void setupLists(EmployeeInfo e, ActivityLogInfo a, String year, String week) {
+    public void setupLists(EmployeeInfo e, ActivityLogInfo a, String year, String week) throws Exception {
         addActivitiesToView(mondayListView, App.application.getEmployeeDayLog(a, "Monday"));
         addActivitiesToView(tuesdayListView, App.application.getEmployeeDayLog(a, "Tuesday"));
         addActivitiesToView(wednesdayListView, App.application.getEmployeeDayLog(a, "Wednesday"));

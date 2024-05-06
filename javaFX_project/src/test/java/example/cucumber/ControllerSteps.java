@@ -92,7 +92,7 @@ public class ControllerSteps {
 
 
     @When("the user searches for the year {string} and week {string} they should see the following dates")
-    public void theUserSearchesForTheYearAndWeekTheyShouldSeeTheFollowingDates(String year, String week, List<String> dates1) {
+    public void theUserSearchesForTheYearAndWeekTheyShouldSeeTheFollowingDates(String year, String week, List<String> dates1) throws Exception {
         List<String> dates2 = application.getWeekDates(year, week);
         assertEquals(dates1, dates2);
     }

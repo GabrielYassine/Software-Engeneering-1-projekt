@@ -47,4 +47,4 @@ Feature: See Employee Schedule
 
   Scenario: User searches for schedule of an employee for year 0
     When the user searches for the schedule of the employee with initials "Huba" for the year "0" and week "7"
-      Then an error message "Year value out of bounds" should be given
+    Then an error message "Year value out of bounds" should be given

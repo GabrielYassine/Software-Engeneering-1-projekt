@@ -24,7 +24,7 @@ public class TestParseAndValidateWeek {
     public void testInputDataSetA() {
         try {
             projectApp.parseAndValidateWeek("53");
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             assertEquals("Week value out of bounds", e.getMessage());
         }
     }
@@ -33,13 +33,13 @@ public class TestParseAndValidateWeek {
     public void testInputDataSetB() {
         try {
             projectApp.parseAndValidateWeek("0");
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             assertEquals("Week value out of bounds", e.getMessage());
         }
     }
 
     @Test
-    public void testInputDataSetC() {
+    public void testInputDataSetC() throws Exception {
         int week = projectApp.parseAndValidateWeek("51");
         assertEquals(51, week);
     }
@@ -49,7 +49,7 @@ public class TestParseAndValidateWeek {
     public void testInputDataSetD() {
         try {
             projectApp.parseAndValidateWeek("");
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             assertEquals("No week given", e.getMessage());
         }
     }
