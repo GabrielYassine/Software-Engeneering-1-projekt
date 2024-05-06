@@ -22,7 +22,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         App.application = new ProjectApp();
-        App.application.initializeTestData();
+        App.application.initializeTestData(); // Initialize test data
         scene = new Scene(loadFXML("menu"), 640, 480);
         stage.setScene(scene);
         stage.setResizable(false);
