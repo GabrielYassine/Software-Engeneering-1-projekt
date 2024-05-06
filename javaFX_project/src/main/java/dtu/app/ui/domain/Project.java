@@ -54,9 +54,6 @@ public class Project {
         // Preconditions
         assert employees != null;
 
-        if (activities == null) {
-            activities = new ArrayList<>();
-        }
         for (Activity a : activities) {
             a.updateEmployees();
         }
