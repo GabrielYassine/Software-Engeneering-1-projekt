@@ -53,7 +53,6 @@ public class ActivityInfoController extends CommonElementsController {
 
         String startWeek = String.valueOf(activity.getStartWeek());
         String endWeek = String.valueOf(activity.getEndWeek());
-        String budgetHours = String.valueOf(activity.getBudgetHours());
 
         activityNameValue.setText(activity.getName());
         startWeekValue.setText(startWeek);
@@ -88,7 +87,7 @@ public class ActivityInfoController extends CommonElementsController {
         try {
             EmployeeInfo employeeInfo = initialsComboBox.getSelectionModel().getSelectedItem();
             LocalDate selectedDate = datePicker.getValue();
-            String date = selectedDate.toString();
+            String date = selectedDate == null ? "" : selectedDate.toString();
             ActivityInfo activity = App.application.getSelectedActivity();
             String hours = hoursField.getText();
             App.application.registerHours(employeeInfo, date, activity, hours, null);

@@ -34,7 +34,9 @@ public class Activity extends AbstractActivity{
     }
 
     public void addEmployee(Employee e) {
-        employees.add(e);
+        if (!employees.contains(e)) {
+            employees.add(e);
+        }
     }
 
     public void updateEmployees() {

@@ -87,17 +87,19 @@ public class EmployeeLogController extends CommonElementsController {
     }
 
     public void selectWeek(ActionEvent actionEvent) throws Exception {
-        EmployeeInfo employeeInfo = EmployeesComboBox.getSelectionModel().getSelectedItem();
-        String year = yearField.getText();
-        String week = weekField.getText();
-
-        initialsValue.setText(employeeInfo.getInitials());
-        yearNumber.setText(year);
-        weekNumber.setText(week);
-
-        ActivityLogInfo employeeLog = App.application.getEmployeeWeekLog(employeeInfo, year, week);
-        refreshPage();
-        setupLists(employeeInfo, employeeLog, year, week);
+        try {
+            EmployeeInfo employeeInfo = EmployeesComboBox.getSelectionModel().getSelectedItem();
+            String year = yearField.getText();
+            String week = weekField.getText();
+            ActivityLogInfo employeeLog = App.application.getEmployeeWeekLog(employeeInfo, year, week);
+            initialsValue.setText(employeeInfo.getInitials());
+            yearNumber.setText(year);
+            weekNumber.setText(week);
+            refreshPage();
+            setupLists(employeeInfo, employeeLog, year, week);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void setupLists(EmployeeInfo e, ActivityLogInfo a, String year, String week) throws Exception {

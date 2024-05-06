@@ -220,18 +220,17 @@ public class ProjectApp {
         if (employeeInfo == null) {
             throw new Exception("Employee missing");
         }
+        double hoursDouble = parseAndValidateHours(hours);
         if (date == null || date.isEmpty()) {
             throw new Exception("Date missing");
         }
         LocalDate localDate = dateServer.parseDate(date);
-
-        double hoursDouble = parseAndValidateHours(hours);
         Employee employee = findEmployee(employeeInfo);
         ProjectInfo projectToUse = projectInfo != null ? projectInfo : getSelectedProject();
         Activity activity = findActivity(projectToUse, activityInfo);
-
         employee.getActivityLog().registerHours(localDate, activity, hoursDouble);
         activity.registerHours(hoursDouble);
+        setActivity(new ActivityInfo(activity));
     }
 
     //////////////////////////// CHECKER METHODS ////////////////////////////
@@ -416,8 +415,8 @@ public class ProjectApp {
         if (employeeInfo == null) {
             throw new Exception("Employee missing");
         }
-        int weekInt = parseAndValidateWeek(week);
         int yearInt = parseAndValidateYear(year);
+        int weekInt = parseAndValidateWeek(week);
         Employee employee = findEmployee(employeeInfo);
         ActivityLogInfo activityLogInfo = new ActivityLogInfo(employee.getActivityLog());
         ActivityLog weekLog = activityLogInfo.getWeekActivities(yearInt, weekInt);

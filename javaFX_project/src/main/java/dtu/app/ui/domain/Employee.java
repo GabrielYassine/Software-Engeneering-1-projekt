@@ -29,7 +29,9 @@ public class Employee {
     }
 
     public void addActivity(Activity a) {
-        activities.add(a);
+        if (!activities.contains(a)) {
+            activities.add(a);
+        }
     }
 
     public void addFixedActivity(FixedActivity a) {
