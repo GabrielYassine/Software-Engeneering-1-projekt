@@ -1,11 +1,16 @@
 package dtu.app.ui.domain;
 
+import dtu.app.ui.database.Database;
+
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.IsoFields;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @Author Taemur Baig
+ */
 public class Employee {
     private final String initials;
     private final ActivityLog activityLog;

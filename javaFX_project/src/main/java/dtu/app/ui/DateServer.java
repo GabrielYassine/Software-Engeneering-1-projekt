@@ -1,9 +1,13 @@
-package dtu.app.ui.domain;
+package dtu.app.ui;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
+
+/**
+ * @Author Taemur Baig
+ */
 
 public class DateServer {
     public LocalDate getDate() {

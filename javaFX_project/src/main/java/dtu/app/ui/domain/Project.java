@@ -1,9 +1,14 @@
 package dtu.app.ui.domain;
 
+import dtu.app.ui.database.Database;
+
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @Author Mathias Bødkerholm Dalsgaard
+ */
 public class Project {
     private final Database database;
     private final int ID;

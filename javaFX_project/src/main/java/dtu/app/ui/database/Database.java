@@ -1,6 +1,9 @@
-package dtu.app.ui.domain;
+package dtu.app.ui.database;
 
 import dtu.app.ui.ProjectApp;
+import dtu.app.ui.domain.Activity;
+import dtu.app.ui.domain.Employee;
+import dtu.app.ui.domain.Project;
 import dtu.app.ui.info.ActivityInfo;
 import dtu.app.ui.info.EmployeeInfo;
 import dtu.app.ui.info.ProjectInfo;
@@ -11,7 +14,7 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * JavaFX App
+ * Shared responsibility.
  */
 
 public class Database {

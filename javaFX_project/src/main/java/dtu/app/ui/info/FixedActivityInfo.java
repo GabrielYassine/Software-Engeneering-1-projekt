@@ -2,6 +2,9 @@ package dtu.app.ui.info;
 
 import dtu.app.ui.domain.FixedActivity;
 
+/**
+ * @Author Aland Ali Ahmad
+ */
 public class FixedActivityInfo {
     private final String name;
     private final int startWeek;

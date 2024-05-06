@@ -3,6 +3,9 @@ package dtu.app.ui.domain;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * @Author Gabriel Ali Yassine
+ */
 public class ActivityLog {
     private final Map<LocalDate, Map<Activity, Double>> dateLog;
     private final List<LocalDate> registeredDates;

@@ -1,5 +1,8 @@
 package dtu.app.ui.domain;
 
+/**
+ * @Author Aland Ali Ahmad
+ */
 
 public class FixedActivity extends AbstractActivity {
     public FixedActivity(Employee employee, String name, int startWeek, int endWeek, int startYear, int endYear) {

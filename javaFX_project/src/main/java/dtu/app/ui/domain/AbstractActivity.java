@@ -1,5 +1,8 @@
 package dtu.app.ui.domain;
 
+/**
+ * @Author Aland Ali Ahmad
+ */
 public abstract class AbstractActivity {
     protected String name;
     protected int startWeek;

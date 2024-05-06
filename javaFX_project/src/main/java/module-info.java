@@ -9,4 +9,6 @@ module hellofx {
     opens dtu.app.ui.pages to javafx.fxml;
     exports dtu.app.ui.domain;
     opens dtu.app.ui.domain to javafx.fxml;
+    exports dtu.app.ui.database;
+    opens dtu.app.ui.database to javafx.fxml;
 }

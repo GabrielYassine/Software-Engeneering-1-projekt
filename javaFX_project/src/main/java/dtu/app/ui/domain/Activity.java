@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @Author Ilias Chaykh
+ */
+
 public class Activity extends AbstractActivity{
     private final List<Employee> employees = new ArrayList<>();
     private final Project project;

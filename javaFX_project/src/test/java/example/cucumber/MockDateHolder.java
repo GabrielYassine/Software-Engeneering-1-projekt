@@ -1,11 +1,9 @@
 package example.cucumber;
 
 import dtu.app.ui.ProjectApp;
-import dtu.app.ui.domain.DateServer;
+import dtu.app.ui.DateServer;
 
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

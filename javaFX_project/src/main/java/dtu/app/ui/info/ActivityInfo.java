@@ -6,6 +6,9 @@ import dtu.app.ui.domain.Employee;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @Author Illias Chaykh
+ */
 public class ActivityInfo {
     private final String name;
     private final double budgetHours;

@@ -1,5 +1,6 @@
 package dtu.app.ui;
 
+import dtu.app.ui.database.Database;
 import dtu.app.ui.domain.*;
 import dtu.app.ui.info.*;
 
@@ -19,6 +20,7 @@ public class ProjectApp {
 
     /**
      * This method initializes the test data
+     * @Author: Gabriel Ali Yassine
      */
 
     public void initializeTestData() throws Exception {
@@ -30,6 +32,7 @@ public class ProjectApp {
 
     /**
      * This method creates an Employee object
+     * @Author: Taemur Baig
      */
 
     public Employee createEmployee(String initials) {
@@ -39,6 +42,7 @@ public class ProjectApp {
 
     /**
      * This method creates a Project object
+     * @Author: Mathias Bødkerholm Dalsgaard
      */
 
     public Project createProject(String projectName, List<EmployeeInfo> employeeInfoList, EmployeeInfo projectLeaderInfo) throws Exception {
@@ -67,6 +71,7 @@ public class ProjectApp {
 
     /**
      * This method creates an Activity object
+     * @Author: Ilias Chaykh
      */
 
     public Activity createActivity(ProjectInfo projectInfo, String activityName, String budgetHours, String startWeek, String endWeek, List<EmployeeInfo> employeeInfoList, String startYear, String endYear) throws Exception {
@@ -88,6 +93,7 @@ public class ProjectApp {
 
     /**
      * This method creates a FixedActivity object
+     * @Author: Aland Ali Ahmad
      */
 
     public void createFixedActivity(EmployeeInfo employeeInfo, String activityName, String startWeek, String endWeek, String startYear, String endYear) throws Exception {
@@ -109,6 +115,7 @@ public class ProjectApp {
 
     /**
      * This method edits a projects details
+     * @Author: Mathias Bødkerholm Dalsgaard
      */
 
     public void editProject(ProjectInfo projectInfo, String projectName, String projectLeaderInitials, List<EmployeeInfo> employeeInfoList) throws Exception {
@@ -127,6 +134,7 @@ public class ProjectApp {
 
     /**
      * This method edits an Activity object
+     * @Author: Ilias Chaykh
      */
 
     public void editActivity(ActivityInfo activityInfo, String activityName, String budgetHours, String startWeek, String endWeek, List<EmployeeInfo> employeeInfoList, String startYear, String endYear) throws Exception {
@@ -153,6 +161,7 @@ public class ProjectApp {
 
     /**
      * This method edits the hours spent on a specific activity on a specific date
+     * @Author: Gabriel Ali Yassine
      */
 
     public void editEmployeeLogHours(String projectID, String activityName, String date, String employeeInitials, String oldHours, String newHours) throws Exception {
@@ -168,6 +177,7 @@ public class ProjectApp {
 
     /**
      * This method completes / uncompletes an activity
+     * @Author: Illias Chaykh
      */
 
     public void switchActivityCompletion(ProjectInfo projectInfo, ActivityInfo activityInfo) throws Exception {
@@ -181,6 +191,7 @@ public class ProjectApp {
 
     /**
      * This method adds an Employee object to a Project object
+     * @Author: Mathias Bødkerholm Dalsgaard
      */
 
     public void addEmployeeToProject(ProjectInfo projectInfo, Employee employee) throws Exception {
@@ -190,6 +201,7 @@ public class ProjectApp {
 
     /**
      * This method adds Employee objects to an Activity object
+     * @Author: Aland Ali Ahmad
      */
 
     private void addEmployeesToActivity(Activity activity, List<EmployeeInfo> employeeInfoList) throws Exception {
@@ -214,6 +226,7 @@ public class ProjectApp {
 
     /**
      * This method registers hours on an Activity object
+     * @Author: Gabriel Ali Yassine
      */
 
     public void registerHours(EmployeeInfo employeeInfo, String date, ActivityInfo activityInfo, String hours, ProjectInfo projectInfo) throws Exception {
@@ -233,7 +246,28 @@ public class ProjectApp {
         setActivity(new ActivityInfo(activity));
     }
 
+
+    /**
+     * This method sends an email to an employee
+     * @Author: Taemur Baig
+     */
+    public void sendEmailToEmployee(EmployeeInfo employeeInfo) throws Exception {
+        DateServer dateServer1 = new DateServer();
+        String currentDate = dateServer1.dateToString(dateServer.getDate());
+        LocalDate beforeDate = dateServer1.parseDate(currentDate).minusDays(1);
+
+        Employee e = findEmployee(employeeInfo);
+        if (!isEmployeeDoingFixedActivity(employeeInfo) && !e.hasRegisteredDailyWork(beforeDate)) {
+            e.addEmail(new Email("Work", "Register your daily work", currentDate));
+        }
+    }
+
     //////////////////////////// CHECKER METHODS ////////////////////////////
+
+    /**
+     * This method checks if an employee is doing a fixed activity
+     * @Author: Taemur Baig
+     */
 
     public boolean isEmployeeDoingFixedActivity(EmployeeInfo employeeInfo) throws Exception {
         Employee e = findEmployee(employeeInfo);
@@ -244,9 +278,26 @@ public class ProjectApp {
         return e.isDoingFixedActivity(currentWeek, currentYear);
     }
 
+    /**
+     * This method checks if an employee has registered daily work
+     * @Author: Taemur Baig
+     */
+
     public boolean hasEmployeeRegisteredDailyWork(EmployeeInfo employeeInfo) throws Exception {
         LocalDate currentDate = dateServer.getDate();
         return findEmployee(employeeInfo).hasRegisteredDailyWork(currentDate);
+    }
+
+    /**
+     * This method checks if an email with specific details exists
+     * @Author: Taemur Baig
+     */
+    public boolean doesEmailExist(EmployeeInfo employeeInfo, String subject, String text, LocalDate date) throws Exception {
+        DateServer dateServer1 = new DateServer();
+        String dateStr = dateServer1.dateToString(date);
+
+        return (getEmployeeInbox(employeeInfo).stream()
+                .anyMatch(email -> email.getSubject().equals(subject) && email.getText().equals(text) && email.getDate().equals(dateStr)));
     }
 
     //////////////////////////// SETTER METHODS ////////////////////////////
@@ -343,25 +394,6 @@ public class ProjectApp {
 
     public EmployeeInfo getSelectedEmployee() {
         return database.getSelectedEmployee();
-    }
-
-    public void sendEmailToEmployee(EmployeeInfo employeeInfo) throws Exception {
-        DateServer dateServer1 = new DateServer();
-        String currentDate = dateServer1.dateToString(dateServer.getDate());
-        LocalDate beforeDate = dateServer1.parseDate(currentDate).minusDays(1);
-
-        Employee e = findEmployee(employeeInfo);
-        if (!isEmployeeDoingFixedActivity(employeeInfo) && !e.hasRegisteredDailyWork(beforeDate)) {
-            e.addEmail(new Email("Work", "Register your daily work", currentDate));
-        }
-    }
-
-    public boolean doesEmailExist(EmployeeInfo employeeInfo, String subject, String text, LocalDate date) throws Exception {
-        DateServer dateServer1 = new DateServer();
-        String dateStr = dateServer1.dateToString(date);
-
-        return (getEmployeeInbox(employeeInfo).stream()
-                .anyMatch(email -> email.getSubject().equals(subject) && email.getText().equals(text) && email.getDate().equals(dateStr)));
     }
 
     public List<Email> getEmployeeInbox(EmployeeInfo employee) {
@@ -489,6 +521,7 @@ public class ProjectApp {
 
     /**
      * This method parses and validates the hours worked or budget hours
+     * @Author Aland Ali Ahmad
      */
 
     private double parseAndValidateHours(String registeredHours) throws Exception {
@@ -503,6 +536,7 @@ public class ProjectApp {
 
     /**
      * This method parses and validates the year
+     * @Author: Aland Ali Ahmad
      */
 
     private int parseAndValidateYear(String year) throws Exception {
@@ -520,6 +554,7 @@ public class ProjectApp {
 
     /**
      * This method parses and validates the week
+     * @Author: Aland Ali Ahmad
      */
 
     public int parseAndValidateWeek(String week) throws Exception {
@@ -544,6 +579,7 @@ public class ProjectApp {
 
     /**
      * This method parses and validates the month
+     * @Author: Aland Ali Ahmad
      */
 
     private int parseAndValidateMonth(String month) {
@@ -560,6 +596,7 @@ public class ProjectApp {
 
     /**
      * This method validates the name of an activity or employee or project
+     * @Author: Mathias Bødkerholm Dalsgaard
      */
 
     public void validateName(String name, Project project) {
@@ -589,6 +626,7 @@ public class ProjectApp {
 
     /**
      * This method validates the interval of the start and end week
+     * @Author: Gabriel Ali Yassine
      */
 
     private void validateInterval(int startWeekInt, int endWeekInt, int startYearInt, int endYearInt) {
@@ -605,6 +643,7 @@ public class ProjectApp {
 
     /**
      * This method return the Employee object from an EmployeeInfo object
+     * @Author: Gabriel Ali Yassine
      */
 
     private Employee findEmployee(EmployeeInfo employee) throws Exception {
@@ -614,6 +653,7 @@ public class ProjectApp {
 
     /**
      * This method returns the Project object from a ProjectInfo object
+     * @Author: Mathias Bødkerholm Dalsgaard
      */
 
     public Project findProject(ProjectInfo project) {
@@ -623,6 +663,7 @@ public class ProjectApp {
 
     /**
      * This method returns the Activity object from a ProjectInfo object and an ActivityInfo object
+     * @Author: Ilias Chaykh
      */
 
     private Activity findActivity(ProjectInfo projectInfo, ActivityInfo activity) {

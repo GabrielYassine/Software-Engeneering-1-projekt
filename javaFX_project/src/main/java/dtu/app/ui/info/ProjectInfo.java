@@ -7,6 +7,10 @@ import dtu.app.ui.domain.Project;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @Author Mathias Bødkerholm Dalsgaard
+ */
+
 public class ProjectInfo {
     private final int id;
     private final String name;

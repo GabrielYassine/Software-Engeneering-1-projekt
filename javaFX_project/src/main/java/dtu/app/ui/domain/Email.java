@@ -1,7 +1,8 @@
 package dtu.app.ui.domain;
 
-import java.time.LocalDate;
-
+/**
+ * @Author Taemur Baig
+ */
 public class Email {
     private final String subject;
     private final String text;

@@ -7,6 +7,10 @@ import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.*;
 
+/**
+ * @Author Gabriel Ali Yassine
+ */
+
 public class ActivityLogInfo {
     private final Map<LocalDate, Map<Activity, Double>> dateLog;
 

@@ -20,9 +20,10 @@ public class App extends Application {
     public static Scene scene;
     public static final Stack<String> navigationHistory = new Stack<>();
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws Exception {
         App.application = new ProjectApp();
-        scene = new Scene(loadFXML("frontpage"), 640, 480);
+        App.application.initializeTestData();
+        scene = new Scene(loadFXML("menu"), 640, 480);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();

@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * @Author Taemur Baig
+ */
 public class EmployeeInfo {
     private final String initials;
     private final List<Email> inbox;
